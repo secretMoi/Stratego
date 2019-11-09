@@ -51,48 +51,6 @@ namespace Stratego
             
             tv = CreateGraphics();
             
-            // timer qui se déclenche lorsque l'on clique dans la tv et sert à déplacer une figure
-            /*loopTimer = new System.Timers.Timer();
-            loopTimer.Interval = 15; //interval in milliseconds
-            loopTimer.Enabled = false; // désactive par défaut pour limiter les ressources
-            loopTimer.Elapsed += loopTimerEvent; // à effectuer entre les 2 clics souris
-            loopTimer.AutoReset = true; // le ré enclenche à la fin
-            MouseDown += mouseDownEvent; // active le timer lors du clic
-            MouseUp += mouseUpEvent; // le désactive*/
-        }
-
-        private void loopTimerEvent(Object source, ElapsedEventArgs e)
-        {
-            int resX, resY;
-            resX = Cursor.Position.X - DesktopLocation.X - decalageStatiqueSourisX;
-            resY = Cursor.Position.Y - DesktopLocation.Y - decalageStatiqueSourisY;
-            // position absolue du curseur -
-            // position de la fenetre -
-            // position de la tv -
-            // les bordures -
-            // une marge pour la taille du curseur souris
-            /*figureCourante.Positionne(Cursor.Position.X - DesktopLocation.X - decalageStatiqueSourisX,
-                Cursor.Position.Y - DesktopLocation.Y - decalageStatiqueSourisY);*/
-
-            Invalidate(positionPieces[0].Rect);
-
-            positionPieces[0].X = resX;
-            positionPieces[0].Y = resY;
-            
-            //tv.DrawImage(fond, aireJeu.Rect);
-            //tv.DrawImage(pieces[0], positionPieces[0].Rect);
-
-            // démarre un nouveau thread servant à ne pas effacer les autres figures
-            /*Thread tRafraichir = new Thread(Rafraichir);
-            tRafraichir.Start();*/
-        }
-        private void mouseDownEvent(object sender, MouseEventArgs e)
-        {
-            loopTimer.Enabled = true;
-        }
-        private void mouseUpEvent(object sender, MouseEventArgs e)
-        {
-            loopTimer.Enabled = false;
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
