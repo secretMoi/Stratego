@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Stratego
 {
@@ -28,16 +29,60 @@ namespace Stratego
             return OffsetY + hauteurCase * ligne;
         }
 
-        public Tuple<int, int> TrouveCase(Point point)
+        // retourne les coordonées de 0 à casesX d'une case
+        // grâce à des coordonées de la case quelconques
+        /*public Point TrouveCase(Point point)
         {
-            if(point.X < OffsetX || point.X > OffsetX + longueurCase * casesX ||
-               point.Y < OffsetY || point.Y > OffsetY + hauteurCase * casesY)
-                return new Tuple<int, int>(-1, -1);
+            // si en dehors de la grille on renvoie (-1; -1)
+            if (point.X < OffsetX || point.X > OffsetX + longueurCase * casesX ||
+                point.Y < OffsetY || point.Y > OffsetY + hauteurCase * casesY)
+            {
+                point.X = -1;
+                point.Y = -1;
+                return point;
+            }
             
-            int caseX = (point.X - OffsetX) / longueurCase;
-            int caseY = (point.Y - OffsetY) / hauteurCase;
+            point.X = (point.X - OffsetX) / longueurCase;
+            point.Y = (point.Y - OffsetY) / hauteurCase;
             
-            return new Tuple<int, int>(caseX, caseY);
+            return point;
+        }*/
+        
+        // retourne les coordonées en px d'une case
+        // grâce à des coordonées de la case quelconques
+        public Point TrouveCase(Point point)
+        {
+            // si en dehors de la grille on renvoie (-1; -1)
+            if (point.X < OffsetX || point.X > OffsetX + longueurCase * casesX ||
+                point.Y < OffsetY || point.Y > OffsetY + hauteurCase * casesY)
+            {
+                point.X = -1;
+                point.Y = -1;
+                return point;
+            }
+
+            point.X -= OffsetX;
+            point.Y -= OffsetY;
+            
+            point.X = (point.X / longueurCase) * longueurCase;
+            point.Y = (point.Y / hauteurCase) * hauteurCase;
+            
+            point.X += OffsetX;
+            point.Y += OffsetY;
+            
+            return point;
+        }
+
+        public Point DebutCase(Point point) // trouve le debut d'une case (en px) grace à ses coord 0 à casesX
+        {
+            point.X = (point.X * longueurCase) + OffsetX;
+            
+            if(point.Y < casesY / 2)
+                point.Y = (point.Y * hauteurCase) + OffsetY;
+            else
+                point.Y = (point.Y * (hauteurCase-1)) + OffsetY + 4;
+
+            return point;
         }
 
         public bool PositionValide(int x, int y) // vérifie que la position est bien dans la grille de jeu

@@ -21,6 +21,7 @@ namespace Stratego
         private int decalageStatiqueSourisY;
 
         private bool drag;
+        private int idDragged;
         public Form1()
         {
             InitializeComponent();
@@ -53,7 +54,9 @@ namespace Stratego
         {
             drag = false; // désactive le drag&drop
             
-            MessageBox.Show(map.TrouveCase(e.Location).ToString());
+            Point position = map.TrouveCase(e.Location);
+            if (position.X != -1)
+                RedessinePiece(0, position, false);
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -69,14 +72,23 @@ namespace Stratego
             RedessinePiece(0, e.Location);
         }
 
-        private void RedessinePiece(int id, Point point)
+        private void RedessinePiece(int id, Point point, bool centrePiece = true)
         {
-            int sourisX = point.X - personnage.DimensionPieceX / 2;
-            int sourisY = point.Y - personnage.DimensionPieceY / 2;
-            
+            int sourisX, sourisY;
+            if (centrePiece)
+            {
+                sourisX = point.X - personnage.DimensionPieceX / 2;
+                sourisY = point.Y - personnage.DimensionPieceY / 2;
+            }
+            else
+            {
+                sourisX = point.X;
+                sourisY = point.Y;
+            }
+
             if (map.PositionValide(sourisX, sourisY )) // si la position est dans la grille
             {
-                pictureBox1.Invalidate(positionPieces[id].Rect); // supprime l'image'
+                pictureBox1.Invalidate(); // supprime l'image
 
                 // calcule ses nouvelles coordonnées
                 positionPieces[id].X = sourisX;
