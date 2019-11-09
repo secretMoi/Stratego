@@ -6,13 +6,18 @@ namespace Stratego
 {
     public class Map
     {
+        // chemin du background map
         public readonly string AireJeu = @"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\fonds.png";
 
+        // nombre de cases
         private const int casesX = 10;
         private const int casesY = 10;
+        
+        // taille de chaque case
         private const int longueurCase = 61;
         private const int hauteurCase = 53;
 
+        // position de la première case
         public const int OffsetX = 4;
         public const int OffsetY = 131;
 
@@ -98,6 +103,11 @@ namespace Stratego
                 return true;
 
             return false;
+        }
+
+        public int Distance(Point source, Point destination)
+        {
+            return 0;
         }
     }
 }

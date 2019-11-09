@@ -1,23 +1,29 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace Stratego.Personnages
 {
     public class Personnage
     {
-        protected readonly int[] dimensionPiece;
+        protected readonly Map map; // contient un objet map pour intéragir
+        public const int DimensionPieceX = 58;
+        public const int DimensionPieceY = 50;
         public readonly int X = 0;
         public readonly int Y = 1;
         
-        private List<string> imageSource;
+        private List<string> imageSource; // liste des images
 
-        public Personnage()
+        protected int deplacement;
+        protected Point position;
+
+        public Personnage(Map map)
         {
-            dimensionPiece = new int[2];
-            dimensionPiece[X] = 58;
-            dimensionPiece[Y] = 50;
-            
             imageSource = new List<string>();
-            ReferencePersonnage();
+            ReferencePersonnage(); // référence toutes les images de personnages 
+
+            this.map = map;
+
+            deplacement = 1;
         }
 
         private void ReferencePersonnage()
@@ -27,7 +33,17 @@ namespace Stratego.Personnages
             imageSource.Add(prefixeSource + "marechal.jpg");
         }
 
-        public int DimensionPieceX => dimensionPiece[X];
-        public int DimensionPieceY => dimensionPiece[Y];
+        public virtual bool Deplacement(Point point)
+        {
+            if (deplacement >= map.Distance(position, point))
+                return true;
+            
+            return false;
+        }
+
+        public List<string> ListePersonnage
+        {
+            get { return imageSource; }
+        }
     }
 }

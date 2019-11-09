@@ -16,9 +16,6 @@ namespace Stratego
         private List<Bitmap> pieces;
         private List<Rectangle> positionPieces;
         private Rectangle aireJeu;
-        
-        private int decalageStatiqueSourisX;
-        private int decalageStatiqueSourisY;
 
         private bool drag;
         private int idDragged;
@@ -29,13 +26,9 @@ namespace Stratego
             DoubleBuffered = true;
             
             map = new Map();
-            personnage = new Personnage();
             
             pieces = new List<Bitmap>();
             positionPieces = new List<Rectangle>();
-            
-            decalageStatiqueSourisX = 2 * SystemInformation.BorderSize.Width + 7;
-            decalageStatiqueSourisY = SystemInformation.CaptionHeight + 7;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -44,13 +37,12 @@ namespace Stratego
             aireJeu = new Rectangle(0,0, 612, 800);
             
             pieces.Add(new Bitmap(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\marechal.jpg"));
-            positionPieces.Add(new Rectangle(map.posPieceX(9), map.posPieceY(9), personnage.DimensionPieceX, personnage.DimensionPieceY));
+            positionPieces.Add(new Rectangle(map.posPieceX(9), map.posPieceY(9), Personnage.DimensionPieceX, Personnage.DimensionPieceY));
             
             tv = CreateGraphics();
-            
         }
 
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
             drag = false; // désactive le drag&drop
             
@@ -65,22 +57,25 @@ namespace Stratego
                 RedessinePiece(0, e.Location);
         }
 
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
             drag = true; // active le drag&drop
 
+            
+            
             RedessinePiece(0, e.Location);
         }
 
         private void RedessinePiece(int id, Point point, bool centrePiece = true)
         {
             int sourisX, sourisY;
-            if (centrePiece)
+            
+            if (centrePiece) // si on doit centrer l'image au centre du curseur'
             {
-                sourisX = point.X - personnage.DimensionPieceX / 2;
-                sourisY = point.Y - personnage.DimensionPieceY / 2;
+                sourisX = point.X - Personnage.DimensionPieceX / 2;
+                sourisY = point.Y - Personnage.DimensionPieceY / 2;
             }
-            else
+            else // on met simplement l'image à cet endroit'
             {
                 sourisX = point.X;
                 sourisY = point.Y;
