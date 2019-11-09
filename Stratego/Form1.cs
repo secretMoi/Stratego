@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Timers;
 using System.Windows.Forms;
 using Stratego.Personnages;
 
@@ -21,8 +19,6 @@ namespace Stratego
         
         private int decalageStatiqueSourisX;
         private int decalageStatiqueSourisY;
-        
-        private static System.Timers.Timer loopTimer;
 
         private bool drag;
         public Form1()
@@ -47,7 +43,7 @@ namespace Stratego
             aireJeu = new Rectangle(0,0, 612, 800);
             
             pieces.Add(new Bitmap(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\marechal.jpg"));
-            positionPieces.Add(new Rectangle(Map.OffsetX, Map.OffsetY, personnage.DimensionPieceX, personnage.DimensionPieceY));
+            positionPieces.Add(new Rectangle(map.posPieceX(9), map.posPieceY(9), personnage.DimensionPieceX, personnage.DimensionPieceY));
             
             tv = CreateGraphics();
             
@@ -55,30 +51,39 @@ namespace Stratego
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            drag = false;
+            drag = false; // désactive le drag&drop
             
-            tv.DrawImage(pieces[0], positionPieces[0].Rect);
-            pictureBox1.Invalidate();
+            MessageBox.Show(map.TrouveCase(e.Location).ToString());
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (drag)
-            {
-                tv.DrawImage(pieces[0], positionPieces[0].Rect);
-                positionPieces[0].X = e.X;
-                positionPieces[0].Y = e.Y;
-                
-                pictureBox1.Invalidate();
-            }
+            if (drag) // si le drag&drop est activé
+                RedessinePiece(0, e.Location);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            drag = true;
+            drag = true; // active le drag&drop
+
+            RedessinePiece(0, e.Location);
+        }
+
+        private void RedessinePiece(int id, Point point)
+        {
+            int sourisX = point.X - personnage.DimensionPieceX / 2;
+            int sourisY = point.Y - personnage.DimensionPieceY / 2;
             
-            positionPieces[0].X = e.X;
-            positionPieces[0].Y = e.Y;
+            if (map.PositionValide(sourisX, sourisY )) // si la position est dans la grille
+            {
+                pictureBox1.Invalidate(positionPieces[id].Rect); // supprime l'image'
+
+                // calcule ses nouvelles coordonnées
+                positionPieces[id].X = sourisX;
+                positionPieces[id].Y = sourisY;
+                    
+                tv.DrawImage(pieces[id], positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées'
+            }
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -87,6 +92,4 @@ namespace Stratego
             e.Graphics.DrawImage(pieces[0], positionPieces[0].Rect);
         }
     }
-    
-    
 }

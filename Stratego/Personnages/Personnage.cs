@@ -13,8 +13,8 @@ namespace Stratego.Personnages
         public Personnage()
         {
             dimensionPiece = new int[2];
-            dimensionPiece[X] = 61;
-            dimensionPiece[Y] = 54;
+            dimensionPiece[X] = 58;
+            dimensionPiece[Y] = 50;
             
             imageSource = new List<string>();
             ReferencePersonnage();
