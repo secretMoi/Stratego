@@ -43,7 +43,7 @@ namespace Stratego
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
             
-            piecesJoueur.Add(new Personnage(new Point(9, 9), "marechal")); // crée le personnage
+            piecesJoueur.Add(new Personnage(0, new Point(9, 9), "marechal")); // crée le personnage
             pieces.Add(new Bitmap(piecesJoueur[0].Piece.Chemin)); // chemin de l'image à afficher
             positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[0].Position), piecesJoueur[0].Piece.Dimension)); // position de l'image
             map.SetPositionPiece(piecesJoueur[0].Position, piecesJoueur[0]); // indique à la map ce qu'elle contient
@@ -53,40 +53,50 @@ namespace Stratego
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            drag = false; // désactive le drag&drop
-            //todo remettre la pièce dans sa position initiale si position invalide grâce à position origine
-            Point position = map.TrouveCase(e.Location);
-
-            if (position.X != -1) // si la position est valide
+            if (drag)
             {
-                Debug.WriteLine(piecesJoueur[0].Deplacement);
-                Debug.WriteLine(positionOrigine);
-                Debug.WriteLine(map.PxToCoord(position));
-                Debug.WriteLine(map.Distance(positionOrigine,  map.PxToCoord(position)));
-                if(piecesJoueur[0].Deplacement <= map.Distance(positionOrigine,  map.PxToCoord(position)))
-                    RedessinePiece(0, position, false);
-                else
-                    RedessinePiece(0, positionOrigine, false);
-            }
+                Point position = map.TrouveCase(e.Location);
 
+                if (position.X != -1) // si la position est valide
+                {
+                    // si le déplacement est valide pour la pièce
+                    if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position)))
+                    {
+                        RedessinePiece(idDragged, position, false);
+                        
+                        map.DeplacePiece(positionOrigine, map.PxToCoord(position), piecesJoueur[0]);
+                        piecesJoueur[idDragged].Position = map.PxToCoord(position);
+                    }
+
+                    else // sinon on la replace à sa position d'origine
+                        RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
+
+                    idDragged = -1;
+                    drag = false; // désactive le drag&drop
+                }
+            }
+            
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (drag) // si le drag&drop est activé
-                RedessinePiece(0, e.Location);
-
-            label1.Text = map.Distance(new Point(Map.OffsetX, Map.OffsetY), e.Location).ToString();
-            label2.Text = positionOrigine.ToString();
+                RedessinePiece(idDragged, e.Location);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
-            drag = true; // active le drag&drop
-            // todo modifier positionOrigine
-            positionOrigine = map.TrouveCase(e.Location, Map.Coord);
+            positionOrigine = map.TrouveCase(e.Location, Map.Coord); // trouve la case en coord où on a cliqué
 
-            RedessinePiece(0, e.Location);
+            Personnage persoSelectionne = map.GetPiece(positionOrigine);
+            
+            // vérifie qu'il y a bien une pièce dans la case et que la pièce soit déplaçable
+            if (persoSelectionne != null && persoSelectionne.Deplacement > 0)
+            {
+                drag = true; // active le drag&drop
+                idDragged = persoSelectionne.Id;
+                RedessinePiece(idDragged, e.Location);
+            }
         }
 
         private void RedessinePiece(int id, Point point, bool centrePiece = true)
@@ -95,8 +105,8 @@ namespace Stratego
             {
                 if (centrePiece) // si on doit centrer l'image au centre du curseur
                 {
-                    point.X -= piecesJoueur[0].Piece.Longueur / 2;
-                    point.Y -= piecesJoueur[0].Piece.Hauteur / 2;
+                    point.X -= piecesJoueur[id].Piece.Longueur / 2;
+                    point.Y -= piecesJoueur[id].Piece.Hauteur / 2;
                 }
                 
                 pictureBox1.Invalidate(); // supprime l'image

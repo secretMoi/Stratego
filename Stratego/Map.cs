@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Stratego.Personnages;
 
 namespace Stratego
 {
@@ -11,7 +12,7 @@ namespace Stratego
         // nombre de cases
         private const int casesX = 10;
         private const int casesY = 10;
-        private Object[,] grille;
+        private Personnage[,] grille;
         
         // taille de chaque case
         private const int longueurCase = 61;
@@ -26,7 +27,7 @@ namespace Stratego
 
         public Map()
         {
-            grille = new Object[casesX, casesY];
+            grille = new Personnage[casesX, casesY];
         }
 
         // permet de positionner une pièce grâce à ses coord et renvoie les px correspondants
@@ -39,7 +40,7 @@ namespace Stratego
             return OffsetY + hauteurCase * ligne;
         }
 
-        public bool SetPositionPiece(Point point, Object idElement)
+        public bool SetPositionPiece(Point point, Personnage idElement)
         {
             // todo vérifier position ok
             // todo à modifier vu que l'on pourra tuer les persos
@@ -53,7 +54,15 @@ namespace Stratego
             return false;
         }
 
-        public Object GetPositionPiece(Point point)
+        public bool DeplacePiece(Point source, Point destination, Personnage idElement)
+        {
+            SetPositionPiece(destination, idElement);
+            grille[source.X, source.Y] = null;
+
+            return true;
+        }
+
+        public Personnage GetPiece(Point point)
         {
             return grille[point.X, point.Y];
         }
@@ -90,13 +99,25 @@ namespace Stratego
             return point;
         }
 
-        public bool PositionValide(Point point) // vérifie que la position en px est bien dans la grille de jeu
+        public bool PositionValide(Point point, bool typeCoord = Pixel) // vérifie que la position en px est bien dans la grille de jeu
         {
-            if (
-                point.X >= OffsetX && point.X < OffsetX + longueurCase * casesX &&
-                point.Y >= OffsetY && point.Y < OffsetY + hauteurCase  * casesY
-            )
-                return true;
+            if (typeCoord == Pixel)
+            {
+                if (
+                    point.X >= OffsetX && point.X < OffsetX + longueurCase * casesX &&
+                    point.Y >= OffsetY && point.Y < OffsetY + hauteurCase  * casesY
+                )
+                    return true;
+            }
+            else
+            {
+                if(
+                    point.X >= 0 && point.X <= casesX &&
+                    point.Y >= 0 && point.Y <= casesY
+                    )
+                    return true;
+            }
+            
 
             return false;
         }
@@ -104,9 +125,8 @@ namespace Stratego
         // recoit des coordonnées en pixels, et retourne la distance en nombre de cases
         public int Distance(Point source, Point destination)
         {
-            // conversion des px en coordonnées
-            source = TrouveCase(source, Coord);
-            destination = TrouveCase(destination, Coord);
+            if (!PositionValide(source, Coord) && !PositionValide(destination, Coord))
+                return -1;
 
             int distance = (int) 
                 Math.Ceiling(

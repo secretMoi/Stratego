@@ -10,11 +10,13 @@ namespace Stratego.Personnages
 
         protected int deplacement; // nombre de cases que peut parcourir le personnage
         protected Point position; // sa position courante dans la map
+        protected int id;
 
-        public Personnage(Point point, string type)
+        public Personnage(int id, Point point, string type)
         {
             deplacement = 1;
 
+            this.id = id;
             position = point;
             
             piece = new Pieces(type);
@@ -25,6 +27,8 @@ namespace Stratego.Personnages
             get => position;
             set => position = value;
         }
+
+        public int Id => id;
 
         public int PositionX
         {
