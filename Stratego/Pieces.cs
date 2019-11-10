@@ -10,17 +10,22 @@ namespace Stratego
         
         private const string prefixeSource = @"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\";
         private const string format = ".jpg";
+        private readonly Bitmap image;
         
         private string imageSource; // liste des images
 
         public Pieces(string type)
         {
             imageSource = prefixeSource + type + format;
+            image = new Bitmap(imageSource);
         }
 
         public string Chemin => imageSource;
 
         public Point Dimension => new Point(DimensionX, DimensionY);
+
+        public Bitmap Image => image;
+
         public int Longueur => DimensionX;
         public int Hauteur => DimensionY;
     }

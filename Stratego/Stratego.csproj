@@ -53,6 +53,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Map.cs" />
+    <Compile Include="Personnages\Marechal.cs" />
     <Compile Include="Personnages\Personnage.cs" />
     <Compile Include="Pieces.cs" />
     <Compile Include="Program.cs" />

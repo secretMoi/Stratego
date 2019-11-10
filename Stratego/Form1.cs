@@ -9,15 +9,14 @@ namespace Stratego
 {
     public partial class Form1 : Form
     {
-        private Map map;
+        private readonly Map map;
         private Personnage personnage;
         
         private Graphics tv;
         private Bitmap fond;
-        private List<Bitmap> pieces;
-        private List<Rectangle> positionPieces;
+        private readonly List<Rectangle> positionPieces;
         private Rectangle aireJeu;
-        private List<Personnage> piecesJoueur;
+        private readonly List<Personnage> piecesJoueur;
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
@@ -27,12 +26,9 @@ namespace Stratego
         public Form1()
         {
             InitializeComponent();
-
-            DoubleBuffered = true;
             
             map = new Map();
             
-            pieces = new List<Bitmap>();
             positionPieces = new List<Rectangle>();
             
             piecesJoueur = new List<Personnage>();
@@ -45,8 +41,7 @@ namespace Stratego
 
             for (int i = 0; i < 2; i++)
             {
-                piecesJoueur.Add(new Personnage(i, new Point(i, i), "marechal")); // crée le personnage
-                pieces.Add(new Bitmap(piecesJoueur[i].Piece.Chemin)); // chemin de l'image à afficher
+                piecesJoueur.Add(new Marechal(i, new Point(i, i))); // crée le personnage
                 positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[i].Position), piecesJoueur[i].Piece.Dimension)); // position de l'image
                 map.SetPositionPiece(piecesJoueur[i].Position, piecesJoueur[i]); // indique à la map ce qu'elle contient
             }
@@ -65,6 +60,7 @@ namespace Stratego
                     // si le déplacement est valide pour la pièce
                     if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position)))
                     {
+                        // todo implémenter collision pièce
                         RedessinePiece(idDragged, position, false);
                         
                         map.DeplacePiece(positionOrigine, map.PxToCoord(position), piecesJoueur[idDragged]);
@@ -116,7 +112,7 @@ namespace Stratego
                 // calcule ses nouvelles coordonnées
                 positionPieces[id].Point = point;
                     
-                tv.DrawImage(pieces[id], positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées
+                tv.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées
             }
         }
 
@@ -124,9 +120,9 @@ namespace Stratego
         {
             e.Graphics.DrawImage(fond, aireJeu.Rect);
 
-            for (int i = 0; i < pieces.Count; i++)
+            for (int id = 0; id < piecesJoueur.Count; id++)
             {
-                e.Graphics.DrawImage(pieces[i], positionPieces[i].Rect);
+                e.Graphics.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect);
             }
             
         }

@@ -12,14 +12,15 @@ namespace Stratego.Personnages
         protected Point position; // sa position courante dans la map
         protected int id;
 
-        public Personnage(int id, Point point, string type)
+        protected int puissance;
+        protected string type;
+
+        public Personnage(int id, Point point)
         {
             deplacement = 1;
 
             this.id = id;
             position = point;
-            
-            piece = new Pieces(type);
         }
 
         public Point Position
@@ -29,6 +30,8 @@ namespace Stratego.Personnages
         }
 
         public int Id => id;
+
+        public int Puissance => puissance;
 
         public int PositionX
         {
