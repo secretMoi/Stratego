@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace Stratego
 {
@@ -19,6 +20,7 @@ namespace Stratego
 
         public string Chemin => imageSource;
 
+        public Point Dimension => new Point(DimensionX, DimensionY);
         public int Longueur => DimensionX;
         public int Hauteur => DimensionY;
     }

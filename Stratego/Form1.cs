@@ -45,9 +45,8 @@ namespace Stratego
             
             piecesJoueur.Add(new Personnage(new Point(9, 9), "marechal")); // crée le personnage
             pieces.Add(new Bitmap(piecesJoueur[0].Piece.Chemin)); // chemin de l'image à afficher
-            positionPieces.Add(new Rectangle(piecesJoueur[0].PositionX, piecesJoueur[0].PositionY,
-                piecesJoueur[0].Piece.Longueur, piecesJoueur[0].Piece.Hauteur));
-            map.SetPositionPiece(new Point(piecesJoueur[0].PositionX, piecesJoueur[0].PositionY), 0);
+            positionPieces.Add(new Rectangle(piecesJoueur[0].Position, piecesJoueur[0].Piece.Dimension));
+            map.SetPositionPiece(piecesJoueur[0].Position, piecesJoueur[0]);
 
             tv = CreateGraphics();
         }

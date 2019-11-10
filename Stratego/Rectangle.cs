@@ -10,6 +10,11 @@ namespace Stratego
         {
             rectangle = new System.Drawing.Rectangle(posX, posY, longueur, hauteur);
         }
+        
+        public Rectangle(Point position, Point dimension)
+        {
+            rectangle = new System.Drawing.Rectangle(position, new Size(dimension));
+        }
 
         public int X
         {

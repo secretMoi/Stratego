@@ -20,6 +20,12 @@ namespace Stratego.Personnages
             piece = new Pieces(type);
         }
 
+        public Point Position
+        {
+            get => position;
+            set => position = value;
+        }
+
         public int PositionX
         {
             get => position.X;

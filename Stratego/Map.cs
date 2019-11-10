@@ -41,7 +41,7 @@ namespace Stratego
             return OffsetY + hauteurCase * ligne;
         }
 
-        public bool SetPositionPiece(Point point, int idElement)
+        public bool SetPositionPiece(Point point, Object idElement)
         {
             // todo vérifier position ok
             // todo à modifier vu que l'on pourra tuer les persos
