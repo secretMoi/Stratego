@@ -42,11 +42,14 @@ namespace Stratego
         {
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
-            
-            piecesJoueur.Add(new Personnage(0, new Point(9, 9), "marechal")); // crée le personnage
-            pieces.Add(new Bitmap(piecesJoueur[0].Piece.Chemin)); // chemin de l'image à afficher
-            positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[0].Position), piecesJoueur[0].Piece.Dimension)); // position de l'image
-            map.SetPositionPiece(piecesJoueur[0].Position, piecesJoueur[0]); // indique à la map ce qu'elle contient
+
+            for (int i = 0; i < 2; i++)
+            {
+                piecesJoueur.Add(new Personnage(i, new Point(i, i), "marechal")); // crée le personnage
+                pieces.Add(new Bitmap(piecesJoueur[i].Piece.Chemin)); // chemin de l'image à afficher
+                positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[i].Position), piecesJoueur[i].Piece.Dimension)); // position de l'image
+                map.SetPositionPiece(piecesJoueur[i].Position, piecesJoueur[i]); // indique à la map ce qu'elle contient
+            }
 
             tv = CreateGraphics();
         }
@@ -64,7 +67,7 @@ namespace Stratego
                     {
                         RedessinePiece(idDragged, position, false);
                         
-                        map.DeplacePiece(positionOrigine, map.PxToCoord(position), piecesJoueur[0]);
+                        map.DeplacePiece(positionOrigine, map.PxToCoord(position), piecesJoueur[idDragged]);
                         piecesJoueur[idDragged].Position = map.PxToCoord(position);
                     }
 
@@ -75,7 +78,6 @@ namespace Stratego
                     drag = false; // désactive le drag&drop
                 }
             }
-            
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -121,7 +123,12 @@ namespace Stratego
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(fond, aireJeu.Rect);
-            e.Graphics.DrawImage(pieces[0], positionPieces[0].Rect);
+
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                e.Graphics.DrawImage(pieces[i], positionPieces[i].Rect);
+            }
+            
         }
     }
 }
