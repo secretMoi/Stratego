@@ -20,6 +20,8 @@ namespace Stratego
 
         private bool drag; // si on a activé le drag&drop
         private int idDragged; // élément sélectionné
+
+        private Point positionOrigine;
         public Form1()
         {
             InitializeComponent();
@@ -46,23 +48,27 @@ namespace Stratego
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
             drag = false; // désactive le drag&drop
-            //todo remettre la pièce dans sa position initiale si position invalide
+            //todo remettre la pièce dans sa position initiale si position invalide grâce à position origine
             Point position = map.TrouveCase(e.Location);
             
             if (position.X != -1)
                 RedessinePiece(0, position, false);
+                
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (drag) // si le drag&drop est activé
                 RedessinePiece(0, e.Location);
+
+            label1.Text = map.Distance(new Point(Map.OffsetX, Map.OffsetY), e.Location).ToString();
+            //label2.Text = map.TrouveCase(e.Location, Map.Coord).ToString();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
             drag = true; // active le drag&drop
-            
+
             RedessinePiece(0, e.Location);
         }
 

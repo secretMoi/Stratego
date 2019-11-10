@@ -73,14 +73,19 @@ namespace Stratego
             return point;
         }
 
-        public Point DebutCase(Point point) // trouve le debut d'une case (en px) grace à ses coord 0 à casesX
+        public Point PxToCoord(Point point)
         {
-            point.X = (point.X * longueurCase) + OffsetX;
+            // si en dehors de la grille on renvoie (-1; -1)
+            if (!PositionValide(point))
+            {
+                point.X = -1;
+                point.Y = -1;
+                
+                return point;
+            }
             
-            if(point.Y < casesY / 2)
-                point.Y = (point.Y * hauteurCase) + OffsetY;
-            else
-                point.Y = (point.Y * (hauteurCase-1)) + OffsetY + 4;
+            point.X = (point.X - OffsetX) / longueurCase;
+            point.Y = (point.Y - OffsetY) / hauteurCase;
 
             return point;
         }
@@ -107,13 +112,19 @@ namespace Stratego
         // recoit des coordonnées en pixels, et retourne la distance en nombre de cases
         public int Distance(Point source, Point destination)
         {
-            // si en dehors de la grille on renvoie -1
-            if (PositionValide(source, false) && PositionValide(destination, false))
-                return -1;
-            
-            
+            // conversion des px en coordonnées
+            source = PxToCoord(source);
+            destination = PxToCoord(destination);
 
-            return 0;
+            int distance = (int) 
+                Math.Ceiling(
+                    Math.Sqrt(
+                        Math.Pow(destination.X - source.X, 2) + 
+                        Math.Pow(destination.Y - source.Y, 2)
+                    )
+                );
+
+            return distance;
         }
     }
 }
