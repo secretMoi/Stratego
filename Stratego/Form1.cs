@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Stratego.Personnages;
@@ -17,8 +18,8 @@ namespace Stratego
         private List<Rectangle> positionPieces;
         private Rectangle aireJeu;
 
-        private bool drag;
-        private int idDragged;
+        private bool drag; // si on a activé le drag&drop
+        private int idDragged; // élément sélectionné
         public Form1()
         {
             InitializeComponent();
@@ -45,8 +46,9 @@ namespace Stratego
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
             drag = false; // désactive le drag&drop
-            
+            //todo remettre la pièce dans sa position initiale si position invalide
             Point position = map.TrouveCase(e.Location);
+            
             if (position.X != -1)
                 RedessinePiece(0, position, false);
         }
@@ -60,36 +62,26 @@ namespace Stratego
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
             drag = true; // active le drag&drop
-
-            
             
             RedessinePiece(0, e.Location);
         }
 
         private void RedessinePiece(int id, Point point, bool centrePiece = true)
         {
-            int sourisX, sourisY;
-            
-            if (centrePiece) // si on doit centrer l'image au centre du curseur'
+            if (map.PositionValide(point)) // si la position est dans la grille
             {
-                sourisX = point.X - Personnage.DimensionPieceX / 2;
-                sourisY = point.Y - Personnage.DimensionPieceY / 2;
-            }
-            else // on met simplement l'image à cet endroit'
-            {
-                sourisX = point.X;
-                sourisY = point.Y;
-            }
-
-            if (map.PositionValide(sourisX, sourisY )) // si la position est dans la grille
-            {
+                if (centrePiece) // si on doit centrer l'image au centre du curseur
+                {
+                    point.X -= Personnage.DimensionPieceX / 2;
+                    point.Y -= Personnage.DimensionPieceY / 2;
+                }
+                
                 pictureBox1.Invalidate(); // supprime l'image
 
                 // calcule ses nouvelles coordonnées
-                positionPieces[id].X = sourisX;
-                positionPieces[id].Y = sourisY;
+                positionPieces[id].Point = point;
                     
-                tv.DrawImage(pieces[id], positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées'
+                tv.DrawImage(pieces[id], positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées
             }
         }
 

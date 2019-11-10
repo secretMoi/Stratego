@@ -1,4 +1,6 @@
-﻿namespace Stratego
+﻿using System.Drawing;
+
+namespace Stratego
 {
     // cette classe permet de maniuler la struct Rectangle de c# grâce à un objet
     public class Rectangle
@@ -16,6 +18,11 @@
         public int Y
         {
             set { rectangle.Y = value; }
+        }
+
+        public Point Point
+        {
+            set { rectangle.Location = value; }
         }
         
         public System.Drawing.Rectangle Rect

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -21,6 +22,9 @@ namespace Stratego
         public const int OffsetX = 4;
         public const int OffsetY = 131;
 
+        public const bool Pixel = false;
+        public const bool Coord = true;
+
         public Map()
         {
         }
@@ -34,46 +38,37 @@ namespace Stratego
             return OffsetY + hauteurCase * ligne;
         }
 
-        // retourne les coordonées de 0 à casesX d'une case
-        // grâce à des coordonées de la case quelconques
-        /*public Point TrouveCase(Point point)
+        // retourne les coordonnées d'une case dans l'unité souhaitée
+        // grâce aux coordonnées de la case quelconques
+        public Point TrouveCase(Point point, bool typeCoord = Pixel)
         {
             // si en dehors de la grille on renvoie (-1; -1)
-            if (point.X < OffsetX || point.X > OffsetX + longueurCase * casesX ||
-                point.Y < OffsetY || point.Y > OffsetY + hauteurCase * casesY)
+            if (!PositionValide(point))
             {
                 point.X = -1;
                 point.Y = -1;
-                return point;
-            }
-            
-            point.X = (point.X - OffsetX) / longueurCase;
-            point.Y = (point.Y - OffsetY) / hauteurCase;
-            
-            return point;
-        }*/
-        
-        // retourne les coordonées en px d'une case
-        // grâce à des coordonées de la case quelconques
-        public Point TrouveCase(Point point)
-        {
-            // si en dehors de la grille on renvoie (-1; -1)
-            if (point.X < OffsetX || point.X > OffsetX + longueurCase * casesX ||
-                point.Y < OffsetY || point.Y > OffsetY + hauteurCase * casesY)
-            {
-                point.X = -1;
-                point.Y = -1;
+                
                 return point;
             }
 
-            point.X -= OffsetX;
-            point.Y -= OffsetY;
+            if (typeCoord == Pixel) // si l'on souhaite les coordonnées en px d'une case
+            {
+                point.X -= OffsetX;
+                point.Y -= OffsetY;
+
+                point.X = (point.X / longueurCase);
+                point.X *= longueurCase;
+                point.Y = (point.Y / hauteurCase);
+                point.Y *= hauteurCase;
             
-            point.X = (point.X / longueurCase) * longueurCase;
-            point.Y = (point.Y / hauteurCase) * hauteurCase;
-            
-            point.X += OffsetX;
-            point.Y += OffsetY;
+                point.X += OffsetX;
+                point.Y += OffsetY;
+            }
+            else // si l'on souhaite les coordonnées comme un tableau
+            {
+                point.X = (point.X - OffsetX) / longueurCase;
+                point.Y = (point.Y - OffsetY) / hauteurCase;
+            }
             
             return point;
         }
@@ -90,23 +85,34 @@ namespace Stratego
             return point;
         }
 
-        public bool PositionValide(int x, int y) // vérifie que la position est bien dans la grille de jeu
+        public bool PositionValide(Point point, bool activeMarge = false) // vérifie que la position est bien dans la grille de jeu
         {
-            // les marges permettent de ne pas bloquer la pièce trop fréquemment lors des déplacements sur les bords
-            int margeX = 20;
-            int margeY = 20;
-            
+            int margeX = 0, margeY = 0;
+            if (activeMarge)
+            {
+                // les marges permettent de ne pas bloquer la pièce trop fréquemment lors des déplacements sur les bords
+                margeX = 20;
+                margeY = 20;
+            }
+
             if (
-                x > OffsetX - margeX && x < OffsetX + longueurCase * (casesX-1) + margeX &&
-                y > OffsetY - margeY && y < OffsetY + hauteurCase  * (casesY-1) + margeY
+                point.X >= OffsetX - margeX && point.X < OffsetX + longueurCase * casesX + margeX &&
+                point.Y >= OffsetY - margeY && point.Y < OffsetY + hauteurCase  * casesY + margeY
             )
                 return true;
 
             return false;
         }
 
+        // recoit des coordonnées en pixels, et retourne la distance en nombre de cases
         public int Distance(Point source, Point destination)
         {
+            // si en dehors de la grille on renvoie -1
+            if (PositionValide(source, false) && PositionValide(destination, false))
+                return -1;
+            
+            
+
             return 0;
         }
     }
