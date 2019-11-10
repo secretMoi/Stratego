@@ -45,8 +45,8 @@ namespace Stratego
             
             piecesJoueur.Add(new Personnage(new Point(9, 9), "marechal")); // crée le personnage
             pieces.Add(new Bitmap(piecesJoueur[0].Piece.Chemin)); // chemin de l'image à afficher
-            positionPieces.Add(new Rectangle(piecesJoueur[0].Position, piecesJoueur[0].Piece.Dimension));
-            map.SetPositionPiece(piecesJoueur[0].Position, piecesJoueur[0]);
+            positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[0].Position), piecesJoueur[0].Piece.Dimension)); // position de l'image
+            map.SetPositionPiece(piecesJoueur[0].Position, piecesJoueur[0]); // indique à la map ce qu'elle contient
 
             tv = CreateGraphics();
         }
@@ -56,10 +56,19 @@ namespace Stratego
             drag = false; // désactive le drag&drop
             //todo remettre la pièce dans sa position initiale si position invalide grâce à position origine
             Point position = map.TrouveCase(e.Location);
-            
-            if (position.X != -1)
-                RedessinePiece(0, position, false);
-                
+
+            if (position.X != -1) // si la position est valide
+            {
+                Debug.WriteLine(piecesJoueur[0].Deplacement);
+                Debug.WriteLine(positionOrigine);
+                Debug.WriteLine(map.PxToCoord(position));
+                Debug.WriteLine(map.Distance(positionOrigine,  map.PxToCoord(position)));
+                if(piecesJoueur[0].Deplacement <= map.Distance(positionOrigine,  map.PxToCoord(position)))
+                    RedessinePiece(0, position, false);
+                else
+                    RedessinePiece(0, positionOrigine, false);
+            }
+
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -68,14 +77,14 @@ namespace Stratego
                 RedessinePiece(0, e.Location);
 
             label1.Text = map.Distance(new Point(Map.OffsetX, Map.OffsetY), e.Location).ToString();
-            label2.Text = map.GetPositionPiece(new Point(9, 9)).ToString();
+            label2.Text = positionOrigine.ToString();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
             drag = true; // active le drag&drop
-            
-            
+            // todo modifier positionOrigine
+            positionOrigine = map.TrouveCase(e.Location, Map.Coord);
 
             RedessinePiece(0, e.Location);
         }

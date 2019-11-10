@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Stratego.Personnages
 {
-    public class Personnage //todo séparer personnage en 2 classes, rajouter une classe pièce ::: pièce sera contenue dans personnage car plsrs persos peuvent avoir la même pièce
+    public class Personnage
     {
         protected readonly Map map; // contient un objet map pour intéragir
         protected Pieces piece;
@@ -11,7 +11,7 @@ namespace Stratego.Personnages
         protected int deplacement; // nombre de cases que peut parcourir le personnage
         protected Point position; // sa position courante dans la map
 
-        public Personnage(Point point, string type) // todo supprimer besoin de map, se sera la classe appelante qui gérera ça
+        public Personnage(Point point, string type)
         {
             deplacement = 1;
 
@@ -36,6 +36,8 @@ namespace Stratego.Personnages
             get => position.Y;
             set => position.Y = value;
         }
+
+        public int Deplacement => deplacement;
 
         public Pieces Piece => piece;
 

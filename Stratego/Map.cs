@@ -27,8 +27,6 @@ namespace Stratego
         public Map()
         {
             grille = new Object[casesX, casesY];
-            
-                
         }
 
         // permet de positionner une pièce grâce à ses coord et renvoie les px correspondants
@@ -86,8 +84,7 @@ namespace Stratego
             }
             else // si l'on souhaite les coordonnées comme un tableau
             {
-                point.X = (point.X - OffsetX) / longueurCase;
-                point.Y = (point.Y - OffsetY) / hauteurCase;
+                point = PxToCoord(point);
             }
             
             return point;
@@ -120,6 +117,22 @@ namespace Stratego
                 );
 
             return distance;
+        }
+
+        public Point CoordToPx(Point point)
+        {
+            point.X = OffsetX + point.X * longueurCase;
+            point.Y = OffsetY + point.Y * hauteurCase;
+
+            return point;
+        }
+        
+        public Point PxToCoord(Point point)
+        {
+            point.X = (point.X - OffsetX) / longueurCase;
+            point.Y = (point.Y - OffsetY) / hauteurCase;
+
+            return point;
         }
     }
 }
