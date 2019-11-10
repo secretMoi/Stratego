@@ -17,7 +17,9 @@ namespace Stratego
         private List<Bitmap> pieces;
         private List<Rectangle> positionPieces;
         private Rectangle aireJeu;
+        private List<Personnage> piecesJoueur;
 
+        // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
         private int idDragged; // élément sélectionné
 
@@ -32,6 +34,8 @@ namespace Stratego
             
             pieces = new List<Bitmap>();
             positionPieces = new List<Rectangle>();
+            
+            piecesJoueur = new List<Personnage>();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,9 +43,12 @@ namespace Stratego
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
             
-            pieces.Add(new Bitmap(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\marechal.jpg"));
-            positionPieces.Add(new Rectangle(map.posPieceX(9), map.posPieceY(9), Personnage.DimensionPieceX, Personnage.DimensionPieceY));
-            
+            piecesJoueur.Add(new Personnage(new Point(9, 9), "marechal")); // crée le personnage
+            pieces.Add(new Bitmap(piecesJoueur[0].Piece.Chemin)); // chemin de l'image à afficher
+            positionPieces.Add(new Rectangle(piecesJoueur[0].PositionX, piecesJoueur[0].PositionY,
+                piecesJoueur[0].Piece.Longueur, piecesJoueur[0].Piece.Hauteur));
+            map.SetPositionPiece(new Point(piecesJoueur[0].PositionX, piecesJoueur[0].PositionY), 0);
+
             tv = CreateGraphics();
         }
 
@@ -62,12 +69,14 @@ namespace Stratego
                 RedessinePiece(0, e.Location);
 
             label1.Text = map.Distance(new Point(Map.OffsetX, Map.OffsetY), e.Location).ToString();
-            //label2.Text = map.TrouveCase(e.Location, Map.Coord).ToString();
+            label2.Text = map.GetPositionPiece(new Point(9, 9)).ToString();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
             drag = true; // active le drag&drop
+            
+            
 
             RedessinePiece(0, e.Location);
         }
@@ -78,8 +87,8 @@ namespace Stratego
             {
                 if (centrePiece) // si on doit centrer l'image au centre du curseur
                 {
-                    point.X -= Personnage.DimensionPieceX / 2;
-                    point.Y -= Personnage.DimensionPieceY / 2;
+                    point.X -= piecesJoueur[0].Piece.Longueur / 2;
+                    point.Y -= piecesJoueur[0].Piece.Hauteur / 2;
                 }
                 
                 pictureBox1.Invalidate(); // supprime l'image

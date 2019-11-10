@@ -2,7 +2,7 @@
 
 namespace Stratego
 {
-    // cette classe permet de maniuler la struct Rectangle de c# grâce à un objet
+    // cette classe permet de manipuler la struct Rectangle de c# grâce à un objet
     public class Rectangle
     {
         private System.Drawing.Rectangle rectangle;

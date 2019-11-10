@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Stratego
 {
@@ -13,6 +11,7 @@ namespace Stratego
         // nombre de cases
         private const int casesX = 10;
         private const int casesY = 10;
+        private Object[,] grille;
         
         // taille de chaque case
         private const int longueurCase = 61;
@@ -27,8 +26,12 @@ namespace Stratego
 
         public Map()
         {
+            grille = new Object[casesX, casesY];
+            
+                
         }
 
+        // permet de positionner une pièce grâce à ses coord et renvoie les px correspondants
         public int posPieceX(int colonne)
         {
             return OffsetX + longueurCase * colonne;
@@ -36,6 +39,25 @@ namespace Stratego
         public int posPieceY(int ligne)
         {
             return OffsetY + hauteurCase * ligne;
+        }
+
+        public bool SetPositionPiece(Point point, int idElement)
+        {
+            // todo vérifier position ok
+            // todo à modifier vu que l'on pourra tuer les persos
+            if (grille[point.X, point.Y] == null) // si il n'y a rien dans cette case
+            {
+                grille[point.X, point.Y] = idElement;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public Object GetPositionPiece(Point point)
+        {
+            return grille[point.X, point.Y];
         }
 
         // retourne les coordonnées d'une case dans l'unité souhaitée
@@ -56,10 +78,8 @@ namespace Stratego
                 point.X -= OffsetX;
                 point.Y -= OffsetY;
 
-                point.X = (point.X / longueurCase);
-                point.X *= longueurCase;
-                point.Y = (point.Y / hauteurCase);
-                point.Y *= hauteurCase;
+                point.X = (point.X / longueurCase) * longueurCase;
+                point.Y = (point.Y / hauteurCase) * hauteurCase;
             
                 point.X += OffsetX;
                 point.Y += OffsetY;
@@ -73,36 +93,11 @@ namespace Stratego
             return point;
         }
 
-        public Point PxToCoord(Point point)
+        public bool PositionValide(Point point) // vérifie que la position en px est bien dans la grille de jeu
         {
-            // si en dehors de la grille on renvoie (-1; -1)
-            if (!PositionValide(point))
-            {
-                point.X = -1;
-                point.Y = -1;
-                
-                return point;
-            }
-            
-            point.X = (point.X - OffsetX) / longueurCase;
-            point.Y = (point.Y - OffsetY) / hauteurCase;
-
-            return point;
-        }
-
-        public bool PositionValide(Point point, bool activeMarge = false) // vérifie que la position est bien dans la grille de jeu
-        {
-            int margeX = 0, margeY = 0;
-            if (activeMarge)
-            {
-                // les marges permettent de ne pas bloquer la pièce trop fréquemment lors des déplacements sur les bords
-                margeX = 20;
-                margeY = 20;
-            }
-
             if (
-                point.X >= OffsetX - margeX && point.X < OffsetX + longueurCase * casesX + margeX &&
-                point.Y >= OffsetY - margeY && point.Y < OffsetY + hauteurCase  * casesY + margeY
+                point.X >= OffsetX && point.X < OffsetX + longueurCase * casesX &&
+                point.Y >= OffsetY && point.Y < OffsetY + hauteurCase  * casesY
             )
                 return true;
 
@@ -113,8 +108,8 @@ namespace Stratego
         public int Distance(Point source, Point destination)
         {
             // conversion des px en coordonnées
-            source = PxToCoord(source);
-            destination = PxToCoord(destination);
+            source = TrouveCase(source, Coord);
+            destination = TrouveCase(destination, Coord);
 
             int distance = (int) 
                 Math.Ceiling(

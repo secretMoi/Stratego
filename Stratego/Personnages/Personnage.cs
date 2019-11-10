@@ -3,47 +3,42 @@ using System.Drawing;
 
 namespace Stratego.Personnages
 {
-    public class Personnage
+    public class Personnage //todo séparer personnage en 2 classes, rajouter une classe pièce ::: pièce sera contenue dans personnage car plsrs persos peuvent avoir la même pièce
     {
         protected readonly Map map; // contient un objet map pour intéragir
-        public const int DimensionPieceX = 58;
-        public const int DimensionPieceY = 50;
-        public readonly int X = 0;
-        public readonly int Y = 1;
-        
-        private List<string> imageSource; // liste des images
+        protected Pieces piece;
 
-        protected int deplacement;
-        protected Point position;
+        protected int deplacement; // nombre de cases que peut parcourir le personnage
+        protected Point position; // sa position courante dans la map
 
-        public Personnage(Map map)
+        public Personnage(Point point, string type) // todo supprimer besoin de map, se sera la classe appelante qui gérera ça
         {
-            imageSource = new List<string>();
-            ReferencePersonnage(); // référence toutes les images de personnages 
-
-            this.map = map;
-
             deplacement = 1;
-        }
 
-        private void ReferencePersonnage()
-        {
-            string prefixeSource = @"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\";
+            position = point;
             
-            imageSource.Add(prefixeSource + "marechal.jpg");
+            piece = new Pieces(type);
         }
 
-        public virtual bool Deplacement(Point point)
+        public int PositionX
         {
-            if (deplacement >= map.Distance(position, point))
+            get => position.X;
+            set => position.X = value;
+        }
+        public int PositionY
+        {
+            get => position.Y;
+            set => position.Y = value;
+        }
+
+        public Pieces Piece => piece;
+
+        public virtual bool DeplacementValide(Point point)
+        {
+            if (deplacement <= map.Distance(position, point))
                 return true;
             
             return false;
-        }
-
-        public List<string> ListePersonnage
-        {
-            get { return imageSource; }
         }
     }
 }
