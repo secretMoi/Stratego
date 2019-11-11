@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using System.Xml;
 using Stratego.Personnages;
 
 namespace Stratego
@@ -11,7 +9,6 @@ namespace Stratego
     public partial class Form1 : Form
     {
         private readonly Map map;
-        private Personnage personnage;
         
         private Graphics tv;
         private Bitmap fond;
@@ -43,107 +40,18 @@ namespace Stratego
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
 
-            // liste toutes les classes existantes
-            DirectoryInfo d = new DirectoryInfo(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\Personnages");//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles("*.cs", SearchOption.TopDirectoryOnly); //Getting Text files
-
-            List<string> fichiersClasses = new List<string>();
-            foreach (FileInfo fichier in Files)
-            {
-                fichiersClasses.Add(fichier.ToString().Remove(fichier.ToString().Length - 3));
-            }
-
+            jeu.ListeClasse(); // génère la liste des classes du dossier personnage
+            
             // charge fichier xml des différentes pièces
-            XmlTextReader listePieces = new XmlTextReader(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\ListePieces.xml");
-            int id = 0;
-            Point position = new Point(0,9);
-
-            string nomPiece = null;
-            int nombrePieces;
+            jeu.OuvreXMLClasses(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\ListePieces.xml");
             
-            while (listePieces.Read())
-            {
-                nombrePieces = 0;
-                
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name")
-                    nomPiece = listePieces.ReadElementString();
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre")
-                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
-
-                //todo apprendre réflection pour simplifier et rendre dynamique l'ajout de pièce
-                /*Assembly currentAssembly = Assembly.GetExecutingAssembly();
-                Type myType = currentAssembly.GetType(nomPiece);
-                MethodInfo TypePiece = myType.GetMethod("TypePiece");
-                
-                Personnage instance = Activator.CreateInstance(myType) as Personnage;
-                TypePiece.Invoke(instance, null);*/
-
-                for (int i = 0; i < nombrePieces; i++)
-                {
-                    if (!fichiersClasses.Contains(nomPiece))
-                    MessageBox.Show("Pièce erronnée : " + nomPiece);
-
-                if (position.X == 10)
-                {
-                    position.X = 0;
-                    position.Y--;
-                }
-
-                switch (nomPiece)
-                {
-                    case "Marechal":
-                        piecesJoueur.Add(new Marechal(id, position)); // crée le personnage
-                        break;
-                    case "General":
-                        piecesJoueur.Add(new General(id, position)); // crée le personnage
-                        break;
-                    case "Colonel":
-                        piecesJoueur.Add(new Colonel(id, position)); // crée le personnage
-                        break;
-                    case "Major":
-                        piecesJoueur.Add(new Major(id, position)); // crée le personnage
-                        break;
-                    case "Capitaine":
-                        piecesJoueur.Add(new Capitaine(id, position)); // crée le personnage
-                        break;
-                    case "Lieutenant":
-                        piecesJoueur.Add(new Lieutenant(id, position)); // crée le personnage
-                        break;
-                    case "Sergent":
-                        piecesJoueur.Add(new Sergent(id, position)); // crée le personnage
-                        break;
-                    case "Demineur":
-                        piecesJoueur.Add(new Demineur(id, position)); // crée le personnage
-                        break;
-                    case "Eclaireur":
-                        piecesJoueur.Add(new Eclaireur(id, position, Map.casesX)); // crée le personnage
-                        break;
-                    case "Espion":
-                        piecesJoueur.Add(new Espion(id, position)); // crée le personnage
-                        break;
-                    case "Drapeau":
-                        piecesJoueur.Add(new Drapeau(id, position)); // crée le personnage
-                        break;
-                    case "Bombe":
-                        piecesJoueur.Add(new Bombe(id, position)); // crée le personnage
-                        break;
-                }
-                    
-                positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[id].Position), piecesJoueur[id].Piece.Dimension)); // position de l'image
-                map.SetPositionPiece(piecesJoueur[id].Position, piecesJoueur[id]); // indique à la map ce qu'elle contient
-            
-                id++;
-                position.X++;
-                }
-            }
+            jeu.GenerePieces(map, piecesJoueur, positionPieces);
 
             tv = CreateGraphics();
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            //todo fixer le déplacement éclaireur
-            //todo fixer décalage pièce quand elle mange une autre
             if (drag)
             {
                 Point position = map.TrouveCase(e.Location);
@@ -151,17 +59,20 @@ namespace Stratego
                 if (position.X != -1) // si la position est valide
                 {
                     // si le déplacement est valide pour la pièce
-                    if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position)))
+                    if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position))
+                        && positionOrigine != map.PxToCoord(position) // si on ne replace pas la pièce au même endroit
+                        && map.DeplacementLineaire(positionOrigine, map.PxToCoord(position))) // si la pièce ne se déplace pas en diagonal
                     {
                         (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
-                        
+
                         if (collision == Personnage.Vide) // si la case de destination est vide
                             RedessinePiece(idDragged, position, false);
-                        else
-                        {
-                            EffacePiece(piece1);
-                            EffacePiece(piece2);
-                        }
+                        else if(collision == Personnage.Attaquant)
+                            RedessinePiece(idDragged, position, false);
+
+                        EffacePiece(piece1);
+                        EffacePiece(piece2);
+
                     }
                     else // sinon on la replace à sa position d'origine
                         RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
@@ -183,6 +94,9 @@ namespace Stratego
             positionOrigine = map.TrouveCase(e.Location, Map.Coord); // trouve la case en coord où on a cliqué
 
             Personnage persoSelectionne = map.GetPiece(positionOrigine);
+
+            label1.Text = positionOrigine.ToString();
+            //label2.Text = persoSelectionne.ToString();
             
             // vérifie qu'il y a bien une pièce dans la case et que la pièce soit déplaçable
             if (persoSelectionne != null && persoSelectionne.Deplacement > 0)

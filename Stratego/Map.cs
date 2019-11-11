@@ -47,7 +47,6 @@ namespace Stratego
 
         public (int, int, int) DeplacePiece(Point source, Point destination)
         {
-            // todo attention pièce supprimée si on la remet à sa place ! elle fait une égalité contre elle même
             Personnage attaquant = grille[source.X, source.Y];
             
             if (attaquant.Deplacement >= 1) // si la pièce peut se déplacer
@@ -108,9 +107,15 @@ namespace Stratego
 
         private bool SansObstacle(Point source, Point destination)
         {
+            int decalage;
             if (source.X != destination.X) // si le déplacement est horizontal
             {
-                for (int x = source.X; x < destination.X - 1; x++)
+                if (source.X > destination.X)
+                    decalage = -1;
+                else
+                    decalage = 1;
+
+                for (int x = source.X + decalage; x < destination.X - 1; x++)
                 {
                     if (grille[x, source.Y] != null)
                         return false;
@@ -118,7 +123,12 @@ namespace Stratego
             } // sinon il est vertical
             else
             {
-                for (int y = source.Y; y < destination.Y - 1; y++)
+                if (source.Y > destination.Y)
+                    decalage = -1;
+                else
+                    decalage = 1;
+                
+                for (int y = source.Y + decalage; y < destination.Y - 1; y++)
                 {
                     if (grille[source.X, y] != null)
                         return false;
@@ -219,6 +229,11 @@ namespace Stratego
             point.Y = (point.Y - OffsetY) / hauteurCase;
 
             return point;
+        }
+
+        public bool DeplacementLineaire(Point origine, Point destination)
+        {
+            return origine.X == destination.X || origine.Y == destination.Y;
         }
     }
 }
