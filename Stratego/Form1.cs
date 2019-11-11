@@ -30,7 +30,6 @@ namespace Stratego
             map = new Map();
             
             positionPieces = new List<Rectangle>();
-            
             piecesJoueur = new List<Personnage>();
         }
 

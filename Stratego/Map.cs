@@ -47,6 +47,7 @@ namespace Stratego
 
         public (int, int, int) DeplacePiece(Point source, Point destination)
         {
+            // todo attention pièce supprimée si on la remet à sa place ! elle fait une égalité contre elle même
             Personnage attaquant = grille[source.X, source.Y];
             
             if (attaquant.Deplacement >= 1) // si la pièce peut se déplacer
@@ -76,13 +77,13 @@ namespace Stratego
                     
                     else if (collision == Personnage.Attaquant) // si l'attaquant gagne
                     {
+                        Personnage defenseur = grille[destination.X, destination.Y];
+                        defenseur.Meurt();
+                        
                         SetPositionPiece(destination, attaquant); // l'attaquant prend la place du défenseur
                         SetPositionPiece(source, null); // supprime l'ancienne position
 
                         attaquant.Position = destination;
-                        
-                        Personnage defenseur = grille[destination.X, destination.Y];
-                        defenseur.Meurt();
 
                         return (Personnage.Attaquant, defenseur.Id, -1);
                     }

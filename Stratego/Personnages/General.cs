@@ -8,7 +8,7 @@ namespace Stratego.Personnages
     public General(int id, Point point) : base(id, point)
     {
         puissance = 9;
-        type = "marechal";
+        type = "general";
 
         piece = new Pieces(type);
     }
