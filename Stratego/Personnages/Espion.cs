@@ -11,5 +11,15 @@ namespace Stratego.Personnages
 
             piece = new Pieces(type);
         }
+        
+        public override int Collision(Personnage attaquant, Personnage defenseur)
+        {
+            int resultat = base.Collision(attaquant, defenseur);
+
+            if (defenseur is Marechal)
+                resultat = Attaquant;
+
+            return resultat;
+        }
     }
 }

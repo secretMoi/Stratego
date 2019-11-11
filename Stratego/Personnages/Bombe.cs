@@ -12,5 +12,7 @@ namespace Stratego.Personnages
 
             piece = new Pieces(type);
         }
+        
+        
     }
 }

@@ -35,19 +35,20 @@ namespace Stratego.Personnages
             position = point;
         }
 
-        public int Collision(Personnage attaquant, Personnage defenseur)
+        public virtual int Collision(Personnage attaquant, Personnage defenseur)
         {
+            int resultat = Vide;
             if (attaquant != null && defenseur != null)
             {
                 if (attaquant.Puissance > defenseur.Puissance) // si l'attaquant est plus puissant
-                    return Attaquant;
-                if (attaquant.Puissance < defenseur.Puissance) // si le défenseur est plus puissant
-                    return Defenseur;
-                if (attaquant.Puissance == defenseur.Puissance) // si même puissance
-                    return Egalite;
+                    resultat = Attaquant;
+                else if (attaquant.Puissance < defenseur.Puissance) // si le défenseur est plus puissant
+                    resultat =  Defenseur;
+                else if (attaquant.Puissance == defenseur.Puissance) // si même puissance
+                    resultat = Egalite;
             }
 
-            return Vide; // sinon la case est vide
+            return resultat; // sinon la case est vide
         }
         
         public Point Position
@@ -80,11 +81,6 @@ namespace Stratego.Personnages
             estVivant = false;
             
             position = new Point(-1, -1);
-        }
-
-        public Personnage TypePiece()
-        {
-            return this;
         }
     }
 }
