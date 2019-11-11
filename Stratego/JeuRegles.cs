@@ -43,7 +43,7 @@ namespace Stratego
             listePieces = new XmlTextReader(chemin);
         }
 
-        public void GenerePieces(Map map, List<Personnage> piecesJoueur, List<Rectangle> positionPieces)
+        public void GenerePieces(Map map, List<Rectangle> positionPieces)
         {
             string nomPiece = null;
             int nombrePieces; // nombre de fois qu'une pièce peut être placée
@@ -79,48 +79,50 @@ namespace Stratego
                         position.Y--;
                     }
 
+                    Personnage personnage = null;
+                    
                     switch (nomPiece)
                     {
                         case "Marechal":
-                            piecesJoueur.Add(new Marechal(id, position)); // crée le personnage
+                            personnage = new Marechal(id, position); // crée le personnage
                             break;
                         case "General":
-                            piecesJoueur.Add(new General(id, position)); // crée le personnage
+                            personnage = new General(id, position); // crée le personnage
                             break;
                         case "Colonel":
-                            piecesJoueur.Add(new Colonel(id, position)); // crée le personnage
+                            personnage = new Colonel(id, position); // crée le personnage
                             break;
                         case "Major":
-                            piecesJoueur.Add(new Major(id, position)); // crée le personnage
+                            personnage = new Major(id, position); // crée le personnage
                             break;
                         case "Capitaine":
-                            piecesJoueur.Add(new Capitaine(id, position)); // crée le personnage
+                            personnage = new Capitaine(id, position); // crée le personnage
                             break;
                         case "Lieutenant":
-                            piecesJoueur.Add(new Lieutenant(id, position)); // crée le personnage
+                            personnage = new Lieutenant(id, position); // crée le personnage
                             break;
                         case "Sergent":
-                            piecesJoueur.Add(new Sergent(id, position)); // crée le personnage
+                            personnage = new Sergent(id, position); // crée le personnage
                             break;
                         case "Demineur":
-                            piecesJoueur.Add(new Demineur(id, position)); // crée le personnage
+                            personnage = new Demineur(id, position); // crée le personnage
                             break;
                         case "Eclaireur":
-                            piecesJoueur.Add(new Eclaireur(id, position, Map.casesX)); // crée le personnage
+                            personnage = new Eclaireur(id, position, Map.casesX); // crée le personnage
                             break;
                         case "Espion":
-                            piecesJoueur.Add(new Espion(id, position)); // crée le personnage
+                            personnage = new Espion(id, position); // crée le personnage
                             break;
                         case "Drapeau":
-                            piecesJoueur.Add(new Drapeau(id, position)); // crée le personnage
+                            personnage = new Drapeau(id, position); // crée le personnage
                             break;
                         case "Bombe":
-                            piecesJoueur.Add(new Bombe(id, position)); // crée le personnage
+                            personnage = new Bombe(id, position); // crée le personnage
                             break;
                     }
                     
-                    positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[id].Position), piecesJoueur[id].Piece.Dimension)); // position de l'image
-                    map.SetPositionPiece(piecesJoueur[id].Position, piecesJoueur[id]); // indique à la map ce qu'elle contient
+                    positionPieces.Add(new Rectangle(map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+                    map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
             
                     id++;
                     position.X++;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
 using Stratego.Personnages;
 
 namespace Stratego
@@ -12,7 +13,7 @@ namespace Stratego
         // nombre de cases
         public const int casesX = 10;
         public const int casesY = 10;
-        private Personnage[,] grille;
+        public Personnage[,] grille;
         
         // taille de chaque case
         private const int longueurCase = 61;
@@ -28,16 +29,6 @@ namespace Stratego
         public Map()
         {
             grille = new Personnage[casesX, casesY];
-        }
-
-        // permet de positionner une pièce grâce à ses coord et renvoie les px correspondants
-        public int posPieceX(int colonne)
-        {
-            return OffsetX + longueurCase * colonne;
-        }
-        public int posPieceY(int ligne)
-        {
-            return OffsetY + hauteurCase * ligne;
         }
 
         public void SetPositionPiece(Point point, Personnage idElement)
@@ -141,9 +132,13 @@ namespace Stratego
             return true;
         }
 
-        public Personnage GetPiece(Point point)
+        public Personnage GetPiece(Point point, bool typeCoord = Coord)
         {
+            if (typeCoord == Pixel) // si on passe le point en px, on le convertit d'abord en coord
+                point = PxToCoord(point);
+            
             return grille[point.X, point.Y];
+                
         }
 
         // retourne les coordonnées d'une case dans l'unité souhaitée
@@ -236,6 +231,23 @@ namespace Stratego
         public bool DeplacementLineaire(Point origine, Point destination)
         {
             return origine.X == destination.X || origine.Y == destination.Y;
+        }
+
+        public Personnage TrouvePersoParID(int id)
+        {
+            for (int y = 0; y < casesY; y++)
+            {
+                for (int x = 0; x < casesX; x++)
+                {
+                    if (grille[x, y] != null) // si l'endroit de la grille n'est pas vide
+                    {
+                        if (grille[x, y].Id == id) // si l'id correspont
+                            return grille[x, y];
+                    }
+                } 
+            }
+
+            return null;
         }
     }
 }

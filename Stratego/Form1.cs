@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Stratego.Personnages;
@@ -17,7 +18,7 @@ namespace Stratego
         private Bitmap fond;
         private readonly List<Rectangle> positionPieces;
         private Rectangle aireJeu;
-        private readonly List<Personnage> piecesJoueur;
+        //private readonly List<Personnage> piecesJoueur;
 
         private JeuRegles jeu; // todo simplifier form en mettant la logique du jeu dans cette classe
 
@@ -33,7 +34,7 @@ namespace Stratego
             map = new Map();
             
             positionPieces = new List<Rectangle>();
-            piecesJoueur = new List<Personnage>();
+            //piecesJoueur = new List<Personnage>();
             
             jeu = new JeuRegles();
         }
@@ -48,7 +49,7 @@ namespace Stratego
             // charge fichier xml des différentes pièces
             jeu.OuvreXMLClasses(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\ListePieces.xml");
             
-            jeu.GenerePieces(map, piecesJoueur, positionPieces);
+            jeu.GenerePieces(map, positionPieces);
 
             tv = CreateGraphics();
         }
@@ -58,32 +59,47 @@ namespace Stratego
             if (drag)
             {
                 Point position = map.TrouveCase(e.Location);
+                label1.Text = position.ToString();
+                Personnage attaquant = map.TrouvePersoParID(idDragged);
 
-                if (position.X != -1) // si la position est valide
+                if (position.X == -1 || attaquant == null) return;
+                // si le déplacement est valide pour la pièce
+                if (attaquant.Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position))
+                    && positionOrigine != map.PxToCoord(position) // si on ne replace pas la pièce au même endroit
+                    && map.DeplacementLineaire(positionOrigine, map.PxToCoord(position)) // si la pièce ne se déplace pas en diagonal
+                    && map.SansObstacle(positionOrigine, map.PxToCoord(position))) 
                 {
-                    // si le déplacement est valide pour la pièce
-                    if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position))
-                        && positionOrigine != map.PxToCoord(position) // si on ne replace pas la pièce au même endroit
-                        && map.DeplacementLineaire(positionOrigine, map.PxToCoord(position)) // si la pièce ne se déplace pas en diagonal
-                        && map.SansObstacle(positionOrigine, map.PxToCoord(position))) 
-                    {
-                        (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
+                    (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
-                        if (collision == Personnage.Vide) // si la case de destination est vide
-                            RedessinePiece(idDragged, position, false);
-                        else if(collision == Personnage.Attaquant)
-                            RedessinePiece(idDragged, position, false);
+                    if (collision == Personnage.Vide) // si la case de destination est vide
+                        RedessinePiece(idDragged, position, false);
+                    else if(collision == Personnage.Attaquant)
+                        RedessinePiece(idDragged, position, false);
 
-                        EffacePiece(piece1);
-                        EffacePiece(piece2);
+                    EffacePiece(piece1);
+                    EffacePiece(piece2);
 
-                    }
-                    else // sinon on la replace à sa position d'origine
-                        RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
-
-                    idDragged = -1;
-                    drag = false; // désactive le drag&drop
                 }
+                else // sinon on la replace à sa position d'origine
+                    RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
+
+                idDragged = -1;
+                drag = false; // désactive le drag&drop
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if(map.grille[j, i] != null)
+                        Debug.Write(map.grille[j, i].ToString().Replace("Stratego.Personnages.", ""));
+                    else
+                    {
+                        Debug.Write("0");
+                    }
+                }
+                
+                Debug.WriteLine(" ");
             }
         }
 
@@ -111,21 +127,21 @@ namespace Stratego
 
         private void RedessinePiece(int id, Point point, bool centrePiece = true)
         {
-            if (map.PositionValide(point) && piecesJoueur[id] != null) // si la position est dans la grille
-            {
-                if (centrePiece) // si on doit centrer l'image au centre du curseur
-                {
-                    point.X -= piecesJoueur[id].Piece.Longueur / 2;
-                    point.Y -= piecesJoueur[id].Piece.Hauteur / 2;
-                }
-                
-                pictureBox1.Invalidate(); // supprime l'image
+            Personnage personnage = map.TrouvePersoParID(id);
 
-                // calcule ses nouvelles coordonnées
-                positionPieces[id].Point = point;
-                    
-                tv.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées
+            if (!map.PositionValide(point) || personnage == null) return;
+            if (centrePiece) // si on doit centrer l'image au centre du curseur
+            {
+                point.X -= personnage.Piece.Longueur / 2;
+                point.Y -= personnage.Piece.Hauteur / 2;
             }
+                
+            pictureBox1.Invalidate(); // supprime l'image
+
+            // calcule ses nouvelles coordonnées
+            positionPieces[id].Point = point;
+                    
+            tv.DrawImage(personnage.Piece.Image, positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées
         }
 
         private void EffacePiece(int id)
@@ -133,7 +149,6 @@ namespace Stratego
             if (id >= 0)
             {
                 positionPieces[id] = null;
-                piecesJoueur[id] = null;
             
                 pictureBox1.Invalidate();
             }
@@ -141,12 +156,17 @@ namespace Stratego
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(fond, aireJeu.Rect);
+            e.Graphics.DrawImage(fond, aireJeu.Rect); // repeint la grille
 
-            for (int id = 0; id < piecesJoueur.Count; id++)
+            Personnage personnage;
+
+            // redessine les pièces
+            for (int id = 0; id < positionPieces.Count; id++)
             {
-                if(piecesJoueur[id] != null) // ne dessine que les pièces valides
-                    e.Graphics.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect);
+                personnage = map.TrouvePersoParID(id);
+                
+                if(personnage != null) // ne dessine que les pièces valides
+                    e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
             }
             
         }
