@@ -53,9 +53,19 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Map.cs" />
+    <Compile Include="Personnages\Bombe.cs" />
+    <Compile Include="Personnages\Capitaine.cs" />
+    <Compile Include="Personnages\Colonel.cs" />
+    <Compile Include="Personnages\Demineur.cs" />
+    <Compile Include="Personnages\Drapeau.cs" />
+    <Compile Include="Personnages\Eclaireur.cs" />
+    <Compile Include="Personnages\Espion.cs" />
     <Compile Include="Personnages\General.cs" />
+    <Compile Include="Personnages\Lieutenant.cs" />
+    <Compile Include="Personnages\Major.cs" />
     <Compile Include="Personnages\Marechal.cs" />
     <Compile Include="Personnages\Personnage.cs" />
+    <Compile Include="Personnages\Sergent.cs" />
     <Compile Include="Pieces.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
