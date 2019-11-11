@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Stratego.Personnages
 {
     public class Personnage
     {
-        protected readonly Map map; // contient un objet map pour intéragir
+        public const int Vide = 0;
+        public const int Attaquant = 1;
+        public const int Defenseur = 2;
+        public const int Egalite = 3;
+        
         protected Pieces piece;
 
         protected int deplacement; // nombre de cases que peut parcourir le personnage
@@ -14,15 +19,32 @@ namespace Stratego.Personnages
 
         protected int puissance;
         protected string type;
+        protected bool estVivant;
 
         public Personnage(int id, Point point)
         {
+            estVivant = true;
             deplacement = 1;
 
             this.id = id;
             position = point;
         }
 
+        public int Collision(Personnage attaquant, Personnage defenseur)
+        {
+            if (attaquant != null && defenseur != null)
+            {
+                if (attaquant.Puissance > defenseur.Puissance) // si l'attaquant est plus puissant
+                    return Attaquant;
+                if (attaquant.Puissance < defenseur.Puissance) // si le défenseur est plus puissant
+                    return Defenseur;
+                if (attaquant.Puissance == defenseur.Puissance) // si même puissance
+                    return Egalite;
+            }
+
+            return Vide; // sinon la case est vide
+        }
+        
         public Point Position
         {
             get => position;
@@ -48,12 +70,11 @@ namespace Stratego.Personnages
 
         public Pieces Piece => piece;
 
-        public virtual bool DeplacementValide(Point point)
+        public void Meurt()
         {
-            if (deplacement <= map.Distance(position, point))
-                return true;
+            estVivant = false;
             
-            return false;
+            position = new Point(-1, -1);
         }
     }
 }

@@ -39,12 +39,16 @@ namespace Stratego
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
 
-            for (int i = 0; i < 2; i++)
+            int i;
+            for (i = 0; i < 2; i++)
             {
                 piecesJoueur.Add(new Marechal(i, new Point(i, i))); // crée le personnage
                 positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[i].Position), piecesJoueur[i].Piece.Dimension)); // position de l'image
                 map.SetPositionPiece(piecesJoueur[i].Position, piecesJoueur[i]); // indique à la map ce qu'elle contient
             }
+            piecesJoueur.Add(new General(i, new Point(i, i))); // crée le personnage
+            positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[i].Position), piecesJoueur[i].Piece.Dimension)); // position de l'image
+            map.SetPositionPiece(piecesJoueur[i].Position, piecesJoueur[i]); // indique à la map ce qu'elle contient
 
             tv = CreateGraphics();
         }
@@ -60,11 +64,25 @@ namespace Stratego
                     // si le déplacement est valide pour la pièce
                     if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position)))
                     {
-                        // todo implémenter collision pièce
-                        RedessinePiece(idDragged, position, false);
+                        (int collision, Personnage defenseur) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
                         
-                        map.DeplacePiece(positionOrigine, map.PxToCoord(position), piecesJoueur[idDragged]);
-                        piecesJoueur[idDragged].Position = map.PxToCoord(position);
+                        if (collision == Personnage.Vide) // si la case de destination est vide
+                        {
+                            RedessinePiece(idDragged, position, false);
+                        }
+                        else if (collision == Personnage.Egalite) // si la case de destination contient une pièce de même niveau
+                        {
+                            EffacePiece(idDragged);
+                            EffacePiece(defenseur.Id);
+                        }
+                        else if (collision == Personnage.Defenseur) // si la case de destination est plus forte
+                        {
+                            EffacePiece(idDragged);
+                        }
+                        else if (collision == Personnage.Attaquant) // si la case de destination est moins forte
+                        {
+                            EffacePiece(defenseur.Id);
+                        }
                     }
 
                     else // sinon on la replace à sa position d'origine
@@ -93,13 +111,14 @@ namespace Stratego
             {
                 drag = true; // active le drag&drop
                 idDragged = persoSelectionne.Id;
+
                 RedessinePiece(idDragged, e.Location);
             }
         }
 
         private void RedessinePiece(int id, Point point, bool centrePiece = true)
         {
-            if (map.PositionValide(point)) // si la position est dans la grille
+            if (map.PositionValide(point) && piecesJoueur[id] != null) // si la position est dans la grille
             {
                 if (centrePiece) // si on doit centrer l'image au centre du curseur
                 {
@@ -116,13 +135,22 @@ namespace Stratego
             }
         }
 
+        private void EffacePiece(int id)
+        {
+            positionPieces[id] = null;
+            piecesJoueur[id] = null;
+            
+            pictureBox1.Invalidate();
+        }
+
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(fond, aireJeu.Rect);
 
             for (int id = 0; id < piecesJoueur.Count; id++)
             {
-                e.Graphics.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect);
+                if(piecesJoueur[id] != null)
+                    e.Graphics.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect);
             }
             
         }

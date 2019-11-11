@@ -40,24 +40,86 @@ namespace Stratego
             return OffsetY + hauteurCase * ligne;
         }
 
-        public bool SetPositionPiece(Point point, Personnage idElement)
+        public void SetPositionPiece(Point point, Personnage idElement)
         {
-            // todo vérifier position ok
-            // todo à modifier vu que l'on pourra tuer les persos
-            if (grille[point.X, point.Y] == null) // si il n'y a rien dans cette case
-            {
-                grille[point.X, point.Y] = idElement;
-
-                return true;
-            }
-
-            return false;
+            grille[point.X, point.Y] = idElement;
         }
 
-        public bool DeplacePiece(Point source, Point destination, Personnage idElement)
+        public (int, Personnage) DeplacePiece(Point source, Point destination)
         {
-            SetPositionPiece(destination, idElement);
-            grille[source.X, source.Y] = null;
+            Personnage personnage = grille[source.X, source.Y];
+            
+            if (personnage.Deplacement >= 1) // si la pièce peut se déplacer
+            {
+                if (SansObstacle(source, destination)) // si il n'y a pas d'obstacle sur son chemin
+                {
+                    int collision = personnage.Collision(personnage, grille[destination.X, destination.Y]);
+                    
+                    if (collision == Personnage.Vide)
+                    {
+                        SetPositionPiece(destination, personnage); // définit nouvelle position
+                        SetPositionPiece(source, null); // supprime l'ancienne position
+
+                        personnage.Position = destination;
+
+                        return (Personnage.Vide, null);
+                    }
+                    
+                    else if (collision == Personnage.Defenseur)
+                    {
+                        SetPositionPiece(source, null);
+
+                        personnage.Meurt();
+
+                        return (Personnage.Defenseur, null);
+                    }
+                    
+                    else if (collision == Personnage.Attaquant)
+                    {
+                        SetPositionPiece(destination, null);
+                        
+                        Personnage defenseur = grille[destination.X, destination.Y];
+                        defenseur.Meurt();
+
+                        return (Personnage.Attaquant, null);
+                    }
+                    
+                    else if (collision == Personnage.Egalite)
+                    {
+                        Personnage defenseur = grille[destination.X, destination.Y];
+                        
+                        personnage.Meurt();
+                        defenseur.Meurt();
+                        
+                        SetPositionPiece(source, null); // supprime les 2 pièces de la grille
+                        SetPositionPiece(destination, null);
+                        
+                        return (Personnage.Egalite, defenseur);
+                    }
+                }
+            }
+
+            return (-1, null);
+        }
+
+        private bool SansObstacle(Point source, Point destination)
+        {
+            if (source.X != destination.X) // si le déplacement est horizontal
+            {
+                for (int x = source.X; x < destination.X - 1; x++)
+                {
+                    if (grille[x, source.Y] != null)
+                        return false;
+                }
+            } // sinon il est vertical
+            else
+            {
+                for (int y = source.Y; y < destination.Y - 1; y++)
+                {
+                    if (grille[source.X, y] != null)
+                        return false;
+                }
+            }
 
             return true;
         }
