@@ -52,6 +52,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="JeuRegles.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Personnages\Bombe.cs" />
     <Compile Include="Personnages\Capitaine.cs" />
@@ -97,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pieces" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ListePieces.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

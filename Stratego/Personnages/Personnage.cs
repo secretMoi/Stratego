@@ -13,8 +13,7 @@ namespace Stratego.Personnages
 
         public const bool Bleu  = true;
         public const bool Rouge = false;
-        
-        
+
         protected Pieces piece;
 
         protected int deplacement; // nombre de cases que peut parcourir le personnage
@@ -81,6 +80,11 @@ namespace Stratego.Personnages
             estVivant = false;
             
             position = new Point(-1, -1);
+        }
+
+        public Personnage TypePiece()
+        {
+            return this;
         }
     }
 }

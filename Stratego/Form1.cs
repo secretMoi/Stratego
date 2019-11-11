@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
+using System.Xml;
 using Stratego.Personnages;
 
 namespace Stratego
@@ -38,22 +41,98 @@ namespace Stratego
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
 
-            int i;
-            for (i = 0; i < 2; i++)
+            // liste toutes les classes existantes
+            DirectoryInfo d = new DirectoryInfo(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\Personnages");//Assuming Test is your Folder
+            FileInfo[] Files = d.GetFiles("*.cs", SearchOption.TopDirectoryOnly); //Getting Text files
+
+            List<string> fichiersClasses =new List<string>();
+            foreach (FileInfo fichier in Files)
             {
-                piecesJoueur.Add(new Marechal(i, new Point(i, i))); // crée le personnage
-                positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[i].Position), piecesJoueur[i].Piece.Dimension)); // position de l'image
-                map.SetPositionPiece(piecesJoueur[i].Position, piecesJoueur[i]); // indique à la map ce qu'elle contient
+                fichiersClasses.Add(fichier.ToString().Remove(Files[0].ToString().Length - 3));
             }
-            piecesJoueur.Add(new General(i, new Point(i, i))); // crée le personnage
-            positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[i].Position), piecesJoueur[i].Piece.Dimension)); // position de l'image
-            map.SetPositionPiece(piecesJoueur[i].Position, piecesJoueur[i]); // indique à la map ce qu'elle contient
+
+            // charge fichier xml des différentes pièces
+            XmlTextReader listePieces = new XmlTextReader(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\ListePieces.xml");
+            int id = 0;
+            Point position = new Point(0,9);
+            while (listePieces.Read())
+            {
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name")
+                {
+                    //todo apprendre réflection pour simplifier et rendre dynamique l'ajout de pièce
+                    /*Assembly currentAssembly = Assembly.GetExecutingAssembly();
+                    Type myType = currentAssembly.GetType(nomPiece);
+                    MethodInfo TypePiece = myType.GetMethod("TypePiece");
+                    
+                    Personnage instance = Activator.CreateInstance(myType) as Personnage;
+                    TypePiece.Invoke(instance, null);*/
+
+                    string nomPiece = listePieces.ReadElementString();
+
+                    /*if (!fichiersClasses.Contains(nomPiece))
+                        MessageBox.Show("Pièce erronnée");*/
+
+                    if (position.X == 10)
+                    {
+                        position.X = 0;
+                        position.Y--;
+                    }
+
+                    switch (nomPiece)
+                    {
+                        case "Marechal":
+                            piecesJoueur.Add(new Marechal(id, position)); // crée le personnage
+                            break;
+                        case "General":
+                            piecesJoueur.Add(new General(id, position)); // crée le personnage
+                            break;
+                        case "Colonel":
+                            piecesJoueur.Add(new Colonel(id, position)); // crée le personnage
+                            break;
+                        case "Major":
+                            piecesJoueur.Add(new Major(id, position)); // crée le personnage
+                            break;
+                        case "Capitaine":
+                            piecesJoueur.Add(new Capitaine(id, position)); // crée le personnage
+                            break;
+                        case "Lieutenant":
+                            piecesJoueur.Add(new Lieutenant(id, position)); // crée le personnage
+                            break;
+                        case "Sergent":
+                            piecesJoueur.Add(new Sergent(id, position)); // crée le personnage
+                            break;
+                        case "Demineur":
+                            piecesJoueur.Add(new Demineur(id, position)); // crée le personnage
+                            break;
+                        case "Eclaireur":
+                            piecesJoueur.Add(new Eclaireur(id, position, Map.casesX)); // crée le personnage
+                            break;
+                        case "Espion":
+                            piecesJoueur.Add(new Espion(id, position)); // crée le personnage
+                            break;
+                        case "Drapeau":
+                            piecesJoueur.Add(new Drapeau(id, position)); // crée le personnage
+                            break;
+                        case "Bombe":
+                            piecesJoueur.Add(new Bombe(id, position)); // crée le personnage
+                            break;
+                    }
+                    
+                
+                    positionPieces.Add(new Rectangle(map.CoordToPx(piecesJoueur[id].Position), piecesJoueur[id].Piece.Dimension)); // position de l'image
+                    map.SetPositionPiece(piecesJoueur[id].Position, piecesJoueur[id]); // indique à la map ce qu'elle contient
+                
+                    id++;
+                    position.X++;
+                }
+            }
 
             tv = CreateGraphics();
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
+            //todo fixer le déplacement éclaireur
             if (drag)
             {
                 Point position = map.TrouveCase(e.Location);

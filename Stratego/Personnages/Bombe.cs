@@ -8,6 +8,7 @@ namespace Stratego.Personnages
         {
             puissance = 11;
             type = "bombe";
+            deplacement = 0;
 
             piece = new Pieces(type);
         }

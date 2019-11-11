@@ -11,5 +11,10 @@ namespace Stratego.Personnages
             
             piece = new Pieces(type);
         }
+
+        public Marechal TypePiece()
+        {
+            return this;
+        }
     }
 }

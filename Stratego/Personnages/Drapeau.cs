@@ -8,6 +8,7 @@ namespace Stratego.Personnages
         {
             puissance = 0;
             type = "drapeau";
+            deplacement = 0;
 
             piece = new Pieces(type);
         }

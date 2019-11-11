@@ -10,8 +10,8 @@ namespace Stratego
         public readonly string AireJeu = @"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\fonds.png";
 
         // nombre de cases
-        private const int casesX = 10;
-        private const int casesY = 10;
+        public const int casesX = 10;
+        public const int casesY = 10;
         private Personnage[,] grille;
         
         // taille de chaque case
