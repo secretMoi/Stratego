@@ -105,33 +105,36 @@ namespace Stratego
             return (-1, -1, -1);
         }
 
-        private bool SansObstacle(Point source, Point destination)
+        public bool SansObstacle(Point source, Point destination)
         {
-            int decalage;
+            int sens = 1;
+
             if (source.X != destination.X) // si le déplacement est horizontal
             {
                 if (source.X > destination.X)
-                    decalage = -1;
-                else
-                    decalage = 1;
-
-                for (int x = source.X + decalage; x < destination.X - 1; x++)
+                    sens = -1;
+                
+                for (int x = source.X; x != destination.X; x += sens)
                 {
-                    if (grille[x, source.Y] != null)
-                        return false;
+                    if (x != source.X && x != destination.X)
+                    {
+                        if (grille[x, source.Y] != null)
+                            return false;
+                    }
                 }
             } // sinon il est vertical
             else
             {
                 if (source.Y > destination.Y)
-                    decalage = -1;
-                else
-                    decalage = 1;
+                    sens = -1;
                 
-                for (int y = source.Y + decalage; y < destination.Y - 1; y++)
+                for (int y = source.Y; y != destination.Y; y += sens)
                 {
-                    if (grille[source.X, y] != null)
-                        return false;
+                    if (y != source.Y && y != destination.Y)
+                    {
+                        if (grille[source.X, y] != null)
+                            return false;
+                    }
                 }
             }
 
@@ -194,7 +197,6 @@ namespace Stratego
                     return true;
             }
             
-
             return false;
         }
 

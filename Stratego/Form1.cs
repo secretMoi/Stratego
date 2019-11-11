@@ -4,12 +4,15 @@ using System.Drawing;
 using System.Windows.Forms;
 using Stratego.Personnages;
 
+//todo cases vertes et rouges
+//todo dialogue historique combat
+//todo utiliser la bande du bas pour générer les pièces
 namespace Stratego
 {
     public partial class Form1 : Form
     {
         private readonly Map map;
-        
+
         private Graphics tv;
         private Bitmap fond;
         private readonly List<Rectangle> positionPieces;
@@ -61,7 +64,8 @@ namespace Stratego
                     // si le déplacement est valide pour la pièce
                     if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position))
                         && positionOrigine != map.PxToCoord(position) // si on ne replace pas la pièce au même endroit
-                        && map.DeplacementLineaire(positionOrigine, map.PxToCoord(position))) // si la pièce ne se déplace pas en diagonal
+                        && map.DeplacementLineaire(positionOrigine, map.PxToCoord(position)) // si la pièce ne se déplace pas en diagonal
+                        && map.SansObstacle(positionOrigine, map.PxToCoord(position))) 
                     {
                         (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
@@ -94,9 +98,6 @@ namespace Stratego
             positionOrigine = map.TrouveCase(e.Location, Map.Coord); // trouve la case en coord où on a cliqué
 
             Personnage persoSelectionne = map.GetPiece(positionOrigine);
-
-            label1.Text = positionOrigine.ToString();
-            //label2.Text = persoSelectionne.ToString();
             
             // vérifie qu'il y a bien une pièce dans la case et que la pièce soit déplaçable
             if (persoSelectionne != null && persoSelectionne.Deplacement > 0)
@@ -144,7 +145,7 @@ namespace Stratego
 
             for (int id = 0; id < piecesJoueur.Count; id++)
             {
-                if(piecesJoueur[id] != null)
+                if(piecesJoueur[id] != null) // ne dessine que les pièces valides
                     e.Graphics.DrawImage(piecesJoueur[id].Piece.Image, positionPieces[id].Rect);
             }
             

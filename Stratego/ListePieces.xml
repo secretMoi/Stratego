@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pieces>
+    <piece1>
+    <name>Marechal</name>
+    <nombre>1</nombre>
+    </piece1>
+    
+    <piece2>
+        <name>General</name>
+        <nombre>1</nombre>
+    </piece2>
+    
+    <piece3>
+        <name>Colonel</name>
+        <nombre>2</nombre>
+    </piece3>
+    
+    <piece4>
+        <name>Major</name>
+        <nombre>3</nombre>
+    </piece4>
+    
+    <piece5>
+        <name>Capitaine</name>
+        <nombre>4</nombre>
+    </piece5>
+    
+    <piece6>
+        <name>Lieutenant</name>
+        <nombre>4</nombre>
+    </piece6>
+
+    <piece7>
+        <name>Sergent</name>
+        <nombre>4</nombre>
+    </piece7>
+
+    <piece8>
+        <name>Demineur</name>
+        <nombre>5</nombre>
+    </piece8>
+
+    <piece9>
+        <name>Eclaireur</name>
+        <nombre>8</nombre>
+    </piece9>
+
+    <piece10>
+        <name>Espion</name>
+        <nombre>1</nombre>
+    </piece10>
+
+    <piece11>
+        <name>Drapeau</name>
+        <nombre>1</nombre>
+    </piece11>
+
+    <piece12>
+        <name>Bombe</name>
+        <nombre>6</nombre>
+    </piece12>
+</pieces>
