@@ -10,6 +10,10 @@ namespace Stratego.Personnages
         public const int Attaquant = 1;
         public const int Defenseur = 2;
         public const int Egalite = 3;
+
+        public const bool Bleu  = true;
+        public const bool Rouge = false;
+        
         
         protected Pieces piece;
 
@@ -20,6 +24,8 @@ namespace Stratego.Personnages
         protected int puissance;
         protected string type;
         protected bool estVivant;
+        // todo implémenter équipe pour ne pas tuer ses pièces
+        protected bool equipe;
 
         public Personnage(int id, Point point)
         {

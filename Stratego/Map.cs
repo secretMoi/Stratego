@@ -45,61 +45,64 @@ namespace Stratego
             grille[point.X, point.Y] = idElement;
         }
 
-        public (int, Personnage) DeplacePiece(Point source, Point destination)
+        public (int, int, int) DeplacePiece(Point source, Point destination)
         {
-            Personnage personnage = grille[source.X, source.Y];
+            Personnage attaquant = grille[source.X, source.Y];
             
-            if (personnage.Deplacement >= 1) // si la pièce peut se déplacer
+            if (attaquant.Deplacement >= 1) // si la pièce peut se déplacer
             {
                 if (SansObstacle(source, destination)) // si il n'y a pas d'obstacle sur son chemin
                 {
-                    int collision = personnage.Collision(personnage, grille[destination.X, destination.Y]);
+                    int collision = attaquant.Collision(attaquant, grille[destination.X, destination.Y]);
                     
                     if (collision == Personnage.Vide)
                     {
-                        SetPositionPiece(destination, personnage); // définit nouvelle position
+                        SetPositionPiece(destination, attaquant); // définit nouvelle position
                         SetPositionPiece(source, null); // supprime l'ancienne position
 
-                        personnage.Position = destination;
+                        attaquant.Position = destination;
 
-                        return (Personnage.Vide, null);
+                        return (Personnage.Vide, -1, -1);
                     }
                     
-                    else if (collision == Personnage.Defenseur)
+                    else if (collision == Personnage.Defenseur) // si le défenseur gagne
                     {
-                        SetPositionPiece(source, null);
+                        SetPositionPiece(source, null); // supprime la position de l'attaquant
 
-                        personnage.Meurt();
+                        attaquant.Meurt();
 
-                        return (Personnage.Defenseur, null);
+                        return (Personnage.Defenseur, attaquant.Id, -1);
                     }
                     
-                    else if (collision == Personnage.Attaquant)
+                    else if (collision == Personnage.Attaquant) // si l'attaquant gagne
                     {
-                        SetPositionPiece(destination, null);
+                        SetPositionPiece(destination, attaquant); // l'attaquant prend la place du défenseur
+                        SetPositionPiece(source, null); // supprime l'ancienne position
+
+                        attaquant.Position = destination;
                         
                         Personnage defenseur = grille[destination.X, destination.Y];
                         defenseur.Meurt();
 
-                        return (Personnage.Attaquant, null);
+                        return (Personnage.Attaquant, defenseur.Id, -1);
                     }
                     
                     else if (collision == Personnage.Egalite)
                     {
                         Personnage defenseur = grille[destination.X, destination.Y];
                         
-                        personnage.Meurt();
+                        attaquant.Meurt();
                         defenseur.Meurt();
                         
                         SetPositionPiece(source, null); // supprime les 2 pièces de la grille
                         SetPositionPiece(destination, null);
                         
-                        return (Personnage.Egalite, defenseur);
+                        return (Personnage.Egalite, defenseur.Id, attaquant.Id);
                     }
                 }
             }
 
-            return (-1, null);
+            return (-1, -1, -1);
         }
 
         private bool SansObstacle(Point source, Point destination)

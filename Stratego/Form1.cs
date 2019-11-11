@@ -64,27 +64,16 @@ namespace Stratego
                     // si le déplacement est valide pour la pièce
                     if (piecesJoueur[idDragged].Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position)))
                     {
-                        (int collision, Personnage defenseur) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
+                        (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
                         
                         if (collision == Personnage.Vide) // si la case de destination est vide
-                        {
                             RedessinePiece(idDragged, position, false);
-                        }
-                        else if (collision == Personnage.Egalite) // si la case de destination contient une pièce de même niveau
+                        else
                         {
-                            EffacePiece(idDragged);
-                            EffacePiece(defenseur.Id);
-                        }
-                        else if (collision == Personnage.Defenseur) // si la case de destination est plus forte
-                        {
-                            EffacePiece(idDragged);
-                        }
-                        else if (collision == Personnage.Attaquant) // si la case de destination est moins forte
-                        {
-                            EffacePiece(defenseur.Id);
+                            EffacePiece(piece1);
+                            EffacePiece(piece2);
                         }
                     }
-
                     else // sinon on la replace à sa position d'origine
                         RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
 
@@ -137,10 +126,13 @@ namespace Stratego
 
         private void EffacePiece(int id)
         {
-            positionPieces[id] = null;
-            piecesJoueur[id] = null;
+            if (id >= 0)
+            {
+                positionPieces[id] = null;
+                piecesJoueur[id] = null;
             
-            pictureBox1.Invalidate();
+                pictureBox1.Invalidate();
+            }
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
