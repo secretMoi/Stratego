@@ -28,5 +28,11 @@ namespace Stratego
 
         public int Longueur => DimensionX;
         public int Hauteur => DimensionY;
+
+        public void CentrePiece(ref Point point)
+        {
+            point.X -= Longueur / 2;
+            point.Y -= Hauteur / 2;
+        }
     }
 }

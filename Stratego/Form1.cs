@@ -18,9 +18,8 @@ namespace Stratego
         private Bitmap fond;
         private readonly List<Rectangle> positionPieces;
         private Rectangle aireJeu;
-        //private readonly List<Personnage> piecesJoueur;
 
-        private JeuRegles jeu; // todo simplifier form en mettant la logique du jeu dans cette classe
+        private JeuRegles jeu;
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
@@ -34,7 +33,6 @@ namespace Stratego
             map = new Map();
             
             positionPieces = new List<Rectangle>();
-            //piecesJoueur = new List<Personnage>();
             
             jeu = new JeuRegles();
         }
@@ -60,15 +58,11 @@ namespace Stratego
             {
                 Point position = map.TrouveCase(e.Location);
                 label1.Text = position.ToString();
-                Personnage attaquant = map.TrouvePersoParID(idDragged);
 
-                if (position.X == -1 || attaquant == null) return;
+                if (position.X == -1) return;
+                
                 // si le déplacement est valide pour la pièce
-                if (attaquant.Deplacement >= map.Distance(positionOrigine, map.PxToCoord(position))
-                    && positionOrigine != map.PxToCoord(position) // si on ne replace pas la pièce au même endroit
-                    && map.DeplacementLineaire(positionOrigine, map.PxToCoord(position)) // si la pièce ne se déplace pas en diagonal
-                    && map.SansObstacle(positionOrigine, map.PxToCoord(position))) 
-                {
+                if(map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
                     (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
                     if (collision == Personnage.Vide) // si la case de destination est vide
@@ -85,21 +79,6 @@ namespace Stratego
 
                 idDragged = -1;
                 drag = false; // désactive le drag&drop
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 10; j++)
-                {
-                    if(map.grille[j, i] != null)
-                        Debug.Write(map.grille[j, i].ToString().Replace("Stratego.Personnages.", ""));
-                    else
-                    {
-                        Debug.Write("0");
-                    }
-                }
-                
-                Debug.WriteLine(" ");
             }
         }
 
@@ -130,11 +109,9 @@ namespace Stratego
             Personnage personnage = map.TrouvePersoParID(id);
 
             if (!map.PositionValide(point) || personnage == null) return;
+            
             if (centrePiece) // si on doit centrer l'image au centre du curseur
-            {
-                point.X -= personnage.Piece.Longueur / 2;
-                point.Y -= personnage.Piece.Hauteur / 2;
-            }
+                personnage.Piece.CentrePiece(ref point);
                 
             pictureBox1.Invalidate(); // supprime l'image
 

@@ -249,5 +249,14 @@ namespace Stratego
 
             return null;
         }
+
+        public bool ConditionsDeplacement(int id, Point origine, Point destination)
+        {
+            return
+                TrouvePersoParID(id).Deplacement >= Distance(origine, destination)
+                && origine != destination // si on ne replace pas la pièce au même endroit
+                && DeplacementLineaire(origine, destination) // si la pièce ne se déplace pas en diagonal
+                && SansObstacle(origine, destination);
+        }
     }
 }
