@@ -55,7 +55,8 @@ namespace Stratego
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            (reseau as Client).Emettre("coucou");
+            if(reseau is Client)
+                (reseau as Client).Emettre("coucou");
             if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             Point position = map.TrouveCase(e.Location);
@@ -167,6 +168,11 @@ namespace Stratego
             
             button1.Enabled = true;
             button2.Enabled = false;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            reseau.Ferme(); // lance la déconnexion du réseau à la fermeture de la fenêtre
         }
     }
 }
