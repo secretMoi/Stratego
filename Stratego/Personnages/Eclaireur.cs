@@ -12,5 +12,10 @@ namespace Stratego.Personnages
             type = "eclaireur";
             piece = new Pieces(type);
         }
+        
+        public override string ToString()
+        {
+            return "Eclaireur";
+        }
     }
 }

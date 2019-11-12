@@ -31,6 +31,8 @@ namespace Stratego.Personnages
 
             this.id = id;
             position = point;
+
+            equipe = Bleu;
         }
 
         public virtual int Collision(Personnage attaquant, Personnage defenseur)
@@ -57,6 +59,8 @@ namespace Stratego.Personnages
 
         public int Id => id;
 
+        public bool Equipe => equipe;
+
         public int Puissance => puissance;
 
         public int Deplacement => deplacement;
@@ -68,6 +72,14 @@ namespace Stratego.Personnages
             estVivant = false;
             
             position = new Point(-1, -1);
+        }
+
+        public Color Couleur()
+        {
+            if(Equipe == Bleu)
+                return Color.Navy;
+
+            return Color.Crimson;
         }
     }
 }

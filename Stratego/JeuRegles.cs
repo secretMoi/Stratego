@@ -42,6 +42,46 @@ namespace Stratego
             listePieces = new XmlTextReader(chemin);
         }
 
+        private void AjoutTexte(RichTextBox richTextBox, string texte, Color color)
+        {
+            richTextBox.SelectionStart = richTextBox.TextLength;
+            richTextBox.SelectionLength = 0;
+
+            richTextBox.SelectionColor = color;
+            richTextBox.AppendText(texte);
+            richTextBox.SelectionColor = richTextBox.ForeColor;
+        }
+
+        public void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
+        {
+            if(attaquant == null || defenseur == null) return;
+            
+            AjoutTexte(richTextBox, attaquant.ToString(), attaquant.Couleur());
+            AjoutTexte(richTextBox, " attaque ", Color.Black);
+            AjoutTexte(richTextBox, defenseur.ToString(), defenseur.Couleur());
+            AjoutTexte(richTextBox, Environment.NewLine, Color.Black);
+
+            switch (resultat)
+            {
+                case Personnage.Attaquant:
+                    AjoutTexte(richTextBox, defenseur.ToString(), defenseur.Couleur());
+                    AjoutTexte(richTextBox, " est mort", Color.Black);
+                    break;
+                case Personnage.Defenseur:
+                    AjoutTexte(richTextBox, attaquant.ToString(), attaquant.Couleur());
+                    AjoutTexte(richTextBox, " est mort", Color.Black);
+                    break;
+                default:
+                    AjoutTexte(richTextBox, attaquant.ToString(), attaquant.Couleur());
+                    AjoutTexte(richTextBox, " et ", Color.Black);
+                    AjoutTexte(richTextBox, defenseur.ToString(), defenseur.Couleur());
+                    AjoutTexte(richTextBox, " sont morts", Color.Black);
+                    break;
+            }
+            
+            AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
+        }
+
         public void GenerePieces(Map map, List<Rectangle> positionPieces)
         {
             string nomPiece = null;
@@ -69,7 +109,7 @@ namespace Stratego
 
                 for (int i = 0; i < nombrePieces; i++) // génère les nb de pièces indiquées par le fichier XML
                 {
-                    if (ClasseExiste(nomPiece))
+                    if (!ClasseExiste(nomPiece))
                         MessageBox.Show("Pièce erronnée : " + nomPiece);
 
                     if (position.X == 10) // passe à la ligne suivante lorsqu'on arrive à la dernière colonne X

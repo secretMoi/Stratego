@@ -12,7 +12,10 @@ namespace Stratego.Personnages
 
             piece = new Pieces(type);
         }
-        
-        
+
+        public override string ToString()
+        {
+            return "Bombe";
+        }
     }
 }

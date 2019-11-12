@@ -21,5 +21,10 @@ namespace Stratego.Personnages
 
             return resultat;
         }
+        
+        public override string ToString()
+        {
+            return "Espion";
+        }
     }
 }
