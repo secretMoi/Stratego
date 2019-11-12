@@ -21,10 +21,11 @@ namespace Stratego
         public void ListeClasse()
         {
             // liste toutes les classes existantes
+            //todo refaire différemment la liste des classes vu que ça change d'un pc à l'autre
             DirectoryInfo d = new DirectoryInfo(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\Personnages");//Assuming Test is your Folder
-            FileInfo[] Files = d.GetFiles("*.cs", SearchOption.TopDirectoryOnly); //Getting Text files
+            FileInfo[] files = d.GetFiles("*.cs", SearchOption.TopDirectoryOnly); //Getting Text files
             
-            foreach (FileInfo fichier in Files)
+            foreach (FileInfo fichier in files)
             {
                 listeClasses.Add(fichier.ToString().Remove(fichier.ToString().Length - 3));
             }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 
 namespace Stratego
 {
@@ -8,7 +10,7 @@ namespace Stratego
         public const int DimensionX = 58;
         public const int DimensionY = 50;
         
-        private const string prefixeSource = @"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\";
+        private string prefixeSource = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\images\";
         private const string format = ".jpg";
         private readonly Bitmap image;
         

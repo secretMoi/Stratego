@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Stratego.Personnages;
 
@@ -21,6 +25,9 @@ namespace Stratego
 
         private JeuRegles jeu;
 
+        private static Thread Ecoute;
+        private static bool serveurActif = false;
+
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
         private int idDragged; // élément sélectionné
@@ -29,7 +36,7 @@ namespace Stratego
         public Form1()
         {
             InitializeComponent();
-            
+
             map = new Map();
             
             positionPieces = new List<Rectangle>();
@@ -150,6 +157,12 @@ namespace Stratego
                     e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
             }
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            serveurActif = !serveurActif;
+            label1.Text = serveurActif.ToString();
         }
     }
 }
