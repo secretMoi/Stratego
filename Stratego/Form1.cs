@@ -61,36 +61,34 @@ namespace Stratego
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            if (drag)
-            {
-                Point position = map.TrouveCase(e.Location);
-
-                Personnage attaquant = map.TrouvePersoParId(idDragged);
-                Personnage defenseur = map.GetPiece(map.PxToCoord(position));
-
-                if (position.X == -1) return;
+            if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
+            
+            Point position = map.TrouveCase(e.Location);
+            if (position.X == -1) return;
+            
+            Personnage attaquant = map.TrouvePersoParId(idDragged);
+            Personnage defenseur = map.GetPiece(map.PxToCoord(position));
                 
-                // si le déplacement est valide pour la pièce
-                if(map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
-                    (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
+            // si le déplacement est valide pour la pièce
+            if(map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
+                (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
-                    jeu.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision);
+                jeu.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision);
                     
-                    if (collision == Personnage.Vide) // si la case de destination est vide
-                        RedessinePiece(idDragged, position, false);
-                    else if(collision == Personnage.Attaquant)
-                        RedessinePiece(idDragged, position, false);
+                if (collision == Personnage.Vide) // si la case de destination est vide
+                    RedessinePiece(idDragged, position, false);
+                else if(collision == Personnage.Attaquant)
+                    RedessinePiece(idDragged, position, false);
 
-                    EffacePiece(piece1);
-                    EffacePiece(piece2);
+                EffacePiece(piece1);
+                EffacePiece(piece2);
 
-                }
-                else // sinon on la replace à sa position d'origine
-                    RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
-
-                idDragged = -1;
-                drag = false; // désactive le drag&drop
             }
+            else // sinon on la replace à sa position d'origine
+                RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
+
+            idDragged = -1;
+            drag = false; // désactive le drag&drop
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
