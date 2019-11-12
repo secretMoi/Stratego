@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using Stratego.Personnages;
 
 namespace Stratego
@@ -13,15 +12,15 @@ namespace Stratego
         // nombre de cases
         public const int casesX = 10;
         public const int casesY = 10;
-        public Personnage[,] grille;
+        private readonly Personnage[,] grille;
         
         // taille de chaque case
         private const int longueurCase = 61;
         private const int hauteurCase = 53;
 
         // position de la première case
-        public const int OffsetX = 4;
-        public const int OffsetY = 131;
+        private const int OffsetX = 4;
+        private const int OffsetY = 131;
 
         public const bool Pixel = false;
         public const bool Coord = true;
@@ -39,64 +38,58 @@ namespace Stratego
         public (int, int, int) DeplacePiece(Point source, Point destination)
         {
             Personnage attaquant = grille[source.X, source.Y];
-            
-            if (attaquant.Deplacement >= 1) // si la pièce peut se déplacer
+
+            if (attaquant.Deplacement < 1) return (-1, -1, -1);  // si la pièce peut se déplacer
+            if (!SansObstacle(source, destination)) return (-1, -1, -1);  // si il n'y a pas d'obstacle sur son chemin
+            int collision = attaquant.Collision(attaquant, grille[destination.X, destination.Y]);
+                    
+            switch (collision)
             {
-                if (SansObstacle(source, destination)) // si il n'y a pas d'obstacle sur son chemin
+                case Personnage.Vide:
+                    SetPositionPiece(destination, attaquant); // définit nouvelle position
+                    SetPositionPiece(source, null); // supprime l'ancienne position
+
+                    attaquant.Position = destination;
+
+                    return (Personnage.Vide, -1, -1);
+                
+                case Personnage.Defenseur: // si le défenseur gagne
+                    SetPositionPiece(source, null); // supprime la position de l'attaquant
+
+                    attaquant.Meurt();
+
+                    return (Personnage.Defenseur, attaquant.Id, -1);
+                
+                case Personnage.Attaquant: // si l'attaquant gagne
                 {
-                    int collision = attaquant.Collision(attaquant, grille[destination.X, destination.Y]);
-                    
-                    if (collision == Personnage.Vide)
-                    {
-                        SetPositionPiece(destination, attaquant); // définit nouvelle position
-                        SetPositionPiece(source, null); // supprime l'ancienne position
-
-                        attaquant.Position = destination;
-
-                        return (Personnage.Vide, -1, -1);
-                    }
-                    
-                    else if (collision == Personnage.Defenseur) // si le défenseur gagne
-                    {
-                        SetPositionPiece(source, null); // supprime la position de l'attaquant
-
-                        attaquant.Meurt();
-
-                        return (Personnage.Defenseur, attaquant.Id, -1);
-                    }
-                    
-                    else if (collision == Personnage.Attaquant) // si l'attaquant gagne
-                    {
-                        Personnage defenseur = grille[destination.X, destination.Y];
-                        defenseur.Meurt();
+                    Personnage defenseur = grille[destination.X, destination.Y];
+                    defenseur.Meurt();
                         
-                        SetPositionPiece(destination, attaquant); // l'attaquant prend la place du défenseur
-                        SetPositionPiece(source, null); // supprime l'ancienne position
+                    SetPositionPiece(destination, attaquant); // l'attaquant prend la place du défenseur
+                    SetPositionPiece(source, null); // supprime l'ancienne position
 
-                        attaquant.Position = destination;
+                    attaquant.Position = destination;
 
-                        return (Personnage.Attaquant, defenseur.Id, -1);
-                    }
-                    
-                    else if (collision == Personnage.Egalite)
-                    {
-                        Personnage defenseur = grille[destination.X, destination.Y];
-                        
-                        attaquant.Meurt();
-                        defenseur.Meurt();
-                        
-                        SetPositionPiece(source, null); // supprime les 2 pièces de la grille
-                        SetPositionPiece(destination, null);
-                        
-                        return (Personnage.Egalite, defenseur.Id, attaquant.Id);
-                    }
+                    return (Personnage.Attaquant, defenseur.Id, -1);
                 }
+                case Personnage.Egalite:
+                {
+                    Personnage defenseur = grille[destination.X, destination.Y];
+                        
+                    attaquant.Meurt();
+                    defenseur.Meurt();
+                        
+                    SetPositionPiece(source, null); // supprime les 2 pièces de la grille
+                    SetPositionPiece(destination, null);
+                        
+                    return (Personnage.Egalite, defenseur.Id, attaquant.Id);
+                }
+                default:
+                    return (-1, -1, -1);
             }
-
-            return (-1, -1, -1);
         }
 
-        public bool SansObstacle(Point source, Point destination)
+        private bool SansObstacle(Point source, Point destination)
         {
             int sens = 1;
 
@@ -187,8 +180,8 @@ namespace Stratego
             {
                 if(
                     point.X >= 0 && point.X <= casesX &&
-                    point.Y >= 0 && point.Y <= casesY
-                    )
+                    point.Y >= 0 && point.Y <= casesY)
+                    
                     return true;
             }
             
@@ -233,7 +226,7 @@ namespace Stratego
             return origine.X == destination.X || origine.Y == destination.Y;
         }
 
-        public Personnage TrouvePersoParID(int id)
+        public Personnage TrouvePersoParId(int id)
         {
             for (int y = 0; y < casesY; y++)
             {
@@ -253,7 +246,7 @@ namespace Stratego
         public bool ConditionsDeplacement(int id, Point origine, Point destination)
         {
             return
-                TrouvePersoParID(id).Deplacement >= Distance(origine, destination)
+                TrouvePersoParId(id).Deplacement >= Distance(origine, destination)
                 && origine != destination // si on ne replace pas la pièce au même endroit
                 && DeplacementLineaire(origine, destination) // si la pièce ne se déplace pas en diagonal
                 && SansObstacle(origine, destination);

@@ -23,8 +23,7 @@ namespace Stratego
             // liste toutes les classes existantes
             DirectoryInfo d = new DirectoryInfo(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\Personnages");//Assuming Test is your Folder
             FileInfo[] Files = d.GetFiles("*.cs", SearchOption.TopDirectoryOnly); //Getting Text files
-
-            List<string> listeClasses = new List<string>();
+            
             foreach (FileInfo fichier in Files)
             {
                 listeClasses.Add(fichier.ToString().Remove(fichier.ToString().Length - 3));

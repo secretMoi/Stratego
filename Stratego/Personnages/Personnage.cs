@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Drawing;
 
 namespace Stratego.Personnages
 {
@@ -60,17 +58,6 @@ namespace Stratego.Personnages
         public int Id => id;
 
         public int Puissance => puissance;
-
-        public int PositionX
-        {
-            get => position.X;
-            set => position.X = value;
-        }
-        public int PositionY
-        {
-            get => position.Y;
-            set => position.Y = value;
-        }
 
         public int Deplacement => deplacement;
 

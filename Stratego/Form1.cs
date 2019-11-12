@@ -106,7 +106,7 @@ namespace Stratego
 
         private void RedessinePiece(int id, Point point, bool centrePiece = true)
         {
-            Personnage personnage = map.TrouvePersoParID(id);
+            Personnage personnage = map.TrouvePersoParId(id);
 
             if (!map.PositionValide(point) || personnage == null) return;
             
@@ -140,7 +140,7 @@ namespace Stratego
             // redessine les pièces
             for (int id = 0; id < positionPieces.Count; id++)
             {
-                personnage = map.TrouvePersoParID(id);
+                personnage = map.TrouvePersoParId(id);
                 
                 if(personnage != null) // ne dessine que les pièces valides
                     e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
