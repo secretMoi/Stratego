@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using Stratego.Personnages;
 
@@ -24,9 +19,7 @@ namespace Stratego
         private Rectangle aireJeu;
 
         private JeuRegles jeu;
-
-        private static Thread Ecoute;
-        private static bool serveurActif = false;
+        private Reseau reseau;
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
@@ -37,6 +30,7 @@ namespace Stratego
         {
             InitializeComponent();
 
+            reseau = new Client();
             map = new Map();
             
             positionPieces = new List<Rectangle>();
@@ -61,6 +55,7 @@ namespace Stratego
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
+            (reseau as Client).Emettre("coucou");
             if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             Point position = map.TrouveCase(e.Location);
@@ -154,13 +149,24 @@ namespace Stratego
                 if(personnage != null) // ne dessine que les pièces valides
                     e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
             }
-            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            serveurActif = !serveurActif;
-            label1.Text = serveurActif.ToString();
+            reseau.Ferme();
+            reseau = new Client();
+            
+            button1.Enabled = false;
+            button2.Enabled = true;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            reseau.Ferme();
+            reseau = new Serveur();
+            
+            button1.Enabled = true;
+            button2.Enabled = false;
         }
     }
 }
