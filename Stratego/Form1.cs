@@ -42,8 +42,6 @@ namespace Stratego
         {
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
-
-            jeu.ListeClasse(); // génère la liste des classes du dossier personnage
             
             // charge fichier xml des différentes pièces
             jeu.OuvreXMLClasses(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\ListePieces.xml");

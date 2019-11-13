@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using Stratego.Personnages;
@@ -10,31 +11,18 @@ namespace Stratego
 {
     public class JeuRegles
     {
-        private readonly List<string> listeClasses;
         private XmlTextReader listePieces;
-        public JeuRegles()
-        {
-            listeClasses = new List<string>();
-        }
 
-        // Récupère la liste des classes contenues dans le programmes
-        public void ListeClasse()
-        {
-            // liste toutes les classes existantes
-            //todo refaire différemment la liste des classes vu que ça change d'un pc à l'autre
-            DirectoryInfo d = new DirectoryInfo(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\Personnages");//Assuming Test is your Folder
-            FileInfo[] files = d.GetFiles("*.cs", SearchOption.TopDirectoryOnly); //Getting Text files
-            
-            foreach (FileInfo fichier in files)
-            {
-                listeClasses.Add(fichier.ToString().Remove(fichier.ToString().Length - 3));
+        // Vérifie qu'une classe existe
+        private bool ClasseExiste(string typeName) {
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+                foreach (Type type in assembly.GetTypes()) {
+                    if (type.Name == typeName)
+                        return true;
+                }
             }
-        }
-
-        // Vérifie qu'une classe est contenue dans la liste de classes
-        public bool ClasseExiste(string classe)
-        {
-            return listeClasses.Contains(classe);
+ 
+            return false;
         }
 
         // Ouvre le fichier XML listant les différentes pièces et leur nombre
@@ -107,12 +95,12 @@ namespace Stratego
                 
                 Personnage instance = Activator.CreateInstance(myType) as Personnage;
                 TypePiece.Invoke(instance, null);*/
+                
+                if (!ClasseExiste(nomPiece + "a"))
+                    MessageBox.Show("Pièce erronnée : " + nomPiece);
 
                 for (int i = 0; i < nombrePieces; i++) // génère les nb de pièces indiquées par le fichier XML
                 {
-                    if (!ClasseExiste(nomPiece))
-                        MessageBox.Show("Pièce erronnée : " + nomPiece);
-
                     if (position.X == 10) // passe à la ligne suivante lorsqu'on arrive à la dernière colonne X
                     {
                         position.X = 0;
