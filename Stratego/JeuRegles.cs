@@ -94,7 +94,7 @@ namespace Stratego
                 
                 Personnage instance = Activator.CreateInstance(myType) as Personnage;
                 TypePiece.Invoke(instance, null);*/
-                
+
                 if (!ClasseExiste(nomPiece))
                     MessageBox.Show("Pièce erronnée : " + nomPiece);
 
@@ -107,8 +107,18 @@ namespace Stratego
                     }
 
                     Personnage personnage = null;
+                    
+                    string @namespace = "Stratego.Personnages";
+                    string @class = nomPiece;
+                    string method= "Hydrate";
 
-                    switch (nomPiece)
+                    var typeClasse = Type.GetType(String.Format("{0}.{1}", @namespace, @class));
+                    personnage = Activator.CreateInstance(typeClasse) as Personnage; //Check if exists, instantiate if so.
+                    personnage.Hydrate(id, position, Map.casesX);
+                    //typeClasse.GetMethod(method)
+                    
+
+                    /*switch (nomPiece)
                     {
                         case "Marechal":
                             personnage = new Marechal(id, position); // crée le personnage
@@ -146,7 +156,7 @@ namespace Stratego
                         case "Bombe":
                             personnage = new Bombe(id, position); // crée le personnage
                             break;
-                    }
+                    }*/
                     
                     positionPieces.Add(new Rectangle(map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
                     map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient

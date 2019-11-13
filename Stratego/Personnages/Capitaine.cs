@@ -4,7 +4,7 @@ namespace Stratego.Personnages
 {
     public class Capitaine : Personnage
     {
-        public Capitaine(int id, Point point) : base(id, point)
+        public Capitaine()
         {
             puissance = 6;
             type = "capitaine";

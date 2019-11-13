@@ -2,7 +2,7 @@
 
 namespace Stratego.Personnages
 {
-    public class Personnage
+    public abstract class Personnage
     {
         public const int Vide = 0;
         public const int Attaquant = 1;
@@ -33,6 +33,20 @@ namespace Stratego.Personnages
             position = point;
 
             equipe = Bleu;
+        }
+        
+        public Personnage()
+        {
+            estVivant = true;
+            deplacement = 1;
+
+            equipe = Bleu;
+        }
+        
+        public virtual void Hydrate(int id, Point point, int deplacement)
+        {
+            this.id = id;
+            position = point;
         }
 
         public virtual int Collision(Personnage attaquant, Personnage defenseur)
