@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using Stratego.Personnages;
 
@@ -44,7 +46,7 @@ namespace Stratego
             aireJeu = new Rectangle(0,0, 612, 800);
             
             // charge fichier xml des différentes pièces
-            jeu.OuvreXMLClasses(@"C:\Users\winmo\RiderProjects\Stratego\Stratego\ListePieces.xml");
+            jeu.OuvreXMLClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\ListePieces.xml");
             
             jeu.GenerePieces(map, positionPieces);
 

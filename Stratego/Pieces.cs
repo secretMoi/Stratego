@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
@@ -7,8 +6,8 @@ namespace Stratego
 {
     public class Pieces
     {
-        public const int DimensionX = 58;
-        public const int DimensionY = 50;
+        private const int DimensionX = 58;
+        private const int DimensionY = 50;
         
         private string prefixeSource = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\images\";
         private const string format = ".jpg";
@@ -21,8 +20,6 @@ namespace Stratego
             imageSource = prefixeSource + type + format;
             image = new Bitmap(imageSource);
         }
-
-        public string Chemin => imageSource;
 
         public Point Dimension => new Point(DimensionX, DimensionY);
 

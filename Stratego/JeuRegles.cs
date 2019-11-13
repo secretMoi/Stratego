@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
@@ -74,19 +73,19 @@ namespace Stratego
         public void GenerePieces(Map map, List<Rectangle> positionPieces)
         {
             string nomPiece = null;
-            int nombrePieces; // nombre de fois qu'une pièce peut être placée
+            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
             
             int id = 0;
             Point position = new Point(0, Map.casesY - 1); // position de la pièce à placer
             
             while (listePieces.Read()) // parcours le fichier XML
             {
-                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
-                
                 if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
                     nomPiece = listePieces.ReadElementString();
                 if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
                     nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
+                
+                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
 
                 //todo apprendre réflection pour simplifier et rendre dynamique l'ajout de pièce
                 /*Assembly currentAssembly = Assembly.GetExecutingAssembly();
@@ -96,7 +95,7 @@ namespace Stratego
                 Personnage instance = Activator.CreateInstance(myType) as Personnage;
                 TypePiece.Invoke(instance, null);*/
                 
-                if (!ClasseExiste(nomPiece + "a"))
+                if (!ClasseExiste(nomPiece))
                     MessageBox.Show("Pièce erronnée : " + nomPiece);
 
                 for (int i = 0; i < nombrePieces; i++) // génère les nb de pièces indiquées par le fichier XML
@@ -108,7 +107,7 @@ namespace Stratego
                     }
 
                     Personnage personnage = null;
-                    
+
                     switch (nomPiece)
                     {
                         case "Marechal":
@@ -155,6 +154,10 @@ namespace Stratego
                     id++;
                     position.X++;
                 }
+                
+                // reset les valeurs pour lire la prochaine pièce
+                nomPiece = null;
+                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
             }
         }
     }
