@@ -25,12 +25,12 @@ namespace Stratego
         }
 
         // Ouvre le fichier XML listant les différentes pièces et leur nombre
-        public void OuvreXMLClasses(string chemin)
+        public void OuvreXmlClasses(string chemin)
         {
             listePieces = new XmlTextReader(chemin);
         }
 
-        private void AjoutTexte(RichTextBox richTextBox, string texte, Color color)
+        private static void AjoutTexte(RichTextBox richTextBox, string texte, Color color)
         {
             richTextBox.SelectionStart = richTextBox.TextLength;
             richTextBox.SelectionLength = 0;
@@ -40,7 +40,7 @@ namespace Stratego
             richTextBox.SelectionColor = richTextBox.ForeColor;
         }
 
-        public void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
+        public static void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
         {
             if(attaquant == null || defenseur == null) return;
             
@@ -77,6 +77,8 @@ namespace Stratego
             
             int id = 0;
             Point position = new Point(0, Map.casesY - 1); // position de la pièce à placer
+
+            Personnage personnage;
             
             while (listePieces.Read()) // parcours le fichier XML
             {
@@ -87,16 +89,8 @@ namespace Stratego
                 
                 if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
 
-                //todo apprendre réflection pour simplifier et rendre dynamique l'ajout de pièce
-                /*Assembly currentAssembly = Assembly.GetExecutingAssembly();
-                Type myType = currentAssembly.GetType(nomPiece);
-                MethodInfo TypePiece = myType.GetMethod("TypePiece");
-                
-                Personnage instance = Activator.CreateInstance(myType) as Personnage;
-                TypePiece.Invoke(instance, null);*/
-
                 if (!ClasseExiste(nomPiece))
-                    MessageBox.Show("Pièce erronnée : " + nomPiece);
+                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
 
                 for (int i = 0; i < nombrePieces; i++) // génère les nb de pièces indiquées par le fichier XML
                 {
@@ -106,58 +100,17 @@ namespace Stratego
                         position.Y--;
                     }
 
-                    Personnage personnage = null;
+                    personnage = null;
                     
                     string @namespace = "Stratego.Personnages";
                     string @class = nomPiece;
-                    string method= "Hydrate";
 
-                    var typeClasse = Type.GetType(String.Format("{0}.{1}", @namespace, @class));
-                    personnage = Activator.CreateInstance(typeClasse) as Personnage; //Check if exists, instantiate if so.
-                    personnage.Hydrate(id, position, Map.casesX);
-                    //typeClasse.GetMethod(method)
-                    
+                    var typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
+                    if(typeClasse != null)
+                        personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
 
-                    /*switch (nomPiece)
-                    {
-                        case "Marechal":
-                            personnage = new Marechal(id, position); // crée le personnage
-                            break;
-                        case "General":
-                            personnage = new General(id, position); // crée le personnage
-                            break;
-                        case "Colonel":
-                            personnage = new Colonel(id, position); // crée le personnage
-                            break;
-                        case "Major":
-                            personnage = new Major(id, position); // crée le personnage
-                            break;
-                        case "Capitaine":
-                            personnage = new Capitaine(id, position); // crée le personnage
-                            break;
-                        case "Lieutenant":
-                            personnage = new Lieutenant(id, position); // crée le personnage
-                            break;
-                        case "Sergent":
-                            personnage = new Sergent(id, position); // crée le personnage
-                            break;
-                        case "Demineur":
-                            personnage = new Demineur(id, position); // crée le personnage
-                            break;
-                        case "Eclaireur":
-                            personnage = new Eclaireur(id, position, Map.casesX); // crée le personnage
-                            break;
-                        case "Espion":
-                            personnage = new Espion(id, position); // crée le personnage
-                            break;
-                        case "Drapeau":
-                            personnage = new Drapeau(id, position); // crée le personnage
-                            break;
-                        case "Bombe":
-                            personnage = new Bombe(id, position); // crée le personnage
-                            break;
-                    }*/
-                    
+                    if (personnage == null) continue;
+                    personnage.Hydrate(id, position, Map.casesX); // hydrate l'objet
                     positionPieces.Add(new Rectangle(map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
                     map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
             

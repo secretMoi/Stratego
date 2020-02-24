@@ -4,14 +4,13 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-//todo bug où le serveur continue de tourner en arrière-plan après la fermeture
 namespace Stratego
 {
     public class Serveur : Reseau
     {
         private Thread Ecoute;
         private UdpClient broadcast;
-        private bool continuer = true;
+        private bool continuer;
         
         public Serveur()
         {
@@ -30,7 +29,7 @@ namespace Stratego
         
         private void Ecouter()
         {
-            // Création d'un Socket qui servira de serveur de manière sécurisée
+            // Création d'un Socket qui servira de serveur
             UdpClient serveur = null;
             bool erreur = false;
             int attempts = 0;
@@ -50,7 +49,7 @@ namespace Stratego
                 }
             } while (erreur && attempts < 4);
             
-            //Si c'est vraiment impossible de se lier, on en informe le serveur et on quitte le thread.
+            //Si c'est vraiment impossible de se lier, on quitte le thread.
             if (serveur == null)
             {
                 Ferme();
@@ -59,7 +58,7 @@ namespace Stratego
             
             serveur.Client.ReceiveTimeout = 1000;
             
-            //Boucle infinie d'écoute du réseau
+            // tant que le serveur est actif
             while (continuer)
             {
                 try
@@ -80,6 +79,17 @@ namespace Stratego
             serveur.Close();
         }
         
+        public override void Ferme()
+        {
+            continuer = false;
+            
+            //erveur.Close();
+            clientOuServeur = !clientOuServeur;
+            
+            if(Ecoute != null && Ecoute.ThreadState == ThreadState.Running)
+                Ecoute.Join();
+        }
+        
         /// Méthode en charge de traiter un message entrant.
         private void TraiterMessage(object messageArgs)
         {
@@ -94,17 +104,6 @@ namespace Stratego
                 broadcast.Send(donnees, donnees.Length);
             }
             catch { }
-        }
-
-        public override void Ferme()
-        {
-            continuer = false;
-            
-            //erveur.Close();
-            clientOuServeur = !clientOuServeur;
-            
-            if(Ecoute != null && Ecoute.ThreadState == ThreadState.Running)
-                Ecoute.Join();
         }
         
          //Définition d'une classe interne privée pour faciliter l'échange de

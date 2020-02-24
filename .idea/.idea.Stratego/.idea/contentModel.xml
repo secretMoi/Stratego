@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\winmo\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\winmo\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Stratego.-47294889.00" t="ExcludeRecursive" />
+    <e p="C:\Users\winmo\RiderProjects\Stratego" t="IncludeFlat">
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Stratego" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Client.cs" t="Include" />
+        <e p="Form1.cs" t="Include" />
+        <e p="Form1.Designer.cs" t="Include" />
+        <e p="Form1.resx" t="Include" />
+        <e p="images" t="Include">
+          <e p="bombe.jpg" t="Include" />
+          <e p="capitaine.jpg" t="Include" />
+          <e p="colonel.jpg" t="Include" />
+          <e p="demineur.jpg" t="Include" />
+          <e p="drapeau.jpg" t="Include" />
+          <e p="eclaireur.jpg" t="Include" />
+          <e p="espion.jpg" t="Include" />
+          <e p="fonds.png" t="Include" />
+          <e p="general.jpg" t="Include" />
+          <e p="lieutenant.jpg" t="Include" />
+          <e p="listePieces.jpg" t="Include" />
+          <e p="major.jpg" t="Include" />
+          <e p="marechal.jpg" t="Include" />
+          <e p="sergent.jpg" t="Include" />
+        </e>
+        <e p="JeuRegles.cs" t="Include" />
+        <e p="ListePieces.xml" t="Include" />
+        <e p="Map.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Personnages" t="Include">
+          <e p="Bombe.cs" t="Include" />
+          <e p="Capitaine.cs" t="Include" />
+          <e p="Colonel.cs" t="Include" />
+          <e p="Demineur.cs" t="Include" />
+          <e p="Drapeau.cs" t="Include" />
+          <e p="Eclaireur.cs" t="Include" />
+          <e p="Espion.cs" t="Include" />
+          <e p="General.cs" t="Include" />
+          <e p="Lieutenant.cs" t="Include" />
+          <e p="Major.cs" t="Include" />
+          <e p="Marechal.cs" t="Include" />
+          <e p="Personnage.cs" t="Include" />
+          <e p="Sergent.cs" t="Include" />
+        </e>
+        <e p="Pieces" t="Include" />
+        <e p="Pieces.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Rectangle.cs" t="Include" />
+        <e p="Reseau.cs" t="Include" />
+        <e p="Serveur.cs" t="Include" />
+        <e p="Stratego.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="Stratego.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>

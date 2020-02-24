@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
-//todo dialogue historique combat
 //todo utiliser la bande du bas pour générer les pièces
 namespace Stratego
 {
@@ -46,7 +45,7 @@ namespace Stratego
             aireJeu = new Rectangle(0,0, 612, 800);
             
             // charge fichier xml des différentes pièces
-            jeu.OuvreXMLClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\ListePieces.xml");
+            jeu.OuvreXmlClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\ListePieces.xml");
             
             jeu.GenerePieces(map, positionPieces);
 
@@ -69,7 +68,7 @@ namespace Stratego
             if(map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
                 (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
-                jeu.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision);
+                JeuRegles.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision);
                     
                 if (collision == Personnage.Vide) // si la case de destination est vide
                     RedessinePiece(idDragged, position, false);
