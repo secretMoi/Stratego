@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
@@ -14,14 +15,14 @@ namespace Stratego
 
         // Vérifie qu'une classe existe
         private bool ClasseExiste(string typeName) {
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+            /*foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
                 foreach (Type type in assembly.GetTypes()) {
                     if (type.Name == typeName)
                         return true;
                 }
-            }
- 
-            return false;
+            }*/
+
+            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Any(type => type.Name == typeName);
         }
 
         // Ouvre le fichier XML listant les différentes pièces et leur nombre
@@ -76,7 +77,7 @@ namespace Stratego
             int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
             
             int id = 0;
-            Point position = new Point(0, Map.casesY - 1); // position de la pièce à placer
+            Point position = new Point(0, Map.CasesY - 1); // position de la pièce à placer
 
             Personnage personnage;
             
@@ -110,8 +111,8 @@ namespace Stratego
                         personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
 
                     if (personnage == null) continue;
-                    personnage.Hydrate(id, position, Map.casesX); // hydrate l'objet
-                    positionPieces.Add(new Rectangle(map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+                    personnage.Hydrate(id, position, Map.CasesX); // hydrate l'objet
+                    positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
                     map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
             
                     id++;

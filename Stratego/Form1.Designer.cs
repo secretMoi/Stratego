@@ -52,14 +52,14 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(937, 678);
+            this.label1.Location = new System.Drawing.Point(1041, 826);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(290, 23);
             this.label1.TabIndex = 2;
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(937, 720);
+            this.label2.Location = new System.Drawing.Point(1041, 868);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(290, 23);
             this.label2.TabIndex = 3;
@@ -77,22 +77,24 @@
             // button1
             // 
             this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(1095, 678);
+            this.button1.Location = new System.Drawing.Point(1199, 826);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(132, 23);
             this.button1.TabIndex = 6;
             this.button1.Text = "Client";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1095, 717);
+            this.button2.Location = new System.Drawing.Point(1199, 865);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(132, 23);
             this.button2.TabIndex = 7;
             this.button2.Text = "Serveur";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1

@@ -13,14 +13,13 @@ namespace Stratego
     public partial class Form1 : Form
     {
         private readonly Map map;
-
-        private Graphics tv;
+        
         private Bitmap fond;
         private readonly List<Rectangle> positionPieces;
         private Rectangle aireJeu;
 
-        private JeuRegles jeu;
-        private Reseau reseau;
+        private readonly JeuRegles jeu;
+        //private Reseau reseau;
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
@@ -31,7 +30,7 @@ namespace Stratego
         {
             InitializeComponent();
 
-            reseau = new Client();
+            //reseau = new Client();
             map = new Map();
             
             positionPieces = new List<Rectangle>();
@@ -45,27 +44,24 @@ namespace Stratego
             aireJeu = new Rectangle(0,0, 612, 800);
             
             // charge fichier xml des différentes pièces
-            jeu.OuvreXmlClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\ListePieces.xml");
+            jeu.OuvreXmlClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\ListePieces.xml");
             
             jeu.GenerePieces(map, positionPieces);
-
-            tv = CreateGraphics();
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            if(reseau is Client)
-                (reseau as Client).Emettre("coucou");
+            /*if(reseau is Client)
+                (reseau as Client).Emettre("coucou");*/
             if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             Point position = map.TrouveCase(e.Location);
-            if (position.X == -1) return;
             
             Personnage attaquant = map.TrouvePersoParId(idDragged);
-            Personnage defenseur = map.GetPiece(map.PxToCoord(position));
+            Personnage defenseur = map.GetPiece(position, Map.Pixel);
                 
             // si le déplacement est valide pour la pièce
-            if(map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
+            if(position.X != -1 && map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
                 (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
                 JeuRegles.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision);
@@ -77,10 +73,9 @@ namespace Stratego
 
                 EffacePiece(piece1);
                 EffacePiece(piece2);
-
             }
             else // sinon on la replace à sa position d'origine
-                RedessinePiece(idDragged, map.CoordToPx(positionOrigine), false);
+                RedessinePiece(idDragged, Map.CoordToPx(positionOrigine), false);
 
             idDragged = -1;
             drag = false; // désactive le drag&drop
@@ -116,23 +111,20 @@ namespace Stratego
             
             if (centrePiece) // si on doit centrer l'image au centre du curseur
                 personnage.Piece.CentrePiece(ref point);
-                
-            pictureBox1.Invalidate(); // supprime l'image
-
+            
             // calcule ses nouvelles coordonnées
             positionPieces[id].Point = point;
-                    
-            tv.DrawImage(personnage.Piece.Image, positionPieces[id].Rect); // affiche l'image avec ses nouvelles coordonnées
+            
+            pictureBox1.Invalidate(); // supprime l'image
         }
 
         private void EffacePiece(int id)
         {
-            if (id >= 0)
-            {
-                positionPieces[id] = null;
+            if (id < 0) return;
             
-                pictureBox1.Invalidate();
-            }
+            positionPieces[id] = null;
+            
+            pictureBox1.Invalidate();
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -153,25 +145,25 @@ namespace Stratego
 
         private void button1_Click(object sender, EventArgs e)
         {
-            reseau.Ferme();
+            /*reseau.Ferme();
             reseau = new Client();
             
             button1.Enabled = false;
-            button2.Enabled = true;
+            button2.Enabled = true;*/
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            reseau.Ferme();
+            /*reseau.Ferme();
             reseau = new Serveur();
             
             button1.Enabled = true;
-            button2.Enabled = false;
+            button2.Enabled = false;*/
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            reseau.Ferme(); // lance la déconnexion du réseau à la fermeture de la fenêtre
+            //reseau.Ferme(); // lance la déconnexion du réseau à la fermeture de la fenêtre
         }
     }
 }

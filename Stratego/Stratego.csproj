@@ -74,6 +74,7 @@
     <Compile Include="Reseau.cs" />
     <Compile Include="Rectangle.cs" />
     <Compile Include="Serveur.cs" />
+    <Compile Include="Texte.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

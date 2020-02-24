@@ -61,6 +61,7 @@
         <e p="Reseau.cs" t="Include" />
         <e p="Serveur.cs" t="Include" />
         <e p="Stratego.csproj" t="IncludeRecursive" />
+        <e p="Texte.cs" t="Include" />
       </e>
       <e p="Stratego.sln" t="IncludeFlat" />
     </e>

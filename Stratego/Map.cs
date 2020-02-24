@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using Stratego.Personnages;
 
 namespace Stratego
@@ -7,16 +9,16 @@ namespace Stratego
     public class Map
     {
         // chemin du background map
-        public readonly string AireJeu = @"C:\Users\winmo\RiderProjects\Stratego\Stratego\images\fonds.png";
+        public readonly string AireJeu = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\images\fonds.png";
 
         // nombre de cases
-        public const int casesX = 10;
-        public const int casesY = 10;
+        public const int CasesX = 10;
+        public const int CasesY = 10;
         private readonly Personnage[,] grille;
         
         // taille de chaque case
-        private const int longueurCase = 61;
-        private const int hauteurCase = 53;
+        private const int LongueurCase = 61;
+        private const int HauteurCase = 53;
 
         // position de la première case
         private const int OffsetX = 4;
@@ -27,7 +29,7 @@ namespace Stratego
 
         public Map()
         {
-            grille = new Personnage[casesX, casesY];
+            grille = new Personnage[CasesX, CasesY];
         }
 
         public void SetPositionPiece(Point point, Personnage idElement)
@@ -130,8 +132,10 @@ namespace Stratego
             if (typeCoord == Pixel) // si on passe le point en px, on le convertit d'abord en coord
                 point = PxToCoord(point);
             
-            return grille[point.X, point.Y];
-                
+            if(PositionValide(point, Coord))
+                return grille[point.X, point.Y];
+            
+            return null;
         }
 
         // retourne les coordonnées d'une case dans l'unité souhaitée
@@ -152,8 +156,8 @@ namespace Stratego
                 point.X -= OffsetX;
                 point.Y -= OffsetY;
 
-                point.X = (point.X / longueurCase) * longueurCase;
-                point.Y = (point.Y / hauteurCase) * hauteurCase;
+                point.X = (point.X / LongueurCase) * LongueurCase;
+                point.Y = (point.Y / HauteurCase) * HauteurCase;
             
                 point.X += OffsetX;
                 point.Y += OffsetY;
@@ -171,16 +175,16 @@ namespace Stratego
             if (typeCoord == Pixel)
             {
                 if (
-                    point.X >= OffsetX && point.X < OffsetX + longueurCase * casesX &&
-                    point.Y >= OffsetY && point.Y < OffsetY + hauteurCase  * casesY
+                    point.X >= OffsetX && point.X < OffsetX + LongueurCase * CasesX &&
+                    point.Y >= OffsetY && point.Y < OffsetY + HauteurCase  * CasesY
                 )
                     return true;
             }
             else
             {
                 if(
-                    point.X >= 0 && point.X <= casesX &&
-                    point.Y >= 0 && point.Y <= casesY)
+                    point.X >= 0 && point.X <= CasesX &&
+                    point.Y >= 0 && point.Y <= CasesY)
                     
                     return true;
             }
@@ -189,7 +193,7 @@ namespace Stratego
         }
 
         // recoit des coordonnées en pixels, et retourne la distance en nombre de cases
-        public int Distance(Point source, Point destination)
+        private int Distance(Point source, Point destination)
         {
             if (!PositionValide(source, Coord) && !PositionValide(destination, Coord))
                 return -1;
@@ -205,32 +209,32 @@ namespace Stratego
             return distance;
         }
 
-        public Point CoordToPx(Point point)
+        public static Point CoordToPx(Point point)
         {
-            point.X = OffsetX + point.X * longueurCase;
-            point.Y = OffsetY + point.Y * hauteurCase;
+            point.X = OffsetX + point.X * LongueurCase;
+            point.Y = OffsetY + point.Y * HauteurCase;
 
             return point;
         }
         
         public Point PxToCoord(Point point)
         {
-            point.X = (point.X - OffsetX) / longueurCase;
-            point.Y = (point.Y - OffsetY) / hauteurCase;
+            point.X = (point.X - OffsetX) / LongueurCase;
+            point.Y = (point.Y - OffsetY) / HauteurCase;
 
             return point;
         }
 
-        public bool DeplacementLineaire(Point origine, Point destination)
+        private static bool DeplacementLineaire(Point origine, Point destination)
         {
             return origine.X == destination.X || origine.Y == destination.Y;
         }
 
         public Personnage TrouvePersoParId(int id)
         {
-            for (int y = 0; y < casesY; y++)
+            for (int y = 0; y < CasesY; y++)
             {
-                for (int x = 0; x < casesX; x++)
+                for (int x = 0; x < CasesX; x++)
                 {
                     if (grille[x, y] != null) // si l'endroit de la grille n'est pas vide
                     {
