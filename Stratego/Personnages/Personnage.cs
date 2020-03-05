@@ -43,7 +43,7 @@ namespace Stratego.Personnages
             equipe = Bleu;
         }
         
-        public virtual void Hydrate(int id, Point point, int deplacement)
+        public virtual void Hydrate(int id, int deplacement, Point point)
         {
             this.id = id;
             position = point;

@@ -12,9 +12,9 @@ namespace Stratego.Personnages
             piece = new Pieces(type);
         }
 
-        public override void Hydrate(int id, Point point, int deplacement)
+        public override void Hydrate(int id,  int deplacement, Point point)
         {
-            base.Hydrate(id, point, deplacement);
+            base.Hydrate(id, deplacement, point);
             this.deplacement = deplacement - 1;
         }
 

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
-//todo utiliser la bande du bas pour générer les pièces
 namespace Stratego
 {
     public partial class Form1 : Form
@@ -19,7 +20,6 @@ namespace Stratego
         private Rectangle aireJeu;
 
         private readonly JeuRegles jeu;
-        //private Reseau reseau;
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
@@ -29,8 +29,7 @@ namespace Stratego
         public Form1()
         {
             InitializeComponent();
-
-            //reseau = new Client();
+            
             map = new Map();
             
             positionPieces = new List<Rectangle>();
@@ -47,12 +46,47 @@ namespace Stratego
             jeu.OuvreXmlClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\ListePieces.xml");
             
             jeu.GenerePieces(map, positionPieces);
+            
+            GenereMenu(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\ListePieces.xml");
+        }
+        
+        private bool ClasseExiste(string typeName) {
+            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Any(type => type.Name == typeName);
+        }
+
+        private void GenereMenu(string chemin)
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            
+            pictureBox1.ContextMenu = contextMenu;
+            
+            XmlTextReader listePieces = new XmlTextReader(chemin);
+            
+            string nomPiece = null;
+            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
+
+            while (listePieces.Read()) // parcours le fichier XML
+            {
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
+                    nomPiece = listePieces.ReadElementString();
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
+                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
+                
+                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
+
+                if (!ClasseExiste(nomPiece))
+                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
+
+                contextMenu.MenuItems.Add(nombrePieces + " - " + nomPiece);
+
+                // reset les valeurs pour lire la prochaine pièce
+                nomPiece = null;
+                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
+            }
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            /*if(reseau is Client)
-                (reseau as Client).Emettre("coucou");*/
             if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             Point position = map.TrouveCase(e.Location);
@@ -141,29 +175,6 @@ namespace Stratego
                 if(personnage != null) // ne dessine que les pièces valides
                     e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            /*reseau.Ferme();
-            reseau = new Client();
-            
-            button1.Enabled = false;
-            button2.Enabled = true;*/
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            /*reseau.Ferme();
-            reseau = new Serveur();
-            
-            button1.Enabled = true;
-            button2.Enabled = false;*/
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //reseau.Ferme(); // lance la déconnexion du réseau à la fermeture de la fenêtre
         }
     }
 }

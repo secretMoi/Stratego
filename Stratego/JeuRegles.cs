@@ -111,7 +111,7 @@ namespace Stratego
                         personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
 
                     if (personnage == null) continue;
-                    personnage.Hydrate(id, position, Map.CasesX); // hydrate l'objet
+                    personnage.Hydrate(id, Map.CasesX, position); // hydrate l'objet
                     positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
                     map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
             
