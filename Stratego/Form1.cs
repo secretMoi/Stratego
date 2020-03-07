@@ -5,6 +5,9 @@ using System.Windows.Forms;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
+//todo cacher les pièces à chaque tour
+//todo chaque joueur ne peut faire qu'un déplacement par tour
+//todo menu (aide, sauvegarder partie, reprendre partie...)
 namespace Stratego
 {
     public partial class Form1 : Form
@@ -19,20 +22,19 @@ namespace Stratego
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
-        private Point dernierClic;
         private bool placementPieces; // si on place les pièces avant le début du jeu
         private int idDragged; // élément sélectionné
 
-        private Point positionOrigine;
+        private Point positionOrigine; // position de départ de la pièce déplacée
         public Form1()
         {
             InitializeComponent();
-            
-            map = new Map();
-            
+
             positionPieces = new List<Rectangle>();
             
             jeu = new JeuRegles("ListePieces.xml");
+            
+            map = new Map(jeu.ListeCasesInterdites());
             
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
@@ -49,7 +51,7 @@ namespace Stratego
 
         public void MenuPictureBox(MenuItem menuItem)
         {
-            if(dernierClic.X == -1)
+            if(positionOrigine.X == -1)
             {
                 MessageBox.Show(@"Case invalide !");
                 return;
@@ -68,7 +70,7 @@ namespace Stratego
             }
             
             // si la case cible est déjà occupée
-            Personnage caseCible = map.GetPiece(dernierClic);
+            Personnage caseCible = map.GetPiece(positionOrigine);
             if (caseCible != null)
             {
                 MessageBox.Show(@"Case occupée !");
@@ -79,7 +81,7 @@ namespace Stratego
                 equipe = Personnage.Rouge;
 
             // crée la pièce
-            if (GenereUnePiece(nomPiece, dernierClic, equipe) == null)
+            if (GenereUnePiece(nomPiece, positionOrigine, equipe) == null)
                 return;
 
             menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
@@ -92,8 +94,7 @@ namespace Stratego
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            if(placementPieces) return;
-            if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
+            if (!drag || placementPieces) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             Point position = map.TrouveCase(e.Location);
             
@@ -101,16 +102,15 @@ namespace Stratego
             Personnage defenseur = map.GetPiece(position, Map.Pixel);
                 
             // si le déplacement est valide pour la pièce
-            if(position.X != -1 && map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position))){
+            if(position.X != -1 && map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position)))
+            {
                 (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 
-                JeuRegles.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision);
-                    
-                if (collision == Personnage.Vide) // si la case de destination est vide
-                    RedessinePiece(idDragged, position, false);
-                else if(collision == Personnage.Attaquant)
-                    RedessinePiece(idDragged, position, false);
+                JeuRegles.GenereHistoriqueDialogue(richTextBox1, attaquant, defenseur, collision); // affiche l'action
+                
+                RedessinePiece(idDragged, position, false); // redessine la pièce à sa position finale
 
+                // efface les pièces qui doivent l'être
                 EffacePiece(piece1);
                 EffacePiece(piece2);
             }
@@ -131,14 +131,11 @@ namespace Stratego
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
-            if (placementPieces)
-            {
-                dernierClic = map.TrouveCase(e.Location, Map.Coord);
-                return;
-            }
-            
             positionOrigine = map.TrouveCase(e.Location, Map.Coord); // trouve la case en coord où on a cliqué
-
+            
+            if (placementPieces)
+                return;
+            
             Personnage persoSelectionne = map.GetPiece(positionOrigine);
             
             // vérifie qu'il y a bien une pièce dans la case et que la pièce soit déplaçable
@@ -163,7 +160,7 @@ namespace Stratego
             // calcule ses nouvelles coordonnées
             positionPieces[id].Point = point;
             
-            pictureBox1.Invalidate(); // supprime l'image
+            pictureBox1.Invalidate();
         }
 
         private void EffacePiece(int id)

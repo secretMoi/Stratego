@@ -124,33 +124,22 @@ namespace Stratego
             return personnage;
         }
 
-        public void GenerePieces(Map map, List<Rectangle> positionPieces)
+        public List<Point> ListeCasesInterdites()
         {
-            /*Point position = new Point(0, Map.CasesY - 1); // position de la pièce à placer
+            List<Point> casesInterdites = new List<Point>();
+            // lac gauche
+            casesInterdites.Add(new Point(2, 4));
+            casesInterdites.Add(new Point(3, 4));
+            casesInterdites.Add(new Point(2, 5));
+            casesInterdites.Add(new Point(3, 5));
+            
+            // lac droit
+            casesInterdites.Add(new Point(6, 4));
+            casesInterdites.Add(new Point(7, 4));
+            casesInterdites.Add(new Point(6, 5));
+            casesInterdites.Add(new Point(7, 5));
 
-            Personnage personnage;
-
-            foreach (KeyValuePair<string, int> piece in listePieces)
-            {
-                for (int i = 0; i < piece.Value; i++) // génère les nb de pièces indiquées par le fichier XML
-                {
-                    if (position.X == 10) // passe à la ligne suivante lorsqu'on arrive à la dernière colonne X
-                    {
-                        position.X = 0;
-                        position.Y--;
-                    }
-                    
-                    personnage = GenereUnePiece(piece.Key, position);
-
-                    if (personnage != null)
-                    {
-                        positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
-                        map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
-                    
-                        position.X++;
-                    }
-                }
-            }*/
+            return casesInterdites;
         }
 
         public Dictionary<string, int> ListePieces => listePieces;

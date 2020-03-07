@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using Stratego.Personnages;
 
 namespace Stratego
@@ -9,12 +8,13 @@ namespace Stratego
     public class Map
     {
         // chemin du background map
-        public readonly string AireJeu = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\images\fonds.png";
+        public readonly string AireJeu = @"images\fonds.png";
 
         // nombre de cases
         public const int CasesX = 10;
         public const int CasesY = 10;
         private readonly Personnage[,] grille;
+        private readonly List<Point> casesInterdites;
         
         // taille de chaque case
         private const int LongueurCase = 61;
@@ -27,8 +27,9 @@ namespace Stratego
         public const bool Pixel = false;
         public const bool Coord = true;
 
-        public Map()
+        public Map(List<Point> casesInterdites)
         {
+            this.casesInterdites = casesInterdites;
             grille = new Personnage[CasesX, CasesY];
         }
 
@@ -247,11 +248,21 @@ namespace Stratego
             return null;
         }
 
+        private bool CaseAutorisee(Point destination)
+        {
+            foreach (Point point in casesInterdites)
+                if (destination.X == point.X && destination.Y == point.Y)
+                    return false;
+
+            return true;
+        }
+
         public bool ConditionsDeplacement(int id, Point origine, Point destination)
         {
             return
                 TrouvePersoParId(id).Deplacement >= Distance(origine, destination)
                 && origine != destination // si on ne replace pas la pièce au même endroit
+                && CaseAutorisee(destination) // vérifie que la position ne fait pas partie des cases interdites
                 && DeplacementLineaire(origine, destination) // si la pièce ne se déplace pas en diagonal
                 && SansObstacle(origine, destination);
         }
