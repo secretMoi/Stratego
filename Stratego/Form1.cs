@@ -8,6 +8,8 @@ using Stratego.Personnages;
 //todo cacher les pièces à chaque tour
 //todo chaque joueur ne peut faire qu'un déplacement par tour
 //todo menu (aide, sauvegarder partie, reprendre partie...)
+//todo zone tuto premièe prise en main
+//todo détection fin de partie
 namespace Stratego
 {
     public partial class Form1 : Form
@@ -100,9 +102,12 @@ namespace Stratego
             
             Personnage attaquant = map.TrouvePersoParId(idDragged);
             Personnage defenseur = map.GetPiece(position, Map.Pixel);
-                
+
+            // si les 2 pièces sont de la même équipe
+            if (defenseur != null && attaquant.Equipe == defenseur.Equipe)
+                RedessinePiece(idDragged, Map.CoordToPx(positionOrigine), false);
             // si le déplacement est valide pour la pièce
-            if(position.X != -1 && map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position)))
+            else if(position.X != -1 && map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position)))
             {
                 (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
 

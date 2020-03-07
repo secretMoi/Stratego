@@ -20,7 +20,7 @@ namespace Stratego.Personnages
 
         protected int puissance;
         protected string type;
-        // todo implémenter équipe pour ne pas tuer ses pièces
+        
         private bool equipe;
 
         private static int nombrePiece;
