@@ -35,6 +35,7 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.buttonRemplir = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -95,11 +96,22 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
             // 
+            // buttonRemplir
+            // 
+            this.buttonRemplir.Location = new System.Drawing.Point(828, 647);
+            this.buttonRemplir.Name = "buttonRemplir";
+            this.buttonRemplir.Size = new System.Drawing.Size(99, 39);
+            this.buttonRemplir.TabIndex = 8;
+            this.buttonRemplir.Text = "Remplir bleus";
+            this.buttonRemplir.UseVisualStyleBackColor = true;
+            this.buttonRemplir.Click += new System.EventHandler(this.buttonRemplir_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1343, 912);
+            this.Controls.Add(this.buttonRemplir);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.richTextBox1);
@@ -122,5 +134,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonRemplir;
     }
 }

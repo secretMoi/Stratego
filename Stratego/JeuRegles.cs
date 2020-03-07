@@ -11,6 +11,36 @@ namespace Stratego
     public class JeuRegles
     {
         private Form1 fenetrePrincipale;
+        private readonly Dictionary<String, int> listePieces;
+
+        public JeuRegles(string chemin)
+        {
+            this.listePieces = new Dictionary<string, int>();
+            XmlTextReader listePieces = new XmlTextReader(chemin);
+            
+            string nomPiece = null;
+            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
+
+            while (listePieces.Read()) // parcours le fichier XML
+            {
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
+                    nomPiece = listePieces.ReadElementString();
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
+                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
+                
+                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
+
+                if (!ClasseExiste(nomPiece))
+                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
+
+                this.listePieces.Add(nomPiece, nombrePieces);
+
+                // reset les valeurs pour lire la prochaine pièce
+                nomPiece = null;
+                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
+            }
+        }
+        
         // Vérifie qu'une classe existe
         private bool ClasseExiste(string typeName) {
             /*foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
@@ -33,33 +63,12 @@ namespace Stratego
             richTextBox.SelectionColor = richTextBox.ForeColor;
         }
         
-        public void GenereMenu(string chemin, ContextMenu contextMenu, Form1 fenetrePrincipale)
+        public void GenereMenu(ContextMenu contextMenu, Form1 fenetrePrincipale)
         {
             this.fenetrePrincipale = fenetrePrincipale;
-            
-            XmlTextReader listePieces = new XmlTextReader(chemin);
-            
-            string nomPiece = null;
-            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
 
-            while (listePieces.Read()) // parcours le fichier XML
-            {
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
-                    nomPiece = listePieces.ReadElementString();
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
-                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
-                
-                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
-
-                if (!ClasseExiste(nomPiece))
-                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
-
-                contextMenu.MenuItems.Add(nombrePieces + " - " + nomPiece, Menu_OnClick);
-
-                // reset les valeurs pour lire la prochaine pièce
-                nomPiece = null;
-                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
-            }
+            foreach(KeyValuePair<string, int> piece in listePieces)
+                contextMenu.MenuItems.Add(piece.Value + " - " + piece.Key, Menu_OnClick);
         }
 
         private void Menu_OnClick(object sender, EventArgs e)
@@ -98,64 +107,52 @@ namespace Stratego
             AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
         }
 
-        public void GenerePiecesAleatoire(Map map, List<Rectangle> positionPieces, string chemin)
+        public Personnage GenereUnePiece(string nomPiece, Point position)
         {
+            string @namespace = "Stratego.Personnages";
+            string @class = nomPiece;
+            Personnage personnage = null;
+
+            Type typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
+            if(typeClasse != null)
+                personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
+
+            if (personnage == null) return null;
             
+            personnage.Hydrate(Personnage.AugmenteNombrePieces(), Map.CasesX, position); // hydrate l'objet
+
+            return personnage;
         }
 
-        public void GenerePieces(Map map, List<Rectangle> positionPieces, string chemin)
+        public void GenerePieces(Map map, List<Rectangle> positionPieces)
         {
-            XmlTextReader listePieces = new XmlTextReader(chemin);
-            string nomPiece = null;
-            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
-            
-            int id = 0;
             Point position = new Point(0, Map.CasesY - 1); // position de la pièce à placer
 
             Personnage personnage;
-            
-            while (listePieces.Read()) // parcours le fichier XML
+
+            foreach (KeyValuePair<string, int> piece in listePieces)
             {
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
-                    nomPiece = listePieces.ReadElementString();
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
-                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
-                
-                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
-
-                if (!ClasseExiste(nomPiece))
-                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
-
-                for (int i = 0; i < nombrePieces; i++) // génère les nb de pièces indiquées par le fichier XML
+                for (int i = 0; i < piece.Value; i++) // génère les nb de pièces indiquées par le fichier XML
                 {
                     if (position.X == 10) // passe à la ligne suivante lorsqu'on arrive à la dernière colonne X
                     {
                         position.X = 0;
                         position.Y--;
                     }
-
-                    personnage = null;
                     
-                    string @namespace = "Stratego.Personnages";
-                    string @class = nomPiece;
+                    personnage = GenereUnePiece(piece.Key, position);
 
-                    var typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
-                    if(typeClasse != null)
-                        personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
-
-                    if (personnage == null) continue;
-                    personnage.Hydrate(id, Map.CasesX, position); // hydrate l'objet
-                    positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
-                    map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
-            
-                    id++;
-                    position.X++;
+                    if (personnage != null)
+                    {
+                        positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+                        map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+                    
+                        position.X++;
+                    }
                 }
-                
-                // reset les valeurs pour lire la prochaine pièce
-                nomPiece = null;
-                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
             }
         }
+
+        public Dictionary<string, int> ListePieces => listePieces;
     }
 }

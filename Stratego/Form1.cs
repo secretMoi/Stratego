@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Xml;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
@@ -33,7 +34,7 @@ namespace Stratego
             
             positionPieces = new List<Rectangle>();
             
-            jeu = new JeuRegles();
+            jeu = new JeuRegles("ListePieces.xml");
             
             fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
@@ -45,7 +46,7 @@ namespace Stratego
         {
             pictureBox1.ContextMenu = new ContextMenu();
             
-            jeu.GenereMenu("ListePieces.xml", pictureBox1.ContextMenu, this);
+            jeu.GenereMenu(pictureBox1.ContextMenu, this);
         }
 
         public void MenuPictureBox(MenuItem menuItem)
@@ -73,18 +74,10 @@ namespace Stratego
                 MessageBox.Show(@"Case occupée !");
                 return;
             }
-            
-            string @namespace = "Stratego.Personnages";
-            string @class = nomPiece;
-            Personnage personnage = null;
 
-            Type typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
-            if(typeClasse != null)
-                personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
-            
-            personnage.Hydrate(Personnage.AugmenteNombrePieces(), Map.CasesX, dernierClic); // hydrate l'objet
-            positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
-            map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+            // crée la pièce
+            if (GenereUnePiece(nomPiece, dernierClic) == null)
+                return;
 
             menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
 
@@ -197,6 +190,63 @@ namespace Stratego
                 if(personnage != null) // ne dessine que les pièces valides
                     e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
             }
+        }
+
+        private void buttonRemplir_Click(object sender, EventArgs e)
+        {
+            Point caseDepart = new Point(0, Map.CasesY - 1); // position de la pièce à placer
+            Point caseCourante = caseDepart;
+            List<Point> listeCases = new List<Point>(40);
+            Random positionAleatoire = new Random();
+            int positionChoisie;
+            //if(buttonRemplir.Text.Contains("rouge"))
+
+            // création de la liste
+            for (int i = 0; i < 40; i++)
+            {
+                listeCases.Add(caseCourante);
+                caseCourante.X++;
+
+                if (caseCourante.X == 10)
+                {
+                    caseCourante.X = 0;
+                    caseCourante.Y--;
+                }
+            }
+
+            foreach(KeyValuePair<string, int> piece in jeu.ListePieces)
+            {
+                for (int repetitionPiece = 0; repetitionPiece < piece.Value; repetitionPiece++)
+                {
+                    positionChoisie = positionAleatoire.Next(listeCases.Count);
+
+                    GenereUnePiece(piece.Key, listeCases[positionChoisie]);
+                
+                    listeCases.RemoveAt(positionChoisie);
+                }
+            }
+            
+            //jeu.GenerePieces(map, positionPieces);
+
+            placementPieces = false;
+            
+            pictureBox1.Invalidate();
+        }
+
+        private Personnage GenereUnePiece(string nomPiece, Point position)
+        {
+            Personnage personnage = jeu.GenereUnePiece(nomPiece, position);
+
+            if (personnage == null)
+            {
+                MessageBox.Show("Création de la pièce " + nomPiece + " impossible !");
+                return null;
+            }
+            
+            positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+            map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+
+            return personnage;
         }
     }
 }
