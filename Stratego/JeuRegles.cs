@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using Stratego.Personnages;
@@ -11,8 +10,7 @@ namespace Stratego
 {
     public class JeuRegles
     {
-        private XmlTextReader listePieces;
-
+        private Form1 fenetrePrincipale;
         // Vérifie qu'une classe existe
         private bool ClasseExiste(string typeName) {
             /*foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
@@ -25,12 +23,6 @@ namespace Stratego
             return AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Any(type => type.Name == typeName);
         }
 
-        // Ouvre le fichier XML listant les différentes pièces et leur nombre
-        public void OuvreXmlClasses(string chemin)
-        {
-            listePieces = new XmlTextReader(chemin);
-        }
-
         private static void AjoutTexte(RichTextBox richTextBox, string texte, Color color)
         {
             richTextBox.SelectionStart = richTextBox.TextLength;
@@ -39,6 +31,41 @@ namespace Stratego
             richTextBox.SelectionColor = color;
             richTextBox.AppendText(texte);
             richTextBox.SelectionColor = richTextBox.ForeColor;
+        }
+        
+        public void GenereMenu(string chemin, ContextMenu contextMenu, Form1 fenetrePrincipale)
+        {
+            this.fenetrePrincipale = fenetrePrincipale;
+            
+            XmlTextReader listePieces = new XmlTextReader(chemin);
+            
+            string nomPiece = null;
+            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
+
+            while (listePieces.Read()) // parcours le fichier XML
+            {
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
+                    nomPiece = listePieces.ReadElementString();
+                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
+                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
+                
+                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
+
+                if (!ClasseExiste(nomPiece))
+                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
+
+                contextMenu.MenuItems.Add(nombrePieces + " - " + nomPiece, Menu_OnClick);
+
+                // reset les valeurs pour lire la prochaine pièce
+                nomPiece = null;
+                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
+            }
+        }
+
+        private void Menu_OnClick(object sender, EventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            fenetrePrincipale.MenuPictureBox(menuItem);
         }
 
         public static void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
@@ -71,8 +98,14 @@ namespace Stratego
             AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
         }
 
-        public void GenerePieces(Map map, List<Rectangle> positionPieces)
+        public void GenerePiecesAleatoire(Map map, List<Rectangle> positionPieces, string chemin)
         {
+            
+        }
+
+        public void GenerePieces(Map map, List<Rectangle> positionPieces, string chemin)
+        {
+            XmlTextReader listePieces = new XmlTextReader(chemin);
             string nomPiece = null;
             int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
             

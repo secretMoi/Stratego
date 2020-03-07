@@ -238,7 +238,7 @@ namespace Stratego
                 {
                     if (grille[x, y] != null) // si l'endroit de la grille n'est pas vide
                     {
-                        if (grille[x, y].Id == id) // si l'id correspont
+                        if (grille[x, y].Id == id) // si l'id correspond
                             return grille[x, y];
                     }
                 } 

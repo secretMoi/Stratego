@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
+
 namespace Stratego
 {
     public partial class Form1 : Form
     {
         private readonly Map map;
         
-        private Bitmap fond;
+        private readonly Bitmap fond;
         private readonly List<Rectangle> positionPieces;
-        private Rectangle aireJeu;
+        private readonly Rectangle aireJeu;
 
         private readonly JeuRegles jeu;
 
         // Déplacement pièce
         private bool drag; // si on a activé le drag&drop
+        private Point dernierClic;
+        private bool placementPieces; // si on place les pièces avant le début du jeu
         private int idDragged; // élément sélectionné
 
         private Point positionOrigine;
@@ -35,58 +34,73 @@ namespace Stratego
             positionPieces = new List<Rectangle>();
             
             jeu = new JeuRegles();
+            
+            fond = new Bitmap(map.AireJeu);
+            aireJeu = new Rectangle(0,0, 612, 800);
+
+            placementPieces = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            fond = new Bitmap(map.AireJeu);
-            aireJeu = new Rectangle(0,0, 612, 800);
+            pictureBox1.ContextMenu = new ContextMenu();
             
-            // charge fichier xml des différentes pièces
-            jeu.OuvreXmlClasses(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\ListePieces.xml");
-            
-            jeu.GenerePieces(map, positionPieces);
-            
-            GenereMenu(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) + @"\ListePieces.xml");
-        }
-        
-        private bool ClasseExiste(string typeName) {
-            return AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Any(type => type.Name == typeName);
+            jeu.GenereMenu("ListePieces.xml", pictureBox1.ContextMenu, this);
         }
 
-        private void GenereMenu(string chemin)
+        public void MenuPictureBox(MenuItem menuItem)
         {
-            ContextMenu contextMenu = new ContextMenu();
-            
-            pictureBox1.ContextMenu = contextMenu;
-            
-            XmlTextReader listePieces = new XmlTextReader(chemin);
-            
-            string nomPiece = null;
-            int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
-
-            while (listePieces.Read()) // parcours le fichier XML
+            if(dernierClic.X == -1)
             {
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
-                    nomPiece = listePieces.ReadElementString();
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
-                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
-                
-                if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
-
-                if (!ClasseExiste(nomPiece))
-                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
-
-                contextMenu.MenuItems.Add(nombrePieces + " - " + nomPiece);
-
-                // reset les valeurs pour lire la prochaine pièce
-                nomPiece = null;
-                nombrePieces = 0; // remet à 0 le nombre de pièces à chaque tour de boucle
+                MessageBox.Show(@"Case invalide !");
+                return;
             }
+            string[] chaineItem = menuItem.Text.Split('-'); // récupère la chaine de l'item sélectionné
+            int nombrePieceRestante = Convert.ToInt32(chaineItem[0].Trim()); // récupère le nombre de pièces pouvant encore être placées
+            string nomPiece = chaineItem[1].Trim(); // récupère le nom de la pièce
+
+            // si on ne peut plus poser de pièces
+            if (nombrePieceRestante < 1)
+            {
+                MessageBox.Show(@"Pièce épuisée");
+                return;
+            }
+            
+            // si la case cible est déjà occupée
+            Personnage caseCible = map.GetPiece(dernierClic);
+            if (caseCible != null)
+            {
+                MessageBox.Show(@"Case occupée !");
+                return;
+            }
+            
+            string @namespace = "Stratego.Personnages";
+            string @class = nomPiece;
+            Personnage personnage = null;
+
+            Type typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
+            if(typeClasse != null)
+                personnage = Activator.CreateInstance(typeClasse) as Personnage; // instancie un objet
+            
+            personnage.Hydrate(Personnage.AugmenteNombrePieces(), Map.CasesX, dernierClic); // hydrate l'objet
+            positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+            map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+
+            menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
+
+            // si toutes les pièces sont placées
+            if (Personnage.GetNombrePieces() == 80)
+            {
+                placementPieces = false;
+                pictureBox1.ContextMenu.Dispose();
+            }
+            
+            pictureBox1.Invalidate();
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
+            if(placementPieces) return;
             if (!drag) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             Point position = map.TrouveCase(e.Location);
@@ -117,12 +131,20 @@ namespace Stratego
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
+            if(placementPieces) return;
+            
             if (drag) // si le drag&drop est activé
                 RedessinePiece(idDragged, e.Location);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
+            if (placementPieces)
+            {
+                dernierClic = map.TrouveCase(e.Location, Map.Coord);
+                return;
+            }
+            
             positionOrigine = map.TrouveCase(e.Location, Map.Coord); // trouve la case en coord où on a cliqué
 
             Personnage persoSelectionne = map.GetPiece(positionOrigine);

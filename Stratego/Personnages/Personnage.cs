@@ -24,6 +24,8 @@ namespace Stratego.Personnages
         // todo implémenter équipe pour ne pas tuer ses pièces
         protected bool equipe;
 
+        protected static int nombrePiece;
+
         public Personnage(int id, Point point)
         {
             estVivant = true;
@@ -49,6 +51,18 @@ namespace Stratego.Personnages
             position = point;
         }
 
+        public static int AugmenteNombrePieces()
+        {
+            nombrePiece++;
+
+            return nombrePiece - 1;
+        }
+
+        public static int GetNombrePieces()
+        {
+            return nombrePiece;
+        }
+        
         public virtual int Collision(Personnage attaquant, Personnage defenseur)
         {
             int resultat = Vide;
