@@ -9,21 +9,23 @@ namespace Stratego
         private const int DimensionX = 58;
         private const int DimensionY = 50;
         
-        private string prefixeSource = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\images\";
+        private static readonly string prefixeSource = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\images\";
         private const string format = ".jpg";
-        private readonly Bitmap image;
-        
-        private string imageSource; // liste des images
+
+        private readonly string imageSource; // liste des images
 
         public Pieces(string type)
         {
             imageSource = prefixeSource + type + format;
-            image = new Bitmap(imageSource);
+            if(File.Exists(imageSource))
+                Image = new Bitmap(imageSource);
+            else
+                Debug.WriteLine(imageSource);
         }
 
         public Point Dimension => new Point(DimensionX, DimensionY);
 
-        public Bitmap Image => image;
+        public Bitmap Image { get; }
 
         public int Longueur => DimensionX;
         public int Hauteur => DimensionY;

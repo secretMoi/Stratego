@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
-
 namespace Stratego
 {
     public partial class Form1 : Form
@@ -56,6 +54,8 @@ namespace Stratego
                 MessageBox.Show(@"Case invalide !");
                 return;
             }
+
+            bool equipe = Personnage.Bleu;
             string[] chaineItem = menuItem.Text.Split('-'); // récupère la chaine de l'item sélectionné
             int nombrePieceRestante = Convert.ToInt32(chaineItem[0].Trim()); // récupère le nombre de pièces pouvant encore être placées
             string nomPiece = chaineItem[1].Trim(); // récupère le nom de la pièce
@@ -75,19 +75,18 @@ namespace Stratego
                 return;
             }
 
+            if (Personnage.GetNombrePieces() >= 40)
+                equipe = Personnage.Rouge;
+
             // crée la pièce
-            if (GenereUnePiece(nomPiece, dernierClic) == null)
+            if (GenereUnePiece(nomPiece, dernierClic, equipe) == null)
                 return;
 
             menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
 
             // si toutes les pièces sont placées
-            if (Personnage.GetNombrePieces() == 80)
-            {
-                placementPieces = false;
-                pictureBox1.ContextMenu.Dispose();
-            }
-            
+            DesactiveMenuContextuel();
+
             pictureBox1.Invalidate();
         }
 
@@ -194,12 +193,16 @@ namespace Stratego
 
         private void buttonRemplir_Click(object sender, EventArgs e)
         {
-            Point caseDepart = new Point(0, Map.CasesY - 1); // position de la pièce à placer
-            Point caseCourante = caseDepart;
+            bool equipe = Personnage.Bleu;
+            Point caseCourante = new Point(0, Map.CasesY - 1); // position de la pièce à placer
             List<Point> listeCases = new List<Point>(40);
             Random positionAleatoire = new Random();
             int positionChoisie;
-            //if(buttonRemplir.Text.Contains("rouge"))
+            if (buttonRemplir.Text.Contains("rouges"))
+            {
+                caseCourante.Y = 3;
+                equipe = Personnage.Rouge;
+            }
 
             // création de la liste
             for (int i = 0; i < 40; i++)
@@ -220,26 +223,30 @@ namespace Stratego
                 {
                     positionChoisie = positionAleatoire.Next(listeCases.Count);
 
-                    GenereUnePiece(piece.Key, listeCases[positionChoisie]);
+                    GenereUnePiece(piece.Key, listeCases[positionChoisie], equipe);
                 
                     listeCases.RemoveAt(positionChoisie);
                 }
             }
-            
-            //jeu.GenerePieces(map, positionPieces);
 
-            placementPieces = false;
+            if (buttonRemplir.Text.Contains("rouges"))
+            {
+                buttonRemplir.Enabled = false;
+                DesactiveMenuContextuel();
+            }
+            else
+                buttonRemplir.Text = buttonRemplir.Text.Replace("bleus", "rouges");
             
             pictureBox1.Invalidate();
         }
 
-        private Personnage GenereUnePiece(string nomPiece, Point position)
+        private Personnage GenereUnePiece(string nomPiece, Point position, bool equipe)
         {
-            Personnage personnage = jeu.GenereUnePiece(nomPiece, position);
+            Personnage personnage = jeu.GenereUnePiece(nomPiece, position, equipe);
 
             if (personnage == null)
             {
-                MessageBox.Show("Création de la pièce " + nomPiece + " impossible !");
+                MessageBox.Show(@"Création de la pièce " + nomPiece + @" impossible !");
                 return null;
             }
             
@@ -247,6 +254,15 @@ namespace Stratego
             map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
 
             return personnage;
+        }
+
+        private void DesactiveMenuContextuel()
+        {
+            if (Personnage.GetNombrePieces() == 80)
+            {
+                placementPieces = false;
+                pictureBox1.ContextMenu.Dispose();
+            }
         }
     }
 }

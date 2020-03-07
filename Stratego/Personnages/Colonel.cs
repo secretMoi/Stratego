@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Stratego.Personnages
+﻿namespace Stratego.Personnages
 {
     public class Colonel : Personnage
     {

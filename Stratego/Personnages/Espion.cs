@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Stratego.Personnages
+﻿namespace Stratego.Personnages
 {
     public class Espion : Personnage
     {
@@ -8,8 +6,6 @@ namespace Stratego.Personnages
         {
             puissance = 1;
             type = "espion";
-
-            piece = new Pieces(type);
         }
         
         public override int Collision(Personnage attaquant, Personnage defenseur)

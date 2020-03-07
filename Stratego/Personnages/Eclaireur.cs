@@ -9,12 +9,11 @@ namespace Stratego.Personnages
             puissance = 2;
                 
             type = "eclaireur";
-            piece = new Pieces(type);
         }
 
-        public override void Hydrate(int id,  int deplacement, Point point)
+        public override void Hydrate(int id,  int deplacement, Point point, bool equipe)
         {
-            base.Hydrate(id, deplacement, point);
+            base.Hydrate(id, deplacement, point, equipe);
             this.deplacement = deplacement - 1;
         }
 

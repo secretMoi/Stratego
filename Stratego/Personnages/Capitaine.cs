@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Stratego.Personnages
+﻿namespace Stratego.Personnages
 {
     public class Capitaine : Personnage
     {
@@ -8,8 +6,6 @@ namespace Stratego.Personnages
         {
             puissance = 6;
             type = "capitaine";
-
-            piece = new Pieces(type);
         }
         
         public override string ToString()

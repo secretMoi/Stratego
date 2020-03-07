@@ -107,7 +107,7 @@ namespace Stratego
             AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
         }
 
-        public Personnage GenereUnePiece(string nomPiece, Point position)
+        public Personnage GenereUnePiece(string nomPiece, Point position, bool equipe)
         {
             string @namespace = "Stratego.Personnages";
             string @class = nomPiece;
@@ -119,14 +119,14 @@ namespace Stratego
 
             if (personnage == null) return null;
             
-            personnage.Hydrate(Personnage.AugmenteNombrePieces(), Map.CasesX, position); // hydrate l'objet
+            personnage.Hydrate(Personnage.AugmenteNombrePieces(), Map.CasesX, position, equipe); // hydrate l'objet
 
             return personnage;
         }
 
         public void GenerePieces(Map map, List<Rectangle> positionPieces)
         {
-            Point position = new Point(0, Map.CasesY - 1); // position de la pièce à placer
+            /*Point position = new Point(0, Map.CasesY - 1); // position de la pièce à placer
 
             Personnage personnage;
 
@@ -150,7 +150,7 @@ namespace Stratego
                         position.X++;
                     }
                 }
-            }
+            }*/
         }
 
         public Dictionary<string, int> ListePieces => listePieces;

@@ -15,20 +15,18 @@ namespace Stratego.Personnages
         protected Pieces piece;
 
         protected int deplacement; // nombre de cases que peut parcourir le personnage
-        protected Point position; // sa position courante dans la map
-        protected int id;
+        private Point position; // sa position courante dans la map
+        private int id;
 
         protected int puissance;
         protected string type;
-        protected bool estVivant;
         // todo implémenter équipe pour ne pas tuer ses pièces
-        protected bool equipe;
+        private bool equipe;
 
-        protected static int nombrePiece;
+        private static int nombrePiece;
 
         public Personnage(int id, Point point)
         {
-            estVivant = true;
             deplacement = 1;
 
             this.id = id;
@@ -39,16 +37,22 @@ namespace Stratego.Personnages
         
         public Personnage()
         {
-            estVivant = true;
             deplacement = 1;
 
             equipe = Bleu;
         }
         
-        public virtual void Hydrate(int id, int deplacement, Point point)
+        public virtual void Hydrate(int id, int deplacement, Point point, bool equipe)
         {
             this.id = id;
             position = point;
+            this.equipe = equipe;
+            
+            if (equipe == Bleu)
+                type = "bleu_" + type;
+            else
+                type = "rouge_" + type;
+            piece = new Pieces(type);
         }
 
         public static int AugmenteNombrePieces()
@@ -66,15 +70,14 @@ namespace Stratego.Personnages
         public virtual int Collision(Personnage attaquant, Personnage defenseur)
         {
             int resultat = Vide;
-            if (attaquant != null && defenseur != null)
-            {
-                if (attaquant.Puissance > defenseur.Puissance) // si l'attaquant est plus puissant
-                    resultat = Attaquant;
-                else if (attaquant.Puissance < defenseur.Puissance) // si le défenseur est plus puissant
-                    resultat =  Defenseur;
-                else if (attaquant.Puissance == defenseur.Puissance) // si même puissance
-                    resultat = Egalite;
-            }
+            if (attaquant == null || defenseur == null) return resultat; // sinon la case est vide
+
+            if (attaquant.Puissance > defenseur.Puissance) // si l'attaquant est plus puissant
+                resultat = Attaquant;
+            else if (attaquant.Puissance < defenseur.Puissance) // si le défenseur est plus puissant
+                resultat =  Defenseur;
+            else if (attaquant.Puissance == defenseur.Puissance) // si même puissance
+                resultat = Egalite;
 
             return resultat; // sinon la case est vide
         }
@@ -97,8 +100,6 @@ namespace Stratego.Personnages
 
         public void Meurt()
         {
-            estVivant = false;
-            
             position = new Point(-1, -1);
         }
 

@@ -13,20 +13,31 @@
         <e p="Form1.Designer.cs" t="Include" />
         <e p="Form1.resx" t="Include" />
         <e p="images" t="Include">
-          <e p="bombe.jpg" t="Include" />
-          <e p="capitaine.jpg" t="Include" />
-          <e p="colonel.jpg" t="Include" />
-          <e p="demineur.jpg" t="Include" />
-          <e p="drapeau.jpg" t="Include" />
-          <e p="eclaireur.jpg" t="Include" />
-          <e p="espion.jpg" t="Include" />
+          <e p="bleu_bombe.jpg" t="Include" />
+          <e p="bleu_capitaine.jpg" t="Include" />
+          <e p="bleu_colonel.jpg" t="Include" />
+          <e p="bleu_demineur.jpg" t="Include" />
+          <e p="bleu_drapeau.jpg" t="Include" />
+          <e p="bleu_eclaireur.jpg" t="Include" />
+          <e p="bleu_espion.jpg" t="Include" />
+          <e p="bleu_general.jpg" t="Include" />
+          <e p="bleu_lieutenant.jpg" t="Include" />
+          <e p="bleu_major.jpg" t="Include" />
+          <e p="bleu_marechal.jpg" t="Include" />
+          <e p="bleu_sergent.jpg" t="Include" />
           <e p="fonds.png" t="Include" />
-          <e p="general.jpg" t="Include" />
-          <e p="lieutenant.jpg" t="Include" />
-          <e p="listePieces.jpg" t="Include" />
-          <e p="major.jpg" t="Include" />
-          <e p="marechal.jpg" t="Include" />
-          <e p="sergent.jpg" t="Include" />
+          <e p="rouge_bombe.jpg" t="Include" />
+          <e p="rouge_capitaine.jpg" t="Include" />
+          <e p="rouge_colonel.jpg" t="Include" />
+          <e p="rouge_demineur.jpg" t="Include" />
+          <e p="rouge_drapeau.jpg" t="Include" />
+          <e p="rouge_eclaireur.jpg" t="Include" />
+          <e p="rouge_espion.jpg" t="Include" />
+          <e p="rouge_general.jpg" t="Include" />
+          <e p="rouge_lieutenant.jpg" t="Include" />
+          <e p="rouge_major.jpg" t="Include" />
+          <e p="rouge_marechal.jpg" t="Include" />
+          <e p="rouge_sergent.jpg" t="Include" />
         </e>
         <e p="JeuRegles.cs" t="Include" />
         <e p="ListePieces.xml" t="Include" />
