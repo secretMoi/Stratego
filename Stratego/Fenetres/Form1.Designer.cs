@@ -176,7 +176,7 @@
             // aProposToolStripMenuItem
             // 
             this.aProposToolStripMenuItem.Name = "aProposToolStripMenuItem";
-            this.aProposToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aProposToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aProposToolStripMenuItem.Text = "A propos";
             this.aProposToolStripMenuItem.Click += new System.EventHandler(this.evenement_Click);
             // 
@@ -199,7 +199,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.menuStrip1);
-            this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Stratego";

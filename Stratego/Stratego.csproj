@@ -46,11 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\FileGUI.cs" />
     <Compile Include="Fenetres\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
     </Compile>
     <Compile Include="JeuRegles.cs" />
     <Compile Include="Map.cs" />
@@ -77,6 +84,9 @@
     <Compile Include="Reseau\Serveur.cs" />
     <EmbeddedResource Include="Fenetres\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

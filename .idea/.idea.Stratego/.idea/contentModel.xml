@@ -8,10 +8,16 @@
       <e p="Stratego" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="core" t="Include">
+          <e p="FileGUI.cs" t="Include" />
+        </e>
         <e p="Fenetres" t="Include">
           <e p="Form1.cs" t="Include" />
           <e p="Form1.Designer.cs" t="Include" />
           <e p="Form1.resx" t="Include" />
+          <e p="Options.cs" t="Include" />
+          <e p="Options.Designer.cs" t="Include" />
+          <e p="Options.resx" t="Include" />
         </e>
         <e p="images" t="Include">
           <e p="bleu_bombe.jpg" t="Include" />

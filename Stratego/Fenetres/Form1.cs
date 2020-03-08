@@ -36,7 +36,7 @@ namespace Stratego.Fenetres
             string[] chaine = nom.Split('_'); // scinde le nom pour avoir les 2 parties
             
             string @namespace = GetType().Namespace;
-            string @class = "Fic" + chaine[1];
+            string @class = chaine[1];
 
             // équivalent var typeClasse = Type.GetType(String.Format("{0}.{1}", @namespace, @class));
             var typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
@@ -100,8 +100,7 @@ namespace Stratego.Fenetres
                     caseCourante.Y--;
                 }
             }
-
-            //todo utiliser les items du menucontext au lieu du dictionnaire
+            
             // génère une pièce pour chaque Point de la liste
             foreach(KeyValuePair<string, int> piece in menuContextuel.PiecesRestantes())
             {
