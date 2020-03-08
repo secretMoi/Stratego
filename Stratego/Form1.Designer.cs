@@ -36,12 +36,21 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.buttonRemplir = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuProgramme = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAide = new System.Windows.Forms.ToolStripMenuItem();
+            this.aProposToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuProgramme_Sauvegarder = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuProgramme_Reprendre = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
+            this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 27);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(822, 912);
             this.pictureBox1.TabIndex = 1;
@@ -68,7 +77,7 @@
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox1.Location = new System.Drawing.Point(828, 12);
+            this.richTextBox1.Location = new System.Drawing.Point(828, 27);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(503, 629);
@@ -98,7 +107,7 @@
             // 
             // buttonRemplir
             // 
-            this.buttonRemplir.Location = new System.Drawing.Point(828, 647);
+            this.buttonRemplir.Location = new System.Drawing.Point(828, 662);
             this.buttonRemplir.Name = "buttonRemplir";
             this.buttonRemplir.Size = new System.Drawing.Size(99, 39);
             this.buttonRemplir.TabIndex = 8;
@@ -106,11 +115,70 @@
             this.buttonRemplir.UseVisualStyleBackColor = true;
             this.buttonRemplir.Click += new System.EventHandler(this.buttonRemplir_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+                {this.menuProgramme, this.menuAide});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1336, 24);
+            this.menuStrip1.TabIndex = 9;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // menuProgramme
+            // 
+            this.menuProgramme.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.menuProgramme_Sauvegarder, this.menuProgramme_Reprendre, this.menuProgramme_Options,
+                this.quitterToolStripMenuItem
+            });
+            this.menuProgramme.Name = "menuProgramme";
+            this.menuProgramme.Size = new System.Drawing.Size(82, 20);
+            this.menuProgramme.Text = "Programme";
+            // 
+            // menuAide
+            // 
+            this.menuAide.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
+                {this.aProposToolStripMenuItem});
+            this.menuAide.Name = "menuAide";
+            this.menuAide.Size = new System.Drawing.Size(43, 20);
+            this.menuAide.Text = "Aide";
+            // 
+            // aProposToolStripMenuItem
+            // 
+            this.aProposToolStripMenuItem.Name = "aProposToolStripMenuItem";
+            this.aProposToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aProposToolStripMenuItem.Text = "A propos";
+            // 
+            // menuProgramme_Sauvegarder
+            // 
+            this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
+            this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(172, 22);
+            this.menuProgramme_Sauvegarder.Text = "Sauvegarder";
+            // 
+            // menuProgramme_Reprendre
+            // 
+            this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
+            this.menuProgramme_Reprendre.Size = new System.Drawing.Size(172, 22);
+            this.menuProgramme_Reprendre.Text = "Reprendre";
+            // 
+            // menuProgramme_Options
+            // 
+            this.menuProgramme_Options.Name = "menuProgramme_Options";
+            this.menuProgramme_Options.Size = new System.Drawing.Size(172, 22);
+            this.menuProgramme_Options.Text = "Options";
+            // 
+            // quitterToolStripMenuItem
+            // 
+            this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
+            this.quitterToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.quitterToolStripMenuItem.Text = "Quitter";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1343, 912);
+            this.ClientSize = new System.Drawing.Size(1336, 938);
             this.Controls.Add(this.buttonRemplir);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -118,12 +186,17 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Stratego";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion
@@ -135,5 +208,13 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button buttonRemplir;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem aProposToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem quitterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuProgramme_Sauvegarder;
+        private System.Windows.Forms.ToolStripMenuItem menuAide;
+        private System.Windows.Forms.ToolStripMenuItem menuProgramme;
+        private System.Windows.Forms.ToolStripMenuItem menuProgramme_Options;
+        private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
     }
 }

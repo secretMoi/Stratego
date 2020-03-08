@@ -8,7 +8,8 @@ namespace Stratego
     public class Map
     {
         // chemin du background map
-        public readonly string AireJeu = @"images\fonds.png";
+        private readonly string aireJeu = @"images\fonds.png";
+        private readonly Bitmap fond;
 
         // nombre de cases
         public const int CasesX = 10;
@@ -29,6 +30,8 @@ namespace Stratego
 
         public Map(List<Point> casesInterdites)
         {
+            fond = new Bitmap(aireJeu);
+            
             this.casesInterdites = casesInterdites;
             grille = new Personnage[CasesX, CasesY];
         }
@@ -266,5 +269,7 @@ namespace Stratego
                 && DeplacementLineaire(origine, destination) // si la pièce ne se déplace pas en diagonal
                 && SansObstacle(origine, destination);
         }
+
+        public Bitmap Fond => fond;
     }
 }

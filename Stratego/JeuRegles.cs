@@ -10,9 +10,10 @@ namespace Stratego
 {
     public class JeuRegles
     {
-        private Map map; // contient la map
+        private readonly Map map; // contient la map
         private int idDragged; // id de l'élément sélectionné par la souris
         private bool drag; // si on est en train de déplacer un élément
+        private bool partieEnCours;
         private readonly List<Rectangle> positionPieces; // liste des positions des pièces
         private readonly Dictionary<String, int> listePieces; // liste dse pièces du fichier XML
         private bool tourActuel = Personnage.Bleu; // indique quelle équipe joue actuellement
@@ -21,6 +22,9 @@ namespace Stratego
 
         public JeuRegles(string chemin)
         {
+            map = new Map(ListeCasesInterdites());
+
+            partieEnCours = true;
             positionPieces = new List<Rectangle>();
             imagePieceAdverse = new Bitmap(@"images/pieceAdverse.jpg");
             imagePieceAlliee = new Bitmap(@"images/pieceAlliee.jpg");
@@ -123,7 +127,7 @@ namespace Stratego
             return personnage;
         }
 
-        public List<Point> ListeCasesInterdites()
+        private List<Point> ListeCasesInterdites()
         {
             List<Point> casesInterdites = new List<Point>
             {
@@ -145,7 +149,7 @@ namespace Stratego
 
         private Bitmap ImagePiece(Personnage personnage)
         {
-            if (personnage.Equipe == tourActuel)
+            if (personnage.Equipe == tourActuel || !partieEnCours)
                 return personnage.Piece.Image;
             else if (tourActuel == Personnage.Bleu)
                 return imagePieceAdverse;
@@ -157,7 +161,7 @@ namespace Stratego
         {
             positionOrigine = map.TrouveCase(positionClic, Map.Coord); // trouve la case en coord où on a cliqué
             
-            if (placementPieces)
+            if (placementPieces || !partieEnCours)
                 return;
             
             Personnage persoSelectionne = map.GetPiece(positionOrigine);
@@ -175,7 +179,7 @@ namespace Stratego
 
         public void LachePiece(Point position, Point positionOrigine, RichTextBox richTextBox)
         {
-            if(!drag) return;
+            if(!drag || !partieEnCours) return;
             
             position = map.TrouveCase(position);
             
@@ -199,6 +203,7 @@ namespace Stratego
                 EffacePiece(piece2);
 
                 ChangeTour();
+                DetectionFinPartie(defenseur);
             }
             else // sinon on la replace à sa position d'origine
                 RedessinePiece(idDragged, Map.CoordToPx(positionOrigine), false);
@@ -206,9 +211,31 @@ namespace Stratego
             drag = false; // désactive le drag&drop
         }
         
+        private void DetectionFinPartie(Personnage defenseur)
+        {
+            if(defenseur == null) return;
+            
+            if (defenseur.ToString() == "Drapeau")
+            {
+                partieEnCours = false;
+                
+                string equipe = "bleue";
+
+                if (defenseur.Equipe == Personnage.Bleu)
+                    equipe = "rouge";
+                
+                MessageBox.Show(
+                    @"Partie terminée !" +
+                    Environment.NewLine + // retour ligne
+                    @"L'équipe " + equipe + @" remporte la victoire !"
+                );
+            }
+                
+        }
+        
         public void BougePiece(Point positionDestination)
         {
-            if (drag) // si le drag&drop est activé
+            if (drag && partieEnCours) // si le drag&drop est activé
                 RedessinePiece(idDragged, positionDestination);
         }
         
@@ -264,12 +291,9 @@ namespace Stratego
                     graphics.DrawImage(ImagePiece(personnage), positionPieces[id].Rect);
             }
         }
-        
+
         public Dictionary<string, int> ListePieces => listePieces;
 
-        public Map Map
-        {
-            set => map = value;
-        }
+        public Map Map => map;
     }
 }

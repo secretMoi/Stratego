@@ -7,7 +7,6 @@ using Stratego.Personnages;
 //todo cases vertes et rouges
 //todo menu (aide, sauvegarder partie, reprendre partie, options...)
 //todo zone tuto premièe prise en main
-//todo détection fin de partie
 //todo compléter aléatoire au lieu d'écraser les pièces
 //todo ne placer ses pièces avec le menu que dans la zone indiquée
 //todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
@@ -15,9 +14,6 @@ namespace Stratego
 {
     public partial class Form1 : Form
     {
-        private readonly Map map;
-        
-        private readonly Bitmap fond;
         private readonly Rectangle aireJeu;
 
         private readonly JeuRegles jeu;
@@ -30,10 +26,7 @@ namespace Stratego
             InitializeComponent();
             
             jeu = new JeuRegles("ListePieces.xml");
-            map = new Map(jeu.ListeCasesInterdites());
-            jeu.Map = map;
             
-            fond = new Bitmap(map.AireJeu);
             aireJeu = new Rectangle(0,0, 612, 800);
 
             placementPieces = true;
@@ -46,7 +39,7 @@ namespace Stratego
             GenereMenu();
         }
 
-        public void MenuPictureBox(MenuItem menuItem)
+        private void MenuPictureBox(MenuItem menuItem)
         {
             if(positionOrigine.X == -1)
             {
@@ -66,7 +59,7 @@ namespace Stratego
             }
             
             // si la case cible est déjà occupée
-            Personnage caseCible = map.GetPiece(positionOrigine);
+            Personnage caseCible = jeu.Map.GetPiece(positionOrigine);
             if (caseCible != null)
             {
                 MessageBox.Show(@"Case occupée !");
@@ -110,7 +103,7 @@ namespace Stratego
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(fond, aireJeu.Rect); // repeint la grille
+            e.Graphics.DrawImage(jeu.Map.Fond, aireJeu.Rect); // repeint la grille
 
             jeu.DessinePieces(e.Graphics);
         }
