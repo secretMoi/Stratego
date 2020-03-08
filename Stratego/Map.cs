@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Runtime.Serialization;
+//using Newtonsoft.Json;
 using Stratego.Personnages;
 
 namespace Stratego
 {
-    public class Map
+    [Serializable]
+    public class Map : ISerializable
     {
         // chemin du background map
         private readonly string aireJeu = @"images\fonds.png";
@@ -28,12 +32,33 @@ namespace Stratego
         public const bool Pixel = false;
         public const bool Coord = true;
 
+        //private static Map mapToSerialize;
+        
+        /*public void Serialise()
+        {
+            using (StreamWriter file = File.CreateText(@"D:\map.sav"))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                //serialize object directly into file stream
+                serializer.Serialize(file, this);
+            }
+            
+            /*List<object> sauvegarde = new List<object>();
+            
+            sauvegarde.Add();
+        }*/
+
         public Map(List<Point> casesInterdites)
         {
             fond = new Bitmap(aireJeu);
             
             this.casesInterdites = casesInterdites;
             grille = new Personnage[CasesX, CasesY];
+        }
+
+        public Map()
+        {
+
         }
 
         public void SetPositionPiece(Point point, Personnage idElement)
@@ -271,5 +296,21 @@ namespace Stratego
         }
 
         public Bitmap Fond => fond;
+
+        // serialise
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Fond", fond, typeof(Bitmap));
+            info.AddValue("Grille", grille, typeof(Personnage[,]));
+            info.AddValue("CasesInterdites", casesInterdites, typeof(List<Point>));
+        }
+        
+        // deserialise
+        public Map(SerializationInfo info, StreamingContext context)
+        {
+            fond = (Bitmap) info.GetValue("Fond", typeof(Bitmap));
+            grille = (Personnage[,]) info.GetValue("Grille", typeof(Personnage[,]));
+            casesInterdites = (List<Point>) info.GetValue("CasesInterdites", typeof(List<Point>));
+        }
     }
 }

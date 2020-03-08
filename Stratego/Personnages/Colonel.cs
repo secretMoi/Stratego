@@ -1,5 +1,9 @@
-﻿namespace Stratego.Personnages
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace Stratego.Personnages
 {
+    [Serializable]
     public class Colonel : Personnage
     {
         public Colonel()
@@ -8,6 +12,11 @@
             type = "colonel";
 
             piece = new Pieces(type);
+        }
+        
+        // deserialise
+        public Colonel(SerializationInfo info, StreamingContext context) : base(info, context) 
+        {
         }
         
         public override string ToString()

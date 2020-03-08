@@ -55,7 +55,7 @@ namespace Stratego.Fenetres
             this.panelSauvegarde.ForeColor = System.Drawing.Color.White;
             this.panelSauvegarde.Location = new System.Drawing.Point(12, 12);
             this.panelSauvegarde.Name = "panelSauvegarde";
-            this.panelSauvegarde.Size = new System.Drawing.Size(350, 150);
+            this.panelSauvegarde.Size = new System.Drawing.Size(350, 151);
             this.panelSauvegarde.TabIndex = 0;
             // 
             // labelSauvegarde
@@ -73,7 +73,7 @@ namespace Stratego.Fenetres
             this.panelGraphique.Controls.Add(this.labelGraphique);
             this.panelGraphique.Location = new System.Drawing.Point(12, 198);
             this.panelGraphique.Name = "panelGraphique";
-            this.panelGraphique.Size = new System.Drawing.Size(350, 150);
+            this.panelGraphique.Size = new System.Drawing.Size(350, 151);
             this.panelGraphique.TabIndex = 1;
             // 
             // labelGraphique
@@ -92,7 +92,7 @@ namespace Stratego.Fenetres
             this.panelDivers.Controls.Add(this.labelDivers);
             this.panelDivers.Location = new System.Drawing.Point(407, 12);
             this.panelDivers.Name = "panelDivers";
-            this.panelDivers.Size = new System.Drawing.Size(350, 150);
+            this.panelDivers.Size = new System.Drawing.Size(350, 151);
             this.panelDivers.TabIndex = 2;
             // 
             // labelDivers
@@ -111,7 +111,7 @@ namespace Stratego.Fenetres
             this.panelSon.Controls.Add(this.labelSon);
             this.panelSon.Location = new System.Drawing.Point(407, 198);
             this.panelSon.Name = "panelSon";
-            this.panelSon.Size = new System.Drawing.Size(350, 150);
+            this.panelSon.Size = new System.Drawing.Size(350, 151);
             this.panelSon.TabIndex = 3;
             // 
             // labelSon
@@ -154,7 +154,7 @@ namespace Stratego.Fenetres
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkSlateBlue;
-            this.ClientSize = new System.Drawing.Size(775, 484);
+            this.ClientSize = new System.Drawing.Size(775, 483);
             this.Controls.Add(this.buttonAnnuler);
             this.Controls.Add(this.buttonValider);
             this.Controls.Add(this.panelSon);

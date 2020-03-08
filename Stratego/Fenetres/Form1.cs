@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 
 //todo cases vertes et rouges
@@ -11,7 +14,7 @@ namespace Stratego.Fenetres
     public partial class Form1 : Form
     {
         private readonly Rectangle aireJeu;
-        private readonly JeuRegles jeu;
+        private JeuRegles jeu;
         private MenuContextuel menuContextuel;
 
         private Point positionOrigine; // position de départ de la pièce déplacée
@@ -44,6 +47,47 @@ namespace Stratego.Fenetres
             Form fenetre = Activator.CreateInstance(typeClasse) as Form; // instancie un objet
 
             fenetre?.Show(); // Affiche la fenêtre
+        }
+        
+        private void Partie(object sender, EventArgs e)
+        {
+            string nom = ((ToolStripMenuItem) sender).Name; // récupère le nom du controle appelant
+            string resultat;
+            FileStream fichierSauvegarde;
+            try
+            {
+                // Use a BinaryFormatter or SoapFormatter.
+                IFormatter formatter = new BinaryFormatter();
+
+                if (nom.Contains("Reprendre"))
+                {
+                    fichierSauvegarde = new FileStream(@"save.xml", FileMode.Open);
+                    JeuRegles ancienJeu = (JeuRegles)formatter.Deserialize(fichierSauvegarde);
+
+                    jeu = ancienJeu;
+                    
+                    resultat = @"Partie restaurée";
+                    
+                    pictureBox1.Invalidate();
+                }
+                else if(nom.Contains("Sauvegarder"))
+                {
+                    fichierSauvegarde = new FileStream(@"save.xml", FileMode.Create);
+                    formatter.Serialize(fichierSauvegarde, jeu);
+                    
+                    resultat = @"Partie sauvegardée";
+                }
+                else
+                    return;
+
+                fichierSauvegarde.Close();
+
+                MessageBox.Show(resultat);
+            }
+            catch (ApplicationException caught)
+            {
+                MessageBox.Show(caught.Source);
+            }
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris

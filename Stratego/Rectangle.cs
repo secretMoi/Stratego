@@ -1,11 +1,27 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Runtime.Serialization;
 
 namespace Stratego
 {
     // cette classe permet de manipuler la struct Rectangle de c# grâce à un objet
-    public class Rectangle
+    [Serializable]
+    public class Rectangle : ISerializable
     {
         private System.Drawing.Rectangle rectangle;
+        
+        // serialise
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Rectangle", rectangle, typeof(System.Drawing.Rectangle));
+        }
+        
+        // deserialise
+        public Rectangle(SerializationInfo info, StreamingContext context)
+        {
+            rectangle = (System.Drawing.Rectangle) info.GetValue("Rectangle", typeof(System.Drawing.Rectangle));
+        }
+        
         public Rectangle(int posX, int posY, int longueur, int hauteur)
         {
             rectangle = new System.Drawing.Rectangle(posX, posY, longueur, hauteur);

@@ -18,6 +18,9 @@
           <e p="Options.cs" t="Include" />
           <e p="Options.Designer.cs" t="Include" />
           <e p="Options.resx" t="Include" />
+          <e p="Sauvegarde" t="Include">
+            <e p="Ecriture" t="Include" />
+          </e>
         </e>
         <e p="images" t="Include">
           <e p="bleu_bombe.jpg" t="Include" />
@@ -83,6 +86,11 @@
           <e p="Client.cs" t="Include" />
           <e p="Reseau.cs" t="Include" />
           <e p="Serveur.cs" t="Include" />
+        </e>
+        <e p="Sauvegarde" t="Include">
+          <e p="Deserialise.cs" t="Include" />
+          <e p="Sauvegarde.cs" t="Include" />
+          <e p="Serialise.cs" t="Include" />
         </e>
         <e p="Stratego.csproj" t="IncludeRecursive" />
       </e>

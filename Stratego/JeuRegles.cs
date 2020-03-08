@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using Stratego.Personnages;
 
 namespace Stratego
 {
-    public class JeuRegles
+    [Serializable]
+    public class JeuRegles : ISerializable
     {
-        private readonly Map map; // contient la map
+        private Map map; // contient la map
         private int idDragged; // id de l'élément sélectionné par la souris
         private bool drag; // si on est en train de déplacer un élément
         private bool partieEnCours;
@@ -19,6 +21,29 @@ namespace Stratego
         private bool tourActuel = Personnage.Bleu; // indique quelle équipe joue actuellement
         private readonly Bitmap imagePieceAdverse;
         private readonly Bitmap imagePieceAlliee;
+        
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Map", map, typeof(Map));
+            info.AddValue("PartieEnCours", partieEnCours, typeof(bool));
+            info.AddValue("PositionPieces", positionPieces, typeof(List<Rectangle>));
+            info.AddValue("ListePieces", listePieces, typeof(Dictionary<String, int>));
+            info.AddValue("TourActuel", tourActuel, typeof(bool));
+            info.AddValue("ImagePieceAdverse", imagePieceAdverse, typeof(Bitmap));
+            info.AddValue("ImagePieceAlliee", imagePieceAlliee, typeof(Bitmap));
+        }
+        
+        // deserialise
+        public JeuRegles(SerializationInfo info, StreamingContext context)
+        {
+            map = (Map) info.GetValue("Map", typeof(Map));
+            partieEnCours = (bool) info.GetValue("PartieEnCours", typeof(bool));
+            positionPieces = (List<Rectangle>) info.GetValue("PositionPieces", typeof(List<Rectangle>));
+            listePieces = (Dictionary<String, int>) info.GetValue("ListePieces", typeof(Dictionary<String, int>));
+            tourActuel = (bool) info.GetValue("TourActuel", typeof(bool));
+            imagePieceAdverse = (Bitmap) info.GetValue("ImagePieceAdverse", typeof(Bitmap));
+            imagePieceAlliee = (Bitmap) info.GetValue("ImagePieceAlliee", typeof(Bitmap));
+        }
 
         public JeuRegles(string chemin)
         {
@@ -313,6 +338,10 @@ namespace Stratego
 
         public Dictionary<string, int> ListePieces => listePieces;
 
-        public Map Map => map;
+        public Map Map
+        {
+            get => map;
+            set => map = value;
+        }
     }
 }

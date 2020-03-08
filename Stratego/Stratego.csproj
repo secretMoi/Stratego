@@ -82,6 +82,9 @@
     <Compile Include="Reseau\Client.cs" />
     <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serveur.cs" />
+    <Compile Include="Sauvegarde\Deserialise.cs" />
+    <Compile Include="Sauvegarde\Sauvegarde.cs" />
+    <Compile Include="Sauvegarde\Serialise.cs" />
     <EmbeddedResource Include="Fenetres\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,6 +199,9 @@
     <Content Include="ListePieces.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fenetres\Sauvegarde\Ecriture" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

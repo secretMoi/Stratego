@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 
 namespace Stratego.Personnages
 {
-    public abstract class Personnage : IDisposable
+    [Serializable]
+    public abstract class Personnage : IDisposable, ISerializable
     {
         public const int Vide = 0;
         public const int Attaquant = 1;
@@ -16,13 +18,13 @@ namespace Stratego.Personnages
         protected Pieces piece;
 
         protected int deplacement; // nombre de cases que peut parcourir le personnage
-        private Point position; // sa position courante dans la map
-        private int id;
+        protected Point position; // sa position courante dans la map
+        protected int id;
 
         protected int puissance;
         protected string type;
         
-        private bool equipe;
+        protected bool equipe;
 
         private static int nombrePiece;
         
@@ -131,6 +133,29 @@ namespace Stratego.Personnages
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Piece", piece, typeof(Pieces));
+            info.AddValue("Deplacement", deplacement, typeof(int));
+            info.AddValue("Position", position, typeof(Point));
+            info.AddValue("Id", id, typeof(int));
+            info.AddValue("Puissance", puissance, typeof(int));
+            info.AddValue("Type", type, typeof(string));
+            info.AddValue("Equipe", equipe, typeof(bool));
+        }
+        
+        // deserialise
+        public Personnage(SerializationInfo info, StreamingContext context)
+        {
+            piece = (Pieces) info.GetValue("Piece", typeof(Pieces));
+            deplacement = (int) info.GetValue("Deplacement", typeof(int));
+            position = (Point) info.GetValue("Position", typeof(Point));
+            id = (int) info.GetValue("Id", typeof(int));
+            puissance = (int) info.GetValue("Puissance", typeof(int));
+            type = (string) info.GetValue("Type", typeof(string));
+            equipe = (bool) info.GetValue("Equipe", typeof(bool));
         }
     }
 }

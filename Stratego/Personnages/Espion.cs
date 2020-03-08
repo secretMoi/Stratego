@@ -1,11 +1,20 @@
-﻿namespace Stratego.Personnages
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace Stratego.Personnages
 {
+    [Serializable]
     public class Espion : Personnage
     {
         public Espion()
         {
             puissance = 1;
             type = "espion";
+        }
+        
+        // deserialise
+        public Espion(SerializationInfo info, StreamingContext context) : base(info, context) 
+        {
         }
         
         public override int Collision(Personnage attaquant, Personnage defenseur)

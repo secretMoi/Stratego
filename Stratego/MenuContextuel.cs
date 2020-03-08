@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Stratego.Personnages;
 
 namespace Stratego
 {
-    public class MenuContextuel
+    [Serializable]
+    public class MenuContextuel : ISerializable
     {
         private readonly ContextMenu contextMenu;
         private readonly PictureBox pictureBox;
@@ -14,6 +16,26 @@ namespace Stratego
         private Point positionOrigine;
         
         private bool placementPieces; // si on place les pièces avant le début du jeu
+        
+        // serialise
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("ContextMenu", contextMenu, typeof(ContextMenu));
+            info.AddValue("PictureBox", pictureBox, typeof(PictureBox));
+            info.AddValue("Jeu", jeu, typeof(JeuRegles));
+            info.AddValue("PositionOrigine", positionOrigine, typeof(Point));
+            info.AddValue("PlacementPieces", placementPieces, typeof(bool));
+        }
+        
+        // deserialise
+        public MenuContextuel(SerializationInfo info, StreamingContext context)
+        {
+            contextMenu = (ContextMenu) info.GetValue("ContextMenu", typeof(ContextMenu));
+            pictureBox = (PictureBox) info.GetValue("PictureBox", typeof(PictureBox));
+            jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
+            positionOrigine = (Point) info.GetValue("PositionOrigine", typeof(Point));
+            placementPieces = (bool) info.GetValue("PlacementPieces", typeof(bool));
+        }
 
         public MenuContextuel(PictureBox pictureBox)
         {
