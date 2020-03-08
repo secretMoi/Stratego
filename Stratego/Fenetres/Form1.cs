@@ -5,8 +5,6 @@ using System.Windows.Forms;
 
 //todo cases vertes et rouges
 //todo zone tuto premièe prise en main
-//todo compléter aléatoire au lieu d'écraser les pièces
-//todo avec le menucontext ne placer les pièces que dans la partie autorisée
 //todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
 namespace Stratego.Fenetres
 {
@@ -91,7 +89,9 @@ namespace Stratego.Fenetres
             // création de la liste
             for (int i = 0; i < 40; i++)
             {
-                listeCases.Add(caseCourante);
+                if (jeu.Map.GetPiece(caseCourante) == null)
+                    listeCases.Add(caseCourante);
+
                 caseCourante.X++;
 
                 if (caseCourante.X == 10)
