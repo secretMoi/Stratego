@@ -269,7 +269,6 @@ namespace Stratego
                     @"L'équipe " + equipe + @" remporte la victoire !"
                 );
             }
-                
         }
         
         public void BougePiece(Point positionDestination)

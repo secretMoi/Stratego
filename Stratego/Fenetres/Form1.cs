@@ -103,7 +103,7 @@ namespace Stratego.Fenetres
 
             //todo utiliser les items du menucontext au lieu du dictionnaire
             // génère une pièce pour chaque Point de la liste
-            foreach(KeyValuePair<string, int> piece in jeu.ListePieces)
+            foreach(KeyValuePair<string, int> piece in menuContextuel.PiecesRestantes())
             {
                 for (int repetitionPiece = 0; repetitionPiece < piece.Value; repetitionPiece++)
                 {
@@ -114,6 +114,8 @@ namespace Stratego.Fenetres
                     listeCases.RemoveAt(positionChoisie);
                 }
             }
+            
+            menuContextuel.GenereMenu();
 
             // si le bouton s'applique aux rouges
             if (buttonRemplir.Text.Contains("rouges"))

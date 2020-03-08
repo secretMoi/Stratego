@@ -24,11 +24,14 @@ namespace Stratego
             PlacementPieces = true;
         }
         
-        public void GenereMenu(JeuRegles jeu)
+        public void GenereMenu(JeuRegles jeu = null)
         {
-            this.jeu = jeu;
+            if(jeu != null)
+                this.jeu = jeu;
             
-            foreach(KeyValuePair<string, int> piece in jeu.ListePieces)
+            contextMenu.MenuItems.Clear();
+            
+            foreach(KeyValuePair<string, int> piece in this.jeu.ListePieces)
                 contextMenu.MenuItems.Add(piece.Value + " - " + piece.Key, Menu_OnClick);
         }
         
@@ -65,6 +68,9 @@ namespace Stratego
             // crée la pièce
             if (jeu.GenereUnePiece(nomPiece, positionOrigine) == null)
                 return;
+            
+            if(Personnage.GetNombrePieces() == 40)
+                GenereMenu();
 
             if (menuItem != null)
                 menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
@@ -82,6 +88,22 @@ namespace Stratego
                 placementPieces = false;
                 contextMenu.Dispose();
             }
+        }
+
+        public Dictionary<string, int> PiecesRestantes()
+        {
+            Dictionary<string, int> piecesRestantes = new Dictionary<string, int>();
+
+            foreach (MenuItem item in contextMenu.MenuItems)
+            {
+                string[] chaineItem = item.Text.Split('-'); // récupère la chaine de l'item sélectionné
+                int nombrePieceRestante = Convert.ToInt32(chaineItem[0].Trim()); // récupère le nombre de pièces pouvant encore être placées
+                string nomPiece = chaineItem[1].Trim(); // récupère le nom de la pièce
+                
+                piecesRestantes.Add(nomPiece, nombrePieceRestante);
+            }
+
+            return piecesRestantes;
         }
 
         public Point PositionOrigine
