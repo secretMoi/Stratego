@@ -251,7 +251,7 @@ namespace Stratego
             return null;
         }
 
-        private bool CaseAutorisee(Point destination)
+        public bool CaseAutorisee(Point destination)
         {
             foreach (Point point in casesInterdites)
                 if (destination.X == point.X && destination.Y == point.Y)

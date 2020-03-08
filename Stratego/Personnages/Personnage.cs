@@ -1,8 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Stratego.Personnages
 {
-    public abstract class Personnage
+    public abstract class Personnage : IDisposable
     {
         public const int Vide = 0;
         public const int Attaquant = 1;
@@ -24,6 +25,8 @@ namespace Stratego.Personnages
         private bool equipe;
 
         private static int nombrePiece;
+        
+        bool disposed;
 
         public Personnage(int id, Point point)
         {
@@ -81,7 +84,7 @@ namespace Stratego.Personnages
 
             return resultat; // sinon la case est vide
         }
-        
+
         public Point Position
         {
             get => position;
@@ -109,6 +112,25 @@ namespace Stratego.Personnages
                 return Color.Navy;
 
             return Color.Crimson;
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    nombrePiece--;
+                }
+            }
+            //dispose unmanaged resources
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

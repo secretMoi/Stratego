@@ -46,6 +46,7 @@
         <e p="JeuRegles.cs" t="Include" />
         <e p="ListePieces.xml" t="Include" />
         <e p="Map.cs" t="Include" />
+        <e p="MenuContextuel.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
         <e p="Personnages" t="Include">
           <e p="Bombe.cs" t="Include" />

@@ -109,8 +109,47 @@ namespace Stratego
             
             AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
         }
+        
+        public Personnage GenereUnePiece(string nomPiece, Point position)
+        {
+            Personnage personnage = InstancieUnePiece(nomPiece, position, tourActuel);
 
-        private Personnage GenereUnePiece(string nomPiece, Point position, bool equipe)
+            if (personnage == null)
+            {
+                MessageBox.Show(@"Création de la pièce " + nomPiece + @" impossible !");
+                return null;
+            }
+
+            // vérifie qu'on essaye pas de placer la pièce dans un endroit invalide
+            if (personnage.Equipe == Personnage.Bleu)
+            {
+                if (position.Y < Map.CasesY - 4)
+                {
+                    MessageBox.Show(@"Création impossible de la pièce à " + position);
+                    personnage.Dispose();
+                    return null;
+                }
+            }
+            else
+            {
+                if (position.Y > 3)
+                {
+                    MessageBox.Show(@"Création impossible de la pièce à " + position);
+                    personnage.Dispose();
+                    return null;
+                }
+            }
+            
+            positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+            map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+
+            if (Personnage.GetNombrePieces() % 40 == 0)
+                ChangeTour();
+
+            return personnage;
+        }
+
+        private Personnage InstancieUnePiece(string nomPiece, Point position, bool equipe)
         {
             string @namespace = "Stratego.Personnages";
             string @class = nomPiece;
@@ -259,25 +298,6 @@ namespace Stratego
             positionPieces[id].Point = point;
         }
 
-        public Personnage GenereUnePiece(string nomPiece, Point position)
-        {
-            Personnage personnage = GenereUnePiece(nomPiece, position, tourActuel);
-
-            if (personnage == null)
-            {
-                MessageBox.Show(@"Création de la pièce " + nomPiece + @" impossible !");
-                return null;
-            }
-            
-            positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
-            map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
-
-            if (Personnage.GetNombrePieces() % 40 == 0)
-                ChangeTour();
-
-            return personnage;
-        }
-        
         public void DessinePieces(Graphics graphics)
         {
             Personnage personnage;

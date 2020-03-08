@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="JeuRegles.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MenuContextuel.cs" />
     <Compile Include="Personnages\Bombe.cs" />
     <Compile Include="Personnages\Capitaine.cs" />
     <Compile Include="Personnages\Colonel.cs" />

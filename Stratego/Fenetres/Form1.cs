@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using Stratego.Personnages;
 
 //todo cases vertes et rouges
 //todo zone tuto premièe prise en main
 //todo compléter aléatoire au lieu d'écraser les pièces
-//todo ne placer ses pièces avec le menu que dans la zone indiquée
+//todo avec le menucontext ne placer les pièces que dans la partie autorisée
 //todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
 namespace Stratego.Fenetres
 {
     public partial class Form1 : Form
     {
         private readonly Rectangle aireJeu;
-
         private readonly JeuRegles jeu;
-        
-        private bool placementPieces; // si on place les pièces avant le début du jeu
+        private MenuContextuel menuContextuel;
 
         private Point positionOrigine; // position de départ de la pièce déplacée
         public Form1()
@@ -27,15 +24,12 @@ namespace Stratego.Fenetres
             jeu = new JeuRegles("ListePieces.xml");
             
             aireJeu = new Rectangle(0,0, 612, 800);
-
-            placementPieces = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            pictureBox1.ContextMenu = new ContextMenu();
-            
-            GenereMenu();
+            menuContextuel = new MenuContextuel(pictureBox1);
+            menuContextuel.GenereMenu(jeu);
         }
         
         private void evenement_Click(object sender, EventArgs e)
@@ -54,48 +48,9 @@ namespace Stratego.Fenetres
             fenetre?.Show(); // Affiche la fenêtre
         }
 
-        private void MenuPictureBox(MenuItem menuItem)
-        {
-            if(positionOrigine.X == -1)
-            {
-                MessageBox.Show(@"Case invalide !");
-                return;
-            }
-            
-            string[] chaineItem = menuItem.Text.Split('-'); // récupère la chaine de l'item sélectionné
-            int nombrePieceRestante = Convert.ToInt32(chaineItem[0].Trim()); // récupère le nombre de pièces pouvant encore être placées
-            string nomPiece = chaineItem[1].Trim(); // récupère le nom de la pièce
-
-            // si on ne peut plus poser de pièces
-            if (nombrePieceRestante < 1)
-            {
-                MessageBox.Show(@"Pièce épuisée");
-                return;
-            }
-            
-            // si la case cible est déjà occupée
-            Personnage caseCible = jeu.Map.GetPiece(positionOrigine);
-            if (caseCible != null)
-            {
-                MessageBox.Show(@"Case occupée !");
-                return;
-            }
-
-            // crée la pièce
-            if (jeu.GenereUnePiece(nomPiece, positionOrigine) == null)
-                return;
-
-            menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
-
-            // si toutes les pièces sont placées
-            DesactiveMenuContextuel();
-
-            pictureBox1.Invalidate();
-        }
-
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            if (placementPieces) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
+            if (menuContextuel.PlacementPieces) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
             jeu.LachePiece(e.Location, positionOrigine, richTextBox1);
 
@@ -104,7 +59,7 @@ namespace Stratego.Fenetres
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if(placementPieces) return;
+            if(menuContextuel.PlacementPieces) return;
             
             jeu.BougePiece(e.Location);
             
@@ -113,7 +68,8 @@ namespace Stratego.Fenetres
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
-            jeu.PrisePiece(ref positionOrigine, e.Location, placementPieces);
+            jeu.PrisePiece(ref positionOrigine, e.Location, menuContextuel.PlacementPieces);
+            menuContextuel.PositionOrigine = positionOrigine;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -145,6 +101,7 @@ namespace Stratego.Fenetres
                 }
             }
 
+            //todo utiliser les items du menucontext au lieu du dictionnaire
             // génère une pièce pour chaque Point de la liste
             foreach(KeyValuePair<string, int> piece in jeu.ListePieces)
             {
@@ -162,33 +119,12 @@ namespace Stratego.Fenetres
             if (buttonRemplir.Text.Contains("rouges"))
             {
                 buttonRemplir.Enabled = false;
-                DesactiveMenuContextuel();
+                menuContextuel.DesactiveMenuContextuel();
             }
             else // sinon aux bleus
                 buttonRemplir.Text = buttonRemplir.Text.Replace("bleus", "rouges");
             
             pictureBox1.Invalidate();
-        }
-
-        private void GenereMenu()
-        {
-            foreach(KeyValuePair<string, int> piece in jeu.ListePieces)
-                pictureBox1.ContextMenu.MenuItems.Add(piece.Value + " - " + piece.Key, Menu_OnClick);
-        }
-
-        private void Menu_OnClick(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            MenuPictureBox(menuItem);
-        }
-
-        private void DesactiveMenuContextuel()
-        {
-            if (Personnage.GetNombrePieces() == 80)
-            {
-                placementPieces = false;
-                pictureBox1.ContextMenu.Dispose();
-            }
         }
 
         private void Quitter_Click(object sender, EventArgs e)
@@ -198,12 +134,13 @@ namespace Stratego.Fenetres
         
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = MessageBox.Show(this,
+            // todo réactiver
+            /*e.Cancel = MessageBox.Show(this,
                 @"Souhaitez-vous quitter ?" + Environment.NewLine + @"Toute partie non sauvegardée sera perdue...",
                 @"Quitter",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
-            ) != DialogResult.Yes;
+            ) != DialogResult.Yes;*/
         }
     }
 }
