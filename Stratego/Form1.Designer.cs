@@ -38,12 +38,13 @@
             this.buttonRemplir = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuProgramme = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuAide = new System.Windows.Forms.ToolStripMenuItem();
-            this.aProposToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProgramme_Sauvegarder = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProgramme_Reprendre = new System.Windows.Forms.ToolStripMenuItem();
             this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
             this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAide = new System.Windows.Forms.ToolStripMenuItem();
+            this.aProposToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -118,7 +119,7 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-                {this.menuProgramme, this.menuAide});
+                {this.menuProgramme, this.menuAide, this.vueToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1336, 24);
@@ -136,6 +137,34 @@
             this.menuProgramme.Size = new System.Drawing.Size(82, 20);
             this.menuProgramme.Text = "Programme";
             // 
+            // menuProgramme_Sauvegarder
+            // 
+            this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
+            this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(152, 22);
+            this.menuProgramme_Sauvegarder.Text = "Sauvegarder";
+            this.menuProgramme_Sauvegarder.Click += new System.EventHandler(this.evenement_Click);
+            // 
+            // menuProgramme_Reprendre
+            // 
+            this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
+            this.menuProgramme_Reprendre.Size = new System.Drawing.Size(152, 22);
+            this.menuProgramme_Reprendre.Text = "Reprendre";
+            this.menuProgramme_Reprendre.Click += new System.EventHandler(this.evenement_Click);
+            // 
+            // menuProgramme_Options
+            // 
+            this.menuProgramme_Options.Name = "menuProgramme_Options";
+            this.menuProgramme_Options.Size = new System.Drawing.Size(152, 22);
+            this.menuProgramme_Options.Text = "Options";
+            this.menuProgramme_Options.Click += new System.EventHandler(this.evenement_Click);
+            // 
+            // quitterToolStripMenuItem
+            // 
+            this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
+            this.quitterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitterToolStripMenuItem.Text = "Quitter";
+            this.quitterToolStripMenuItem.Click += new System.EventHandler(this.Quitter_Click);
+            // 
             // menuAide
             // 
             this.menuAide.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
@@ -149,30 +178,13 @@
             this.aProposToolStripMenuItem.Name = "aProposToolStripMenuItem";
             this.aProposToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aProposToolStripMenuItem.Text = "A propos";
+            this.aProposToolStripMenuItem.Click += new System.EventHandler(this.evenement_Click);
             // 
-            // menuProgramme_Sauvegarder
+            // vueToolStripMenuItem
             // 
-            this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
-            this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(172, 22);
-            this.menuProgramme_Sauvegarder.Text = "Sauvegarder";
-            // 
-            // menuProgramme_Reprendre
-            // 
-            this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
-            this.menuProgramme_Reprendre.Size = new System.Drawing.Size(172, 22);
-            this.menuProgramme_Reprendre.Text = "Reprendre";
-            // 
-            // menuProgramme_Options
-            // 
-            this.menuProgramme_Options.Name = "menuProgramme_Options";
-            this.menuProgramme_Options.Size = new System.Drawing.Size(172, 22);
-            this.menuProgramme_Options.Text = "Options";
-            // 
-            // quitterToolStripMenuItem
-            // 
-            this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
-            this.quitterToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            this.quitterToolStripMenuItem.Text = "Quitter";
+            this.vueToolStripMenuItem.Name = "vueToolStripMenuItem";
+            this.vueToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.vueToolStripMenuItem.Text = "Vue";
             // 
             // Form1
             // 
@@ -191,6 +203,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Stratego";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
@@ -216,5 +229,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuProgramme;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Options;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
+        private System.Windows.Forms.ToolStripMenuItem vueToolStripMenuItem;
     }
 }

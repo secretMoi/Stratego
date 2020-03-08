@@ -38,6 +38,22 @@ namespace Stratego
             
             GenereMenu();
         }
+        
+        private void evenement_Click(object sender, EventArgs e)
+        {
+            string nom = ((ToolStripMenuItem) sender).Name; // récupère le nom du controle appelant
+            string[] chaine = nom.Split('_'); // scinde le nom pour avoir les 2 parties
+            
+            string @namespace = GetType().Namespace;
+            string @class = "Fic" + chaine[1];
+
+            // équivalent var typeClasse = Type.GetType(String.Format("{0}.{1}", @namespace, @class));
+            var typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
+            if (typeClasse == null) return; // quitte si la classe est introuvable
+            Form fenetre = Activator.CreateInstance(typeClasse) as Form; // instancie un objet
+
+            fenetre?.Show(); // Affiche la fenêtre
+        }
 
         private void MenuPictureBox(MenuItem menuItem)
         {
@@ -174,6 +190,21 @@ namespace Stratego
                 placementPieces = false;
                 pictureBox1.ContextMenu.Dispose();
             }
+        }
+
+        private void Quitter_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = MessageBox.Show(this,
+                @"Souhaitez-vous quitter ?" + Environment.NewLine + @"Toute partie non sauvegardée sera perdue...",
+                "Quitter",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            ) != DialogResult.Yes;
         }
     }
 }
