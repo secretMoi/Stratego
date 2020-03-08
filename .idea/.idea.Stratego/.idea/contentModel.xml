@@ -26,6 +26,9 @@
           <e p="bleu_marechal.jpg" t="Include" />
           <e p="bleu_sergent.jpg" t="Include" />
           <e p="fonds.png" t="Include" />
+          <e p="listePieces.jpg" t="Include" />
+          <e p="pieceAdverse.jpg" t="Include" />
+          <e p="pieceAlliee.jpg" t="Include" />
           <e p="rouge_bombe.jpg" t="Include" />
           <e p="rouge_capitaine.jpg" t="Include" />
           <e p="rouge_colonel.jpg" t="Include" />

@@ -12,21 +12,26 @@ namespace Stratego
     {
         private Form1 fenetrePrincipale;
         private readonly Dictionary<String, int> listePieces;
+        private bool tourActuel = Personnage.Bleu;
+        private readonly Bitmap imagePieceAdverse;
+        private readonly Bitmap imagePieceAlliee;
 
         public JeuRegles(string chemin)
         {
-            this.listePieces = new Dictionary<string, int>();
-            XmlTextReader listePieces = new XmlTextReader(chemin);
+            imagePieceAdverse = new Bitmap(@"images/pieceAdverse.jpg");
+            imagePieceAlliee = new Bitmap(@"images/pieceAlliee.jpg");
+            listePieces = new Dictionary<string, int>();
+            XmlTextReader listePiecesXml = new XmlTextReader(chemin);
             
             string nomPiece = null;
             int nombrePieces = 0; // nombre de fois qu'une pièce peut être placée
 
-            while (listePieces.Read()) // parcours le fichier XML
+            while (listePiecesXml.Read()) // parcours le fichier XML
             {
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "name") // récupère le nom
-                    nomPiece = listePieces.ReadElementString();
-                if (listePieces.NodeType == XmlNodeType.Element && listePieces.Name == "nombre") // récupère le nb de pièces
-                    nombrePieces = Convert.ToInt32(listePieces.ReadElementString());
+                if (listePiecesXml.NodeType == XmlNodeType.Element && listePiecesXml.Name == "name") // récupère le nom
+                    nomPiece = listePiecesXml.ReadElementString();
+                if (listePiecesXml.NodeType == XmlNodeType.Element && listePiecesXml.Name == "nombre") // récupère le nb de pièces
+                    nombrePieces = Convert.ToInt32(listePiecesXml.ReadElementString());
                 
                 if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
 
@@ -75,6 +80,11 @@ namespace Stratego
         {
             MenuItem menuItem = sender as MenuItem;
             fenetrePrincipale.MenuPictureBox(menuItem);
+        }
+
+        public void ChangeTour()
+        {
+            tourActuel = !tourActuel;
         }
 
         public static void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
@@ -126,22 +136,36 @@ namespace Stratego
 
         public List<Point> ListeCasesInterdites()
         {
-            List<Point> casesInterdites = new List<Point>();
-            // lac gauche
-            casesInterdites.Add(new Point(2, 4));
-            casesInterdites.Add(new Point(3, 4));
-            casesInterdites.Add(new Point(2, 5));
-            casesInterdites.Add(new Point(3, 5));
-            
-            // lac droit
-            casesInterdites.Add(new Point(6, 4));
-            casesInterdites.Add(new Point(7, 4));
-            casesInterdites.Add(new Point(6, 5));
-            casesInterdites.Add(new Point(7, 5));
+            List<Point> casesInterdites = new List<Point>
+            {
+                // lac gauche
+                new Point(2, 4),
+                new Point(3, 4),
+                new Point(2, 5),
+                new Point(3, 5),
+                
+                // lac droit
+                new Point(6, 4),
+                new Point(7, 4),
+                new Point(6, 5),
+                new Point(7, 5)
+            };
 
             return casesInterdites;
         }
 
+        public Bitmap ImagePiece(Personnage personnage)
+        {
+            if (personnage.Equipe == tourActuel)
+                return personnage.Piece.Image;
+            else if (tourActuel == Personnage.Bleu)
+                return imagePieceAdverse;
+            else
+                return imagePieceAlliee;
+        }
+
         public Dictionary<string, int> ListePieces => listePieces;
+
+        public bool TourActuel => tourActuel;
     }
 }

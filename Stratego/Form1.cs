@@ -5,8 +5,6 @@ using System.Windows.Forms;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
-//todo cacher les pièces à chaque tour
-//todo chaque joueur ne peut faire qu'un déplacement par tour
 //todo menu (aide, sauvegarder partie, reprendre partie...)
 //todo zone tuto premièe prise en main
 //todo détection fin de partie
@@ -58,8 +56,7 @@ namespace Stratego
                 MessageBox.Show(@"Case invalide !");
                 return;
             }
-
-            bool equipe = Personnage.Bleu;
+            
             string[] chaineItem = menuItem.Text.Split('-'); // récupère la chaine de l'item sélectionné
             int nombrePieceRestante = Convert.ToInt32(chaineItem[0].Trim()); // récupère le nombre de pièces pouvant encore être placées
             string nomPiece = chaineItem[1].Trim(); // récupère le nom de la pièce
@@ -79,11 +76,8 @@ namespace Stratego
                 return;
             }
 
-            if (Personnage.GetNombrePieces() >= 40)
-                equipe = Personnage.Rouge;
-
             // crée la pièce
-            if (GenereUnePiece(nomPiece, positionOrigine, equipe) == null)
+            if (GenereUnePiece(nomPiece, positionOrigine) == null)
                 return;
 
             menuItem.Text = --nombrePieceRestante + @" - " + nomPiece; // actualise le texte de l'item
@@ -118,6 +112,8 @@ namespace Stratego
                 // efface les pièces qui doivent l'être
                 EffacePiece(piece1);
                 EffacePiece(piece2);
+
+                jeu.ChangeTour();
             }
             else // sinon on la replace à sa position d'origine
                 RedessinePiece(idDragged, Map.CoordToPx(positionOrigine), false);
@@ -142,9 +138,10 @@ namespace Stratego
                 return;
             
             Personnage persoSelectionne = map.GetPiece(positionOrigine);
+            if(persoSelectionne == null) return;
             
-            // vérifie qu'il y a bien une pièce dans la case et que la pièce soit déplaçable
-            if (persoSelectionne != null && persoSelectionne.Deplacement > 0)
+            // vérifie que la pièce soit déplacable (sinon bombe/drapeau) et que ce soit au tour de la pièce de bouger 
+            if (persoSelectionne.Deplacement > 0 && persoSelectionne.Equipe == jeu.TourActuel)
             {
                 drag = true; // active le drag&drop
                 idDragged = persoSelectionne.Id;
@@ -189,22 +186,18 @@ namespace Stratego
                 personnage = map.TrouvePersoParId(id);
                 
                 if(personnage != null) // ne dessine que les pièces valides
-                    e.Graphics.DrawImage(personnage.Piece.Image, positionPieces[id].Rect);
+                    e.Graphics.DrawImage(jeu.ImagePiece(personnage), positionPieces[id].Rect);
             }
         }
 
         private void buttonRemplir_Click(object sender, EventArgs e)
         {
-            bool equipe = Personnage.Bleu;
             Point caseCourante = new Point(0, Map.CasesY - 1); // position de la pièce à placer
             List<Point> listeCases = new List<Point>(40);
             Random positionAleatoire = new Random();
             int positionChoisie;
             if (buttonRemplir.Text.Contains("rouges"))
-            {
                 caseCourante.Y = 3;
-                equipe = Personnage.Rouge;
-            }
 
             // création de la liste
             for (int i = 0; i < 40; i++)
@@ -225,7 +218,7 @@ namespace Stratego
                 {
                     positionChoisie = positionAleatoire.Next(listeCases.Count);
 
-                    GenereUnePiece(piece.Key, listeCases[positionChoisie], equipe);
+                    GenereUnePiece(piece.Key, listeCases[positionChoisie]);
                 
                     listeCases.RemoveAt(positionChoisie);
                 }
@@ -242,9 +235,9 @@ namespace Stratego
             pictureBox1.Invalidate();
         }
 
-        private Personnage GenereUnePiece(string nomPiece, Point position, bool equipe)
+        private Personnage GenereUnePiece(string nomPiece, Point position)
         {
-            Personnage personnage = jeu.GenereUnePiece(nomPiece, position, equipe);
+            Personnage personnage = jeu.GenereUnePiece(nomPiece, position, jeu.TourActuel);
 
             if (personnage == null)
             {
@@ -254,6 +247,9 @@ namespace Stratego
             
             positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
             map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+
+            if (Personnage.GetNombrePieces() % 40 == 0)
+                jeu.ChangeTour();
 
             return personnage;
         }
