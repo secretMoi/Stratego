@@ -20,8 +20,8 @@ namespace Stratego
         // serialise
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("ContextMenu", contextMenu, typeof(ContextMenu));
-            info.AddValue("PictureBox", pictureBox, typeof(PictureBox));
+            //todo recréer à la deserialisation
+            //info.AddValue("ContextMenu", contextMenu, typeof(ContextMenu));
             info.AddValue("Jeu", jeu, typeof(JeuRegles));
             info.AddValue("PositionOrigine", positionOrigine, typeof(Point));
             info.AddValue("PlacementPieces", placementPieces, typeof(bool));
@@ -30,8 +30,7 @@ namespace Stratego
         // deserialise
         public MenuContextuel(SerializationInfo info, StreamingContext context)
         {
-            contextMenu = (ContextMenu) info.GetValue("ContextMenu", typeof(ContextMenu));
-            pictureBox = (PictureBox) info.GetValue("PictureBox", typeof(PictureBox));
+            //contextMenu = (ContextMenu) info.GetValue("ContextMenu", typeof(ContextMenu));
             jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
             positionOrigine = (Point) info.GetValue("PositionOrigine", typeof(Point));
             placementPieces = (bool) info.GetValue("PlacementPieces", typeof(bool));

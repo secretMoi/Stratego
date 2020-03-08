@@ -57,6 +57,7 @@
         <e p="Map.cs" t="Include" />
         <e p="MenuContextuel.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
+        <e p="PartieActuelle.cs" t="Include" />
         <e p="Personnages" t="Include">
           <e p="Bombe.cs" t="Include" />
           <e p="Capitaine.cs" t="Include" />

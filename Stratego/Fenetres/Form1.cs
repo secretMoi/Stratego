@@ -13,26 +13,42 @@ namespace Stratego.Fenetres
 {
     public partial class Form1 : Form
     {
-        private readonly Rectangle aireJeu;
+        private PartieActuelle partieActuelle;
+        /*private readonly Rectangle aireJeu;
         private JeuRegles jeu;
-        private MenuContextuel menuContextuel;
+        private MenuContextuel menuContextuel;*/
 
         private Point positionOrigine; // position de départ de la pièce déplacée
+        
+        /*// serialise
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Jeu", jeu, typeof(JeuRegles));
+            info.AddValue("MenuContextuel", menuContextuel, typeof(MenuContextuel));
+            info.AddValue("PositionOrigine", positionOrigine, typeof(Point));
+        }
+        
+        // deserialise
+        public Form1(SerializationInfo info, StreamingContext context) : base()
+        {
+            jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
+            menuContextuel = (MenuContextuel) info.GetValue("MenuContextuel", typeof(MenuContextuel));
+            positionOrigine = (Point) info.GetValue("PositionOrigine", typeof(Point));
+        }*/
+        
         public Form1()
         {
             InitializeComponent();
+            partieActuelle = new PartieActuelle(pictureBox1);
             
-            jeu = new JeuRegles("ListePieces.xml");
+            /*jeu = new JeuRegles("ListePieces.xml");
             
             aireJeu = new Rectangle(0,0, 612, 800);
+            
+            menuContextuel = new MenuContextuel(pictureBox1);
+            menuContextuel.GenereMenu(jeu);*/
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            menuContextuel = new MenuContextuel(pictureBox1);
-            menuContextuel.GenereMenu(jeu);
-        }
-        
         private void evenement_Click(object sender, EventArgs e)
         {
             string nom = ((ToolStripMenuItem) sender).Name; // récupère le nom du controle appelant
@@ -61,10 +77,10 @@ namespace Stratego.Fenetres
 
                 if (nom.Contains("Reprendre"))
                 {
-                    fichierSauvegarde = new FileStream(@"save.xml", FileMode.Open);
-                    JeuRegles ancienJeu = (JeuRegles)formatter.Deserialize(fichierSauvegarde);
+                    fichierSauvegarde = new FileStream(@"save.sav", FileMode.Open);
+                    PartieActuelle ancienJeu = (PartieActuelle)formatter.Deserialize(fichierSauvegarde);
 
-                    jeu = ancienJeu;
+                    partieActuelle = ancienJeu;
                     
                     resultat = @"Partie restaurée";
                     
@@ -72,8 +88,8 @@ namespace Stratego.Fenetres
                 }
                 else if(nom.Contains("Sauvegarder"))
                 {
-                    fichierSauvegarde = new FileStream(@"save.xml", FileMode.Create);
-                    formatter.Serialize(fichierSauvegarde, jeu);
+                    fichierSauvegarde = new FileStream(@"save.sav", FileMode.Create);
+                    formatter.Serialize(fichierSauvegarde, partieActuelle);
                     
                     resultat = @"Partie sauvegardée";
                 }
@@ -92,33 +108,33 @@ namespace Stratego.Fenetres
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
-            if (menuContextuel.PlacementPieces) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
+            if (partieActuelle.MenuContextuel.PlacementPieces) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
             
-            jeu.LachePiece(e.Location, positionOrigine, richTextBox1);
+            partieActuelle.Jeu.LachePiece(e.Location, positionOrigine, richTextBox1);
 
             pictureBox1.Invalidate();
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if(menuContextuel.PlacementPieces) return;
+            if(partieActuelle.MenuContextuel.PlacementPieces) return;
             
-            jeu.BougePiece(e.Location);
+            partieActuelle.Jeu.BougePiece(e.Location);
             
             pictureBox1.Invalidate();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
         {
-            jeu.PrisePiece(ref positionOrigine, e.Location, menuContextuel.PlacementPieces);
-            menuContextuel.PositionOrigine = positionOrigine;
+            partieActuelle.Jeu.PrisePiece(ref positionOrigine, e.Location, partieActuelle.MenuContextuel.PlacementPieces);
+            partieActuelle.MenuContextuel.PositionOrigine = positionOrigine;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(jeu.Map.Fond, aireJeu.Rect); // repeint la grille
+            e.Graphics.DrawImage(partieActuelle.Jeu.Map.Fond, partieActuelle.AireJeu.Rect); // repeint la grille
 
-            jeu.DessinePieces(e.Graphics);
+            partieActuelle.Jeu.DessinePieces(e.Graphics);
         }
 
         private void buttonRemplir_Click(object sender, EventArgs e)
@@ -133,7 +149,7 @@ namespace Stratego.Fenetres
             // création de la liste
             for (int i = 0; i < 40; i++)
             {
-                if (jeu.Map.GetPiece(caseCourante) == null)
+                if (partieActuelle.Jeu.Map.GetPiece(caseCourante) == null)
                     listeCases.Add(caseCourante);
 
                 caseCourante.X++;
@@ -146,25 +162,25 @@ namespace Stratego.Fenetres
             }
             
             // génère une pièce pour chaque Point de la liste
-            foreach(KeyValuePair<string, int> piece in menuContextuel.PiecesRestantes())
+            foreach(KeyValuePair<string, int> piece in partieActuelle.MenuContextuel.PiecesRestantes())
             {
                 for (int repetitionPiece = 0; repetitionPiece < piece.Value; repetitionPiece++)
                 {
                     positionChoisie = positionAleatoire.Next(listeCases.Count);
 
-                    jeu.GenereUnePiece(piece.Key, listeCases[positionChoisie]);
+                    partieActuelle.Jeu.GenereUnePiece(piece.Key, listeCases[positionChoisie]);
                 
                     listeCases.RemoveAt(positionChoisie);
                 }
             }
             
-            menuContextuel.GenereMenu();
+            partieActuelle.MenuContextuel.GenereMenu();
 
             // si le bouton s'applique aux rouges
             if (buttonRemplir.Text.Contains("rouges"))
             {
                 buttonRemplir.Enabled = false;
-                menuContextuel.DesactiveMenuContextuel();
+                partieActuelle.MenuContextuel.DesactiveMenuContextuel();
             }
             else // sinon aux bleus
                 buttonRemplir.Text = buttonRemplir.Text.Replace("bleus", "rouges");
