@@ -1,4 +1,4 @@
-﻿namespace Stratego
+﻿namespace Stratego.Fenetres
 {
     partial class Form1
     {

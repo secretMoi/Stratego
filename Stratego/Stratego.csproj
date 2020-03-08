@@ -46,11 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Fenetres\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Fenetres\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="JeuRegles.cs" />
@@ -71,11 +70,11 @@
     <Compile Include="Pieces.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reseau.cs" />
     <Compile Include="Rectangle.cs" />
-    <Compile Include="Serveur.cs" />
-    <Compile Include="Texte.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <Compile Include="Reseau\Client.cs" />
+    <Compile Include="Reseau\Reseau.cs" />
+    <Compile Include="Reseau\Serveur.cs" />
+    <EmbeddedResource Include="Fenetres\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -99,9 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pieces" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="images\bleu_bombe.jpg">

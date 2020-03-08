@@ -8,10 +8,11 @@
       <e p="Stratego" t="IncludeRecursive">
         <e p="App.config" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="Client.cs" t="Include" />
-        <e p="Form1.cs" t="Include" />
-        <e p="Form1.Designer.cs" t="Include" />
-        <e p="Form1.resx" t="Include" />
+        <e p="Fenetres" t="Include">
+          <e p="Form1.cs" t="Include" />
+          <e p="Form1.Designer.cs" t="Include" />
+          <e p="Form1.resx" t="Include" />
+        </e>
         <e p="images" t="Include">
           <e p="bleu_bombe.jpg" t="Include" />
           <e p="bleu_capitaine.jpg" t="Include" />
@@ -61,7 +62,6 @@
           <e p="Personnage.cs" t="Include" />
           <e p="Sergent.cs" t="Include" />
         </e>
-        <e p="Pieces" t="Include" />
         <e p="Pieces.cs" t="Include" />
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">
@@ -72,10 +72,12 @@
           <e p="Settings.settings" t="Include" />
         </e>
         <e p="Rectangle.cs" t="Include" />
-        <e p="Reseau.cs" t="Include" />
-        <e p="Serveur.cs" t="Include" />
+        <e p="Reseau" t="Include">
+          <e p="Client.cs" t="Include" />
+          <e p="Reseau.cs" t="Include" />
+          <e p="Serveur.cs" t="Include" />
+        </e>
         <e p="Stratego.csproj" t="IncludeRecursive" />
-        <e p="Texte.cs" t="Include" />
       </e>
       <e p="Stratego.sln" t="IncludeFlat" />
     </e>

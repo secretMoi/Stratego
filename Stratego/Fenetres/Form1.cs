@@ -5,12 +5,11 @@ using System.Windows.Forms;
 using Stratego.Personnages;
 
 //todo cases vertes et rouges
-//todo menu (aide, sauvegarder partie, reprendre partie, options...)
 //todo zone tuto premièe prise en main
 //todo compléter aléatoire au lieu d'écraser les pièces
 //todo ne placer ses pièces avec le menu que dans la zone indiquée
 //todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
-namespace Stratego
+namespace Stratego.Fenetres
 {
     public partial class Form1 : Form
     {
@@ -201,7 +200,7 @@ namespace Stratego
         {
             e.Cancel = MessageBox.Show(this,
                 @"Souhaitez-vous quitter ?" + Environment.NewLine + @"Toute partie non sauvegardée sera perdue...",
-                "Quitter",
+                @"Quitter",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question
             ) != DialogResult.Yes;
