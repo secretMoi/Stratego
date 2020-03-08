@@ -10,17 +10,22 @@ namespace Stratego
 {
     public class JeuRegles
     {
-        private Form1 fenetrePrincipale;
-        private readonly Dictionary<String, int> listePieces;
-        private bool tourActuel = Personnage.Bleu;
+        private Map map; // contient la map
+        private int idDragged; // id de l'élément sélectionné par la souris
+        private bool drag; // si on est en train de déplacer un élément
+        private readonly List<Rectangle> positionPieces; // liste des positions des pièces
+        private readonly Dictionary<String, int> listePieces; // liste dse pièces du fichier XML
+        private bool tourActuel = Personnage.Bleu; // indique quelle équipe joue actuellement
         private readonly Bitmap imagePieceAdverse;
         private readonly Bitmap imagePieceAlliee;
 
         public JeuRegles(string chemin)
         {
+            positionPieces = new List<Rectangle>();
             imagePieceAdverse = new Bitmap(@"images/pieceAdverse.jpg");
             imagePieceAlliee = new Bitmap(@"images/pieceAlliee.jpg");
             listePieces = new Dictionary<string, int>();
+            
             XmlTextReader listePiecesXml = new XmlTextReader(chemin);
             
             string nomPiece = null;
@@ -35,10 +40,8 @@ namespace Stratego
                 
                 if(nomPiece == null || nombrePieces == 0) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
 
-                if (!ClasseExiste(nomPiece))
-                    MessageBox.Show(@"Pièce erronnée : " + nomPiece);
-
-                this.listePieces.Add(nomPiece, nombrePieces);
+                if (ClasseExiste(nomPiece))
+                    listePieces.Add(nomPiece, nombrePieces);
 
                 // reset les valeurs pour lire la prochaine pièce
                 nomPiece = null;
@@ -67,27 +70,13 @@ namespace Stratego
             richTextBox.AppendText(texte);
             richTextBox.SelectionColor = richTextBox.ForeColor;
         }
-        
-        public void GenereMenu(ContextMenu contextMenu, Form1 fenetrePrincipale)
-        {
-            this.fenetrePrincipale = fenetrePrincipale;
 
-            foreach(KeyValuePair<string, int> piece in listePieces)
-                contextMenu.MenuItems.Add(piece.Value + " - " + piece.Key, Menu_OnClick);
-        }
-
-        private void Menu_OnClick(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            fenetrePrincipale.MenuPictureBox(menuItem);
-        }
-
-        public void ChangeTour()
+        private void ChangeTour()
         {
             tourActuel = !tourActuel;
         }
 
-        public static void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
+        private static void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
         {
             if(attaquant == null || defenseur == null) return;
             
@@ -117,7 +106,7 @@ namespace Stratego
             AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
         }
 
-        public Personnage GenereUnePiece(string nomPiece, Point position, bool equipe)
+        private Personnage GenereUnePiece(string nomPiece, Point position, bool equipe)
         {
             string @namespace = "Stratego.Personnages";
             string @class = nomPiece;
@@ -154,7 +143,7 @@ namespace Stratego
             return casesInterdites;
         }
 
-        public Bitmap ImagePiece(Personnage personnage)
+        private Bitmap ImagePiece(Personnage personnage)
         {
             if (personnage.Equipe == tourActuel)
                 return personnage.Piece.Image;
@@ -164,8 +153,123 @@ namespace Stratego
                 return imagePieceAlliee;
         }
 
+        public void PrisePiece(ref Point positionOrigine, Point positionClic, bool placementPieces)
+        {
+            positionOrigine = map.TrouveCase(positionClic, Map.Coord); // trouve la case en coord où on a cliqué
+            
+            if (placementPieces)
+                return;
+            
+            Personnage persoSelectionne = map.GetPiece(positionOrigine);
+            if(persoSelectionne == null) return;
+            
+            // vérifie que la pièce soit déplacable (sinon bombe/drapeau) et que ce soit au tour de la pièce de bouger 
+            if (persoSelectionne.Deplacement > 0 && persoSelectionne.Equipe == tourActuel)
+            {
+                drag = true; // active le drag&drop
+                idDragged = persoSelectionne.Id;
+
+                RedessinePiece(idDragged, positionClic);
+            }
+        }
+
+        public void LachePiece(Point position, Point positionOrigine, RichTextBox richTextBox)
+        {
+            if(!drag) return;
+            
+            position = map.TrouveCase(position);
+            
+            Personnage attaquant = map.TrouvePersoParId(idDragged);
+            Personnage defenseur = map.GetPiece(position, Map.Pixel);
+
+            // si les 2 pièces sont de la même équipe
+            if (defenseur != null && attaquant.Equipe == defenseur.Equipe)
+                RedessinePiece(idDragged, Map.CoordToPx(positionOrigine), false);
+            // si le déplacement est valide pour la pièce
+            else if(position.X != -1 && map.ConditionsDeplacement(idDragged, positionOrigine, map.PxToCoord(position)))
+            {
+                (int collision, int piece1, int piece2) = map.DeplacePiece(positionOrigine, map.PxToCoord(position));
+
+                GenereHistoriqueDialogue(richTextBox, attaquant, defenseur, collision); // affiche l'action
+                
+                RedessinePiece(idDragged, position, false); // redessine la pièce à sa position finale
+
+                // efface les pièces qui doivent l'être
+                EffacePiece(piece1);
+                EffacePiece(piece2);
+
+                ChangeTour();
+            }
+            else // sinon on la replace à sa position d'origine
+                RedessinePiece(idDragged, Map.CoordToPx(positionOrigine), false);
+            
+            drag = false; // désactive le drag&drop
+        }
+        
+        public void BougePiece(Point positionDestination)
+        {
+            if (drag) // si le drag&drop est activé
+                RedessinePiece(idDragged, positionDestination);
+        }
+        
+        private void EffacePiece(int id)
+        {
+            if (id < 0) return;
+            
+            positionPieces[id] = null;
+        }
+        
+        private void RedessinePiece(int id, Point point, bool centrePiece = true)
+        {
+            Personnage personnage = map.TrouvePersoParId(id);
+
+            if (!map.PositionValide(point) || personnage == null) return;
+            
+            if (centrePiece) // si on doit centrer l'image au centre du curseur
+                personnage.Piece.CentrePiece(ref point);
+            
+            // calcule ses nouvelles coordonnées
+            positionPieces[id].Point = point;
+        }
+
+        public Personnage GenereUnePiece(string nomPiece, Point position)
+        {
+            Personnage personnage = GenereUnePiece(nomPiece, position, tourActuel);
+
+            if (personnage == null)
+            {
+                MessageBox.Show(@"Création de la pièce " + nomPiece + @" impossible !");
+                return null;
+            }
+            
+            positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
+            map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
+
+            if (Personnage.GetNombrePieces() % 40 == 0)
+                ChangeTour();
+
+            return personnage;
+        }
+        
+        public void DessinePieces(Graphics graphics)
+        {
+            Personnage personnage;
+
+            // redessine les pièces
+            for (int id = 0; id < positionPieces.Count; id++)
+            {
+                personnage = map.TrouvePersoParId(id);
+                
+                if(personnage != null) // ne dessine que les pièces valides
+                    graphics.DrawImage(ImagePiece(personnage), positionPieces[id].Rect);
+            }
+        }
+        
         public Dictionary<string, int> ListePieces => listePieces;
 
-        public bool TourActuel => tourActuel;
+        public Map Map
+        {
+            set => map = value;
+        }
     }
 }
