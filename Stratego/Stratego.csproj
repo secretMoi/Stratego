@@ -84,6 +84,12 @@
     <Compile Include="Reseau\Client.cs" />
     <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serveur.cs" />
+    <Compile Include="UserControls\Bouton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\Bouton.Designer.cs">
+      <DependentUpon>Bouton.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DialogBox.cs">
       <SubType>Form</SubType>
     </Compile>

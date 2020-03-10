@@ -25,10 +25,6 @@ namespace Stratego.Fenetres
         {
             InitializeComponent();
             partieActuelle = new PartieActuelle(pictureBox1);
-
-            richTextBox1.BackColor = couleurFond;
-            buttonRemplir.BackColor = couleurFond;
-            buttonRemplir.ForeColor = Color.Chocolate;
         }
 
         private void evenement_Click(object sender, EventArgs e)
@@ -92,11 +88,11 @@ namespace Stratego.Fenetres
 
                 fichierSauvegarde.Close();
 
-                MessageBox.Show(resultat);
+                DialogBox.Show(resultat);
             }
             catch (ApplicationException caught)
             {
-                MessageBox.Show(caught.Source);
+	            DialogBox.Show(caught.Source);
             }
         }
 
@@ -191,11 +187,9 @@ namespace Stratego.Fenetres
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // todo réactiver
-            /*e.Cancel = MessageBox.Show(this,
+            /*e.Cancel = DialogBox.ShowYesNo(this,
                 @"Souhaitez-vous quitter ?" + Environment.NewLine + @"Toute partie non sauvegardée sera perdue...",
-                @"Quitter",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
+                @"Quitter"
             ) != DialogResult.Yes;*/
         }
     }

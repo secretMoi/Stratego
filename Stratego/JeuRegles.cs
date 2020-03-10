@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 using Stratego.Personnages;
+using Stratego.UserControls;
 
 namespace Stratego
 {
@@ -141,7 +142,7 @@ namespace Stratego
 
             if (personnage == null)
             {
-                MessageBox.Show(@"Création de la pièce " + nomPiece + @" impossible !");
+	            DialogBox.Show(@"Création de la pièce " + nomPiece + @" impossible !");
                 return null;
             }
 
@@ -150,7 +151,7 @@ namespace Stratego
             {
                 if (position.Y < Map.CasesY - 4)
                 {
-                    MessageBox.Show(@"Création impossible de la pièce à " + position);
+	                DialogBox.Show(@"Création impossible de la pièce à " + position);
                     personnage.Dispose();
                     return null;
                 }
@@ -159,7 +160,7 @@ namespace Stratego
             {
                 if (position.Y > 3)
                 {
-                    MessageBox.Show(@"Création impossible de la pièce à " + position);
+	                DialogBox.Show(@"Création impossible de la pièce à " + position);
                     personnage.Dispose();
                     return null;
                 }
@@ -287,8 +288,8 @@ namespace Stratego
 
                 if (defenseur.Equipe == Personnage.Bleu)
                     equipe = "rouge";
-                
-                MessageBox.Show(
+
+                DialogBox.Show(
                     @"Partie terminée !" +
                     Environment.NewLine + // retour ligne
                     @"L'équipe " + equipe + @" remporte la victoire !"

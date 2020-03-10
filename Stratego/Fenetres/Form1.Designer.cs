@@ -78,7 +78,7 @@
 			// 
 			// richTextBox1
 			// 
-			this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
+			this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.richTextBox1.ForeColor = System.Drawing.Color.Chocolate;
@@ -112,11 +112,11 @@
 			// 
 			// buttonRemplir
 			// 
-			this.buttonRemplir.BackColor = System.Drawing.SystemColors.ControlLight;
+			this.buttonRemplir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.buttonRemplir.FlatAppearance.BorderSize = 2;
 			this.buttonRemplir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonRemplir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonRemplir.ForeColor = System.Drawing.Color.White;
+			this.buttonRemplir.ForeColor = System.Drawing.Color.Chocolate;
 			this.buttonRemplir.Location = new System.Drawing.Point(710, 574);
 			this.buttonRemplir.Name = "buttonRemplir";
 			this.buttonRemplir.Size = new System.Drawing.Size(153, 50);

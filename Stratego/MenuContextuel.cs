@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Stratego.Personnages;
+using Stratego.UserControls;
 
 namespace Stratego
 {
@@ -62,7 +63,7 @@ namespace Stratego
             // si on clic en dehors de la map ou dans un lac
             if(positionOrigine.X == -1)
             {
-                MessageBox.Show(@"Case invalide !");
+	            DialogBox.Show(@"Case invalide !");
                 return;
             }
             
@@ -73,7 +74,7 @@ namespace Stratego
             // si on ne peut plus poser de pièces
             if (nombrePieceRestante < 1)
             {
-                MessageBox.Show(@"Pièce épuisée");
+	            DialogBox.Show(@"Pièce épuisée");
                 return;
             }
             
@@ -81,7 +82,7 @@ namespace Stratego
             Personnage caseCible = jeu.Map.GetPiece(positionOrigine);
             if (caseCible != null)
             {
-                MessageBox.Show(@"Case occupée !");
+	            DialogBox.Show(@"Case occupée !");
                 return;
             }
 

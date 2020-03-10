@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
-using System.Xml;
+﻿using System.Windows.Forms;
 
 namespace Stratego.Fenetres
 {
 	
     public partial class Options : Form
     {
-	    private Color couleurFond = Color.FromArgb(218, 184, 133);
-	    private Color couleurFondLight = Color.FromArgb(247, 211, 165);
-
-
+	    private Stratego.Options options;
         public Options()
         {
             InitializeComponent();
+            options = new Stratego.Options();
 
-            BackColor = couleurFond;
-
-            /*panelBorderSauvegarde.BackColor = couleurFondLight;
-            panelBorderGraphique.BackColor = couleurFondLight;
-            panelBorderSauvegarde.BackColor = couleurFondLight;
-            panelBorderSon.BackColor = couleurFondLight;
-
-            panelBorderSauvegarde.BorderColor = Color.Chocolate;*/
+            textBoxEmplacementSauvegarde.Text = options.GetOption("EmplacementSauvegarde");
         }
 
-        
+        private void buttonAnnuler_Click(object sender, System.EventArgs e)
+        {
+            Close();
+        }
+
+        private void buttonValider_Click(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }
