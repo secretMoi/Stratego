@@ -32,22 +32,6 @@ namespace Stratego
         public const bool Pixel = false;
         public const bool Coord = true;
 
-        //private static Map mapToSerialize;
-        
-        /*public void Serialise()
-        {
-            using (StreamWriter file = File.CreateText(@"D:\map.sav"))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                //serialize object directly into file stream
-                serializer.Serialize(file, this);
-            }
-            
-            /*List<object> sauvegarde = new List<object>();
-            
-            sauvegarde.Add();
-        }*/
-
         public Map(List<Point> casesInterdites)
         {
             fond = new Bitmap(aireJeu);
@@ -133,7 +117,7 @@ namespace Stratego
                 {
                     if (x != source.X && x != destination.X)
                     {
-                        if (grille[x, source.Y] != null)
+                        if (grille[x, source.Y] != null || !CaseAutorisee(new Point(x, source.Y)))
                             return false;
                     }
                 }
@@ -147,7 +131,7 @@ namespace Stratego
                 {
                     if (y != source.Y && y != destination.Y)
                     {
-                        if (grille[source.X, y] != null)
+                        if (grille[source.X, y] != null || !CaseAutorisee(new Point(source.X, y)))
                             return false;
                     }
                 }
@@ -179,13 +163,13 @@ namespace Stratego
                 
                 return point;
             }
-
+            
             if (typeCoord == Pixel) // si l'on souhaite les coordonnées en px d'une case
             {
                 point.X -= OffsetX;
                 point.Y -= OffsetY;
 
-                point.X = (point.X / LongueurCase) * LongueurCase;
+                point.X = (point.X / LongueurCase) * LongueurCase; //todo WTF
                 point.Y = (point.Y / HauteurCase) * HauteurCase;
             
                 point.X += OffsetX;

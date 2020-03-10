@@ -10,8 +10,7 @@ namespace Stratego
         private Rectangle aireJeu;
         private JeuRegles jeu;
         private MenuContextuel menuContextuel;
-
-        //private Point positionOrigine; // position de départ de la pièce déplacée
+        private Options options;
         
         // serialise
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -19,6 +18,7 @@ namespace Stratego
             info.AddValue("AireJeu", aireJeu, typeof(Rectangle));
             info.AddValue("Jeu", jeu, typeof(JeuRegles));
             info.AddValue("MenuContextuel", menuContextuel, typeof(MenuContextuel));
+            info.AddValue("Options", options, typeof(Options));
         }
         
         // deserialise
@@ -27,6 +27,7 @@ namespace Stratego
             aireJeu = (Rectangle) info.GetValue("AireJeu", typeof(Rectangle));
             jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
             menuContextuel = (MenuContextuel) info.GetValue("MenuContextuel", typeof(MenuContextuel));
+            options = (Options) info.GetValue("Options", typeof(Options));
         }
 
         public PartieActuelle(PictureBox pictureBox)
@@ -37,6 +38,8 @@ namespace Stratego
             
             menuContextuel = new MenuContextuel(pictureBox);
             menuContextuel.GenereMenu(jeu);
+
+            options = new Options();
         }
 
         public Rectangle AireJeu
@@ -57,10 +60,6 @@ namespace Stratego
             set => menuContextuel = value;
         }
 
-        /*public Point PositionOrigine
-        {
-            get => positionOrigine;
-            set => positionOrigine = value;
-        }*/
+        public Options Option => options;
     }
 }

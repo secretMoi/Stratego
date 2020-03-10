@@ -9,44 +9,27 @@ using System.Windows.Forms;
 //todo cases vertes et rouges
 //todo zone tuto premièe prise en main
 //todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
+//todo richtextbox background parchemin + police manuscrite
+//todo créer ses propres MessageBox
 namespace Stratego.Fenetres
 {
     public partial class Form1 : Form
     {
         private PartieActuelle partieActuelle;
-        /*private readonly Rectangle aireJeu;
-        private JeuRegles jeu;
-        private MenuContextuel menuContextuel;*/
+        private Color couleurFond = Color.FromArgb(218, 184, 133);
+        private Color couleurFondLight = Color.FromArgb(247, 211, 165);
 
         private Point positionOrigine; // position de départ de la pièce déplacée
-        
-        /*// serialise
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("Jeu", jeu, typeof(JeuRegles));
-            info.AddValue("MenuContextuel", menuContextuel, typeof(MenuContextuel));
-            info.AddValue("PositionOrigine", positionOrigine, typeof(Point));
-        }
-        
-        // deserialise
-        public Form1(SerializationInfo info, StreamingContext context) : base()
-        {
-            jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
-            menuContextuel = (MenuContextuel) info.GetValue("MenuContextuel", typeof(MenuContextuel));
-            positionOrigine = (Point) info.GetValue("PositionOrigine", typeof(Point));
-        }*/
-        
+
         public Form1()
         {
             InitializeComponent();
             partieActuelle = new PartieActuelle(pictureBox1);
-            
-            /*jeu = new JeuRegles("ListePieces.xml");
-            
-            aireJeu = new Rectangle(0,0, 612, 800);
-            
-            menuContextuel = new MenuContextuel(pictureBox1);
-            menuContextuel.GenereMenu(jeu);*/
+
+            BackColor = couleurFond;
+            richTextBox1.BackColor = couleurFond;
+            buttonRemplir.BackColor = couleurFond;
+            buttonRemplir.ForeColor = Color.Chocolate;
         }
 
         private void evenement_Click(object sender, EventArgs e)
@@ -180,6 +163,7 @@ namespace Stratego.Fenetres
             if (buttonRemplir.Text.Contains("rouges"))
             {
                 buttonRemplir.Enabled = false;
+                buttonRemplir.Visible = false;
                 partieActuelle.MenuContextuel.DesactiveMenuContextuel();
             }
             else // sinon aux bleus

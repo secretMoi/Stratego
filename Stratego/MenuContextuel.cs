@@ -61,7 +61,7 @@ namespace Stratego
             MenuItem menuItem = sender as MenuItem;
             
             // si on clic en dehors de la map ou dans un lac
-            if(positionOrigine.X == -1/* || !jeu.Map.CaseAutorisee(positionOrigine)*/)
+            if(positionOrigine.X == -1)
             {
                 MessageBox.Show(@"Case invalide !");
                 return;

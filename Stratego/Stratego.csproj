@@ -62,6 +62,7 @@
     <Compile Include="JeuRegles.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="MenuContextuel.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="PartieActuelle.cs" />
     <Compile Include="Personnages\Bombe.cs" />
     <Compile Include="Personnages\Capitaine.cs" />
@@ -86,6 +87,12 @@
     <Compile Include="Sauvegarde\Deserialise.cs" />
     <Compile Include="Sauvegarde\Sauvegarde.cs" />
     <Compile Include="Sauvegarde\Serialise.cs" />
+    <Compile Include="UserControls\PanelBorder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\PanelBorder.Designer.cs">
+      <DependentUpon>PanelBorder.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Fenetres\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -101,6 +108,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="config.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -193,6 +203,9 @@
     <EmbeddedResource Include="images\pieceAdverse.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="images\fondParchemin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="images\listePieces.jpg" />
     <EmbeddedResource Include="images\pieceAlliee.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -202,7 +215,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Fenetres\Sauvegarde\Ecriture" />
+    <Folder Include="Fenetres\Sauvegarde\Ecriture\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
