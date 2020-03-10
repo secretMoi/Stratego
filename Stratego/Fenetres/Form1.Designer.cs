@@ -36,7 +36,6 @@
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
-			this.buttonRemplir = new System.Windows.Forms.Button();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.menuProgramme = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Sauvegarder = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +45,7 @@
 			this.menuAide = new System.Windows.Forms.ToolStripMenuItem();
 			this.aProposToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.vueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.buttonRemplir = new Stratego.UserControls.Bouton();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -109,21 +109,6 @@
 			this.button2.Text = "Serveur";
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Visible = false;
-			// 
-			// buttonRemplir
-			// 
-			this.buttonRemplir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
-			this.buttonRemplir.FlatAppearance.BorderSize = 2;
-			this.buttonRemplir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonRemplir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonRemplir.ForeColor = System.Drawing.Color.Chocolate;
-			this.buttonRemplir.Location = new System.Drawing.Point(710, 574);
-			this.buttonRemplir.Name = "buttonRemplir";
-			this.buttonRemplir.Size = new System.Drawing.Size(153, 50);
-			this.buttonRemplir.TabIndex = 8;
-			this.buttonRemplir.Text = "Remplir bleus";
-			this.buttonRemplir.UseVisualStyleBackColor = false;
-			this.buttonRemplir.Click += new System.EventHandler(this.buttonRemplir_Click);
 			// 
 			// menuStrip1
 			// 
@@ -198,6 +183,21 @@
 			this.vueToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
 			this.vueToolStripMenuItem.Text = "Vue";
 			// 
+			// buttonRemplir
+			// 
+			this.buttonRemplir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
+			this.buttonRemplir.FlatAppearance.BorderSize = 2;
+			this.buttonRemplir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonRemplir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonRemplir.ForeColor = System.Drawing.Color.Chocolate;
+			this.buttonRemplir.Location = new System.Drawing.Point(710, 575);
+			this.buttonRemplir.Name = "buttonRemplir";
+			this.buttonRemplir.Size = new System.Drawing.Size(152, 48);
+			this.buttonRemplir.TabIndex = 10;
+			this.buttonRemplir.Text = "Remplir bleus";
+			this.buttonRemplir.UseVisualStyleBackColor = false;
+			this.buttonRemplir.Click += new System.EventHandler(this.buttonRemplir_Click_1);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,7 +233,6 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button buttonRemplir;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem aProposToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitterToolStripMenuItem;
@@ -243,5 +242,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Options;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
         private System.Windows.Forms.ToolStripMenuItem vueToolStripMenuItem;
+		private UserControls.Bouton buttonRemplir;
 	}
 }

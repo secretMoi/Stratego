@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace Stratego
@@ -33,17 +33,27 @@ namespace Stratego
 
 		private void ChargeFichier()
 		{
-			XmlTextReader configurationXml = new XmlTextReader(FichierConfiguration);
+			//XmlTextReader configurationXml = new XmlTextReader(FichierConfiguration);
 			elementConfiguration = new Dictionary<string, string>();
 
 			string nom = null, valeur = null;
-
-			while (configurationXml.Read()) // parcours le fichier XML
+			XmlReaderSettings settings = new XmlReaderSettings();
+			settings.ConformanceLevel = ConformanceLevel.Fragment;
+			settings.IgnoreWhitespace = true;
+			settings.IgnoreComments = true;
+			XmlReader xReader = XmlReader.Create(FichierConfiguration, settings);
+			while (xReader.Read())
 			{
-				if (configurationXml.NodeType == XmlNodeType.Element && configurationXml.Name == "nom") // récupère le nom
-					nom = configurationXml.ReadElementString();
-				if (configurationXml.NodeType == XmlNodeType.Element && configurationXml.Name == "valeur") // récupère le nb de pièces
-					valeur = configurationXml.ReadElementString();
+
+				switch (xReader.NodeType)
+				{
+					case XmlNodeType.Element:
+						nom = xReader.Name;
+						break;
+					case XmlNodeType.Text:
+						valeur = xReader.Value;
+						break;
+				}
 
 				if (nom == null || valeur == null) continue; // tant qu'on a pas le nom et le nb de pièces on continue de parcourir
 
@@ -51,8 +61,10 @@ namespace Stratego
 
 				// reset les valeurs pour lire la prochaine pièce
 				nom = null;
-				valeur = null; // remet à 0 le nombre de pièces à chaque tour de boucle
+				valeur = null;
 			}
+
+			xReader.Close();
 		}
 
 		public string GetOption(string cle)
@@ -65,10 +77,28 @@ namespace Stratego
 
 		public void SetOption(string cle, string valeur)
 		{
-			if (elementConfiguration.TryGetValue(cle, out string valeurResultat))
-				elementConfiguration[valeurResultat] = valeur;
+			if(elementConfiguration.ContainsKey(cle))
+				elementConfiguration[cle] = valeur;
 			else
 				elementConfiguration.Add(cle, valeur);
+		}
+
+		public void Enregistre()
+		{
+			XmlWriter xmlWriter = XmlWriter.Create(FichierConfiguration);
+
+			xmlWriter.WriteStartDocument();
+			xmlWriter.WriteStartElement("config");
+
+			foreach (KeyValuePair<string, string> element in elementConfiguration)
+			{
+				xmlWriter.WriteStartElement(element.Key);
+				xmlWriter.WriteString(element.Value);
+				xmlWriter.WriteEndElement();
+			}
+
+			xmlWriter.WriteEndDocument();
+			xmlWriter.Close();
 		}
 	}
 }

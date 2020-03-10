@@ -127,7 +127,21 @@ namespace Stratego.Fenetres
             partieActuelle.Jeu.DessinePieces(e.Graphics);
         }
 
-        private void buttonRemplir_Click(object sender, EventArgs e)
+        private void Quitter_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // todo réactiver
+            /*e.Cancel = DialogBox.ShowYesNo(this,
+                @"Souhaitez-vous quitter ?" + Environment.NewLine + @"Toute partie non sauvegardée sera perdue...",
+                @"Quitter"
+            ) != DialogResult.Yes;*/
+        }
+
+        private void buttonRemplir_Click_1(object sender, EventArgs e)
         {
             Point caseCourante = new Point(0, Map.CasesY - 1); // position de la pièce à placer
             List<Point> listeCases = new List<Point>(40); // liste les coordonnées des cases disponibles
@@ -150,20 +164,20 @@ namespace Stratego.Fenetres
                     caseCourante.Y--;
                 }
             }
-            
+
             // génère une pièce pour chaque Point de la liste
-            foreach(KeyValuePair<string, int> piece in partieActuelle.MenuContextuel.PiecesRestantes())
+            foreach (KeyValuePair<string, int> piece in partieActuelle.MenuContextuel.PiecesRestantes())
             {
                 for (int repetitionPiece = 0; repetitionPiece < piece.Value; repetitionPiece++)
                 {
                     positionChoisie = positionAleatoire.Next(listeCases.Count);
 
                     partieActuelle.Jeu.GenereUnePiece(piece.Key, listeCases[positionChoisie]);
-                
+
                     listeCases.RemoveAt(positionChoisie);
                 }
             }
-            
+
             partieActuelle.MenuContextuel.GenereMenu();
 
             // si le bouton s'applique aux rouges
@@ -175,22 +189,8 @@ namespace Stratego.Fenetres
             }
             else // sinon aux bleus
                 buttonRemplir.Text = buttonRemplir.Text.Replace("bleus", "rouges");
-            
-            pictureBox1.Invalidate();
-        }
 
-        private void Quitter_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-        
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // todo réactiver
-            /*e.Cancel = DialogBox.ShowYesNo(this,
-                @"Souhaitez-vous quitter ?" + Environment.NewLine + @"Toute partie non sauvegardée sera perdue...",
-                @"Quitter"
-            ) != DialogResult.Yes;*/
+            pictureBox1.Invalidate();
         }
     }
 }

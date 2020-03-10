@@ -67,31 +67,26 @@ namespace Stratego.UserControls
 				ClientSize.Width / 4 - taille.Width / 2,
 				ClientSize.Height - taille.Height - 15
 			);
-			Button boutonOui = StyleBouton(position);
 
-			boutonOui.Text = @"Oui";
-			boutonOui.Click += (sender, args) =>
+			Bouton bouton = CreerBouton(position, @"Oui");
+
+			bouton.Click += (sender, args) =>
 			{
 				resultat = DialogResult.Yes;
 				Action_Fermeture(sender, args);
 			};
 
-			Controls.Add(boutonOui);
-
 			position = new Point(
 				ClientSize.Width * 3 / 4 - taille.Width / 2,
 				ClientSize.Height - taille.Height - 15
 			);
-			Button boutonNon = StyleBouton(position);
+			bouton = CreerBouton(position, @"Non");
 
-			boutonNon.Text = @"Non";
-			boutonNon.Click += (sender, args) =>
+			bouton.Click += (sender, args) =>
 			{
 				resultat = DialogResult.No;
 				Action_Fermeture(sender, args);
 			};
-
-			Controls.Add(boutonNon);
 		}
 
 		private void CreerOkButton()
@@ -100,33 +95,21 @@ namespace Stratego.UserControls
 				(ClientSize.Width - taille.Width) / 2,
 				ClientSize.Height - taille.Height - 15
 			);
-			Button boutonOk = StyleBouton(position);
 
-			boutonOk.Text = @"OK";
+			Bouton boutonOk = CreerBouton(position, @"OK");
+
 			boutonOk.Click += Action_Fermeture;
-
-			this.Controls.Add(boutonOk);
 		}
 
-		private Button StyleBouton(Point position)
+		private Bouton CreerBouton(Point position, string texte)
 		{
-			Button bouton = new Button();
+			Bouton bouton = new Bouton
+			{
+				Location = position,
+				Size = taille, Text = texte
+			};
 
-			bouton.BackColor = SystemColors.ControlLight;
-			bouton.FlatAppearance.BorderSize = 2;
-			bouton.FlatStyle = FlatStyle.Flat;
-			bouton.Size = taille;
-			bouton.Location = position;
-			bouton.Font = new Font(
-				"Microsoft Sans Serif",
-				12F,
-				FontStyle.Regular,
-				GraphicsUnit.Point,
-				((byte)(0))
-			);
-			bouton.ForeColor = Color.Chocolate;
-			bouton.BackColor = Color.FromArgb(218, 184, 133);
-			bouton.UseVisualStyleBackColor = false;
+			Controls.Add(bouton);
 
 			return bouton;
 		}
