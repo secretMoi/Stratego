@@ -39,7 +39,7 @@ namespace Stratego
             menuContextuel = new MenuContextuel(pictureBox);
             menuContextuel.GenereMenu(jeu);
 
-            options = new Options();
+            options = Options.Instance;
         }
 
         public Rectangle AireJeu

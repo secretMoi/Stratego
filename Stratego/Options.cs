@@ -1,18 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using System.Xml;
 
 namespace Stratego
 {
 	[Serializable]
-	public class Options : ISerializable
+	public sealed class Options : ISerializable
 	{
 		private const string FichierConfiguration = @"config.ini";
 		private Dictionary<string, string> elementConfiguration;
+
+		private static readonly Options instance = new Options();
+
+		// juste pour le pattern Singleton, ne pas remplir
+		static Options()
+		{
+		}
+
+		public Options()
+		{
+			if (elementConfiguration == null)
+				ChargeFichier();
+		}
 
 		// sérialise
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -26,25 +36,20 @@ namespace Stratego
 			elementConfiguration = (Dictionary<string, string>)info.GetValue("ElementConfiguration", typeof(Dictionary<string, string>));
 		}
 
-		public Options()
-		{
-			ChargeFichier();
-		}
-
 		private void ChargeFichier()
 		{
-			//XmlTextReader configurationXml = new XmlTextReader(FichierConfiguration);
 			elementConfiguration = new Dictionary<string, string>();
 
 			string nom = null, valeur = null;
+
 			XmlReaderSettings settings = new XmlReaderSettings();
 			settings.ConformanceLevel = ConformanceLevel.Fragment;
 			settings.IgnoreWhitespace = true;
 			settings.IgnoreComments = true;
 			XmlReader xReader = XmlReader.Create(FichierConfiguration, settings);
+
 			while (xReader.Read())
 			{
-
 				switch (xReader.NodeType)
 				{
 					case XmlNodeType.Element:
@@ -100,5 +105,7 @@ namespace Stratego
 			xmlWriter.WriteEndDocument();
 			xmlWriter.Close();
 		}
+
+		public static Options Instance => instance;
 	}
 }

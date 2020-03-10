@@ -12,7 +12,7 @@ namespace Stratego.Fenetres
         {
             InitializeComponent();
 
-            options = new Stratego.Options();
+            options = Stratego.Options.Instance;
 
             textBoxEmplacementSauvegarde.Text = options.GetOption("EmplacementSauvegarde");
             textBoxEmplacementPiece.Text = options.GetOption("EmplacementPiece");
