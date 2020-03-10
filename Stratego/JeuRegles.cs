@@ -110,29 +110,29 @@ namespace Stratego
             if(attaquant == null || defenseur == null) return;
             
             AjoutTexte(richTextBox, attaquant.ToString(), attaquant.Couleur());
-            AjoutTexte(richTextBox, " attaque ", Color.Black);
+            AjoutTexte(richTextBox, " attaque ", richTextBox.ForeColor);
             AjoutTexte(richTextBox, defenseur.ToString(), defenseur.Couleur());
-            AjoutTexte(richTextBox, Environment.NewLine, Color.Black);
+            AjoutTexte(richTextBox, Environment.NewLine, richTextBox.ForeColor);
 
             switch (resultat)
             {
                 case Personnage.Attaquant:
                     AjoutTexte(richTextBox, defenseur.ToString(), defenseur.Couleur());
-                    AjoutTexte(richTextBox, " est mort", Color.Black);
+                    AjoutTexte(richTextBox, " est mort", richTextBox.ForeColor);
                     break;
                 case Personnage.Defenseur:
                     AjoutTexte(richTextBox, attaquant.ToString(), attaquant.Couleur());
-                    AjoutTexte(richTextBox, " est mort", Color.Black);
+                    AjoutTexte(richTextBox, " est mort", richTextBox.ForeColor);
                     break;
                 default:
                     AjoutTexte(richTextBox, attaquant.ToString(), attaquant.Couleur());
-                    AjoutTexte(richTextBox, " et ", Color.Black);
+                    AjoutTexte(richTextBox, " et ", richTextBox.ForeColor);
                     AjoutTexte(richTextBox, defenseur.ToString(), defenseur.Couleur());
-                    AjoutTexte(richTextBox, " sont morts", Color.Black);
+                    AjoutTexte(richTextBox, " sont morts", richTextBox.ForeColor);
                     break;
             }
             
-            AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, Color.Black);
+            AjoutTexte(richTextBox, Environment.NewLine + Environment.NewLine, richTextBox.ForeColor);
         }
         
         public Personnage GenereUnePiece(string nomPiece, Point position)

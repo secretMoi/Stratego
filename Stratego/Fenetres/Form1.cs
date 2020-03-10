@@ -5,11 +5,11 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using Stratego.UserControls;
 
 //todo cases vertes et rouges
 //todo zone tuto premièe prise en main
 //todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
-//todo richtextbox background parchemin + police manuscrite
 //todo créer ses propres MessageBox
 namespace Stratego.Fenetres
 {
@@ -26,7 +26,6 @@ namespace Stratego.Fenetres
             InitializeComponent();
             partieActuelle = new PartieActuelle(pictureBox1);
 
-            BackColor = couleurFond;
             richTextBox1.BackColor = couleurFond;
             buttonRemplir.BackColor = couleurFond;
             buttonRemplir.ForeColor = Color.Chocolate;
@@ -60,10 +59,16 @@ namespace Stratego.Fenetres
 
                 if (nom.Contains("Reprendre"))
                 {
-                    fichierSauvegarde = new FileStream(@"save.sav", FileMode.Open);
+	                fichierSauvegarde = new FileStream(@"save.sav", FileMode.Open);
                     PartieActuelle ancienJeu = (PartieActuelle)formatter.Deserialize(fichierSauvegarde);
 
                     partieActuelle = ancienJeu;
+
+                    if (!partieActuelle.MenuContextuel.PlacementPieces)
+                    {
+	                    buttonRemplir.Enabled = false;
+	                    buttonRemplir.Visible = false;
+                    }
                     
                     resultat = @"Partie restaurée";
                     
@@ -71,6 +76,12 @@ namespace Stratego.Fenetres
                 }
                 else if(nom.Contains("Sauvegarder"))
                 {
+	                if (partieActuelle.MenuContextuel.PlacementPieces)
+	                {
+		                DialogBox.Show(@"Vous devez lancer la partie pour la sauvegarder !");
+                        return;
+	                }
+
                     fichierSauvegarde = new FileStream(@"save.sav", FileMode.Create);
                     formatter.Serialize(fichierSauvegarde, partieActuelle);
                     

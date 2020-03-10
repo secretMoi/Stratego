@@ -79,6 +79,9 @@
 			// richTextBox1
 			// 
 			this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
+			this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.richTextBox1.ForeColor = System.Drawing.Color.Chocolate;
 			this.richTextBox1.Location = new System.Drawing.Point(710, 23);
 			this.richTextBox1.Name = "richTextBox1";
 			this.richTextBox1.ReadOnly = true;
@@ -199,7 +202,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.SystemColors.Control;
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.ClientSize = new System.Drawing.Size(1145, 813);
 			this.Controls.Add(this.buttonRemplir);
 			this.Controls.Add(this.button2);

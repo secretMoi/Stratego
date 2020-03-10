@@ -11,7 +11,7 @@ namespace Stratego
     public class MenuContextuel : ISerializable
     {
         private readonly ContextMenu contextMenu;
-        private readonly PictureBox pictureBox;
+        private static PictureBox pictureBox;
         private JeuRegles jeu;
         private Point positionOrigine;
         
@@ -20,8 +20,6 @@ namespace Stratego
         // serialise
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            //todo recréer à la deserialisation
-            //info.AddValue("ContextMenu", contextMenu, typeof(ContextMenu));
             info.AddValue("Jeu", jeu, typeof(JeuRegles));
             info.AddValue("PositionOrigine", positionOrigine, typeof(Point));
             info.AddValue("PlacementPieces", placementPieces, typeof(bool));
@@ -30,16 +28,17 @@ namespace Stratego
         // deserialise
         public MenuContextuel(SerializationInfo info, StreamingContext context)
         {
-            //contextMenu = (ContextMenu) info.GetValue("ContextMenu", typeof(ContextMenu));
-            jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
+            /*jeu = (JeuRegles) info.GetValue("Jeu", typeof(JeuRegles));
             positionOrigine = (Point) info.GetValue("PositionOrigine", typeof(Point));
-            placementPieces = (bool) info.GetValue("PlacementPieces", typeof(bool));
+            placementPieces = (bool) info.GetValue("PlacementPieces", typeof(bool));*/
+
+            pictureBox.ContextMenu.Dispose();
         }
 
         public MenuContextuel(PictureBox pictureBox)
         {
-            this.pictureBox = pictureBox;
-            this.pictureBox.ContextMenu = new ContextMenu();
+	        MenuContextuel.pictureBox = pictureBox;
+	        MenuContextuel.pictureBox.ContextMenu = new ContextMenu();
             contextMenu = pictureBox.ContextMenu;
             
             PlacementPieces = true;

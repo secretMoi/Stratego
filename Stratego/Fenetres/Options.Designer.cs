@@ -31,6 +31,7 @@ namespace Stratego.Fenetres
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Options));
 			this.buttonValider = new System.Windows.Forms.Button();
 			this.buttonAnnuler = new System.Windows.Forms.Button();
 			this.panelBorderSon = new Stratego.UserControls.PanelBorder();
@@ -175,6 +176,7 @@ namespace Stratego.Fenetres
 			this.Controls.Add(this.panelBorderSauvegarde);
 			this.Controls.Add(this.buttonAnnuler);
 			this.Controls.Add(this.buttonValider);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "Options";

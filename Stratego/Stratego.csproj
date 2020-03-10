@@ -84,9 +84,12 @@
     <Compile Include="Reseau\Client.cs" />
     <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serveur.cs" />
-    <Compile Include="Sauvegarde\Deserialise.cs" />
-    <Compile Include="Sauvegarde\Sauvegarde.cs" />
-    <Compile Include="Sauvegarde\Serialise.cs" />
+    <Compile Include="UserControls\DialogBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControls\DialogBox.Designer.cs">
+      <DependentUpon>DialogBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PanelBorder.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -110,6 +113,9 @@
     </Compile>
     <EmbeddedResource Include="config.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\DialogBox.resx">
+      <DependentUpon>DialogBox.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -214,8 +220,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fenetres\Sauvegarde\Ecriture\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

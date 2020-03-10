@@ -169,7 +169,7 @@ namespace Stratego
                 point.X -= OffsetX;
                 point.Y -= OffsetY;
 
-                point.X = (point.X / LongueurCase) * LongueurCase; //todo WTF
+                point.X = (point.X / LongueurCase) * LongueurCase;
                 point.Y = (point.Y / HauteurCase) * HauteurCase;
             
                 point.X += OffsetX;
