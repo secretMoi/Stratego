@@ -12,7 +12,7 @@ namespace Stratego
         private const int DimensionX = 58;
         private const int DimensionY = 50;
         
-        private static readonly string prefixeSource = @"images\";
+        private static readonly string prefixeSource = @"Ressources\Images\";
         private const string format = ".jpg";
 
         private readonly string imageSource; // liste des images

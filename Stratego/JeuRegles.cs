@@ -52,8 +52,8 @@ namespace Stratego
 
             partieEnCours = true;
             positionPieces = new List<Rectangle>();
-            imagePieceAdverse = new Bitmap(@"images/pieceAdverse.jpg");
-            imagePieceAlliee = new Bitmap(@"images/pieceAlliee.jpg");
+            imagePieceAdverse = new Bitmap(@"Ressources/Images/pieceAdverse.jpg");
+            imagePieceAlliee = new Bitmap(@"Ressources/Images/pieceAlliee.jpg");
             listePieces = new Dictionary<string, int>();
             
             XmlTextReader listePiecesXml = new XmlTextReader(chemin);

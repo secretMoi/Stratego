@@ -12,7 +12,7 @@ namespace Stratego
     public class Map : ISerializable
     {
         // chemin du background map
-        private readonly string aireJeu = @"images\fonds.png";
+        private readonly string aireJeu = @"Ressources\Images\fonds.png";
         private readonly Bitmap fond;
 
         // nombre de cases

@@ -32,14 +32,13 @@ namespace Stratego
 
         public PartieActuelle(PictureBox pictureBox)
         {
-            jeu = new JeuRegles("ListePieces.xml");
+	        options = Options.Instance;
+            jeu = new JeuRegles(options.GetOption("EmplacementPiece"));
             
             aireJeu = new Rectangle(0,0, 612, 800);
             
             menuContextuel = new MenuContextuel(pictureBox);
             menuContextuel.GenereMenu(jeu);
-
-            options = Options.Instance;
         }
 
         public Rectangle AireJeu

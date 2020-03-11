@@ -35,6 +35,8 @@ namespace Stratego.Fenetres
 			this.boutonAnnuler = new Stratego.UserControls.Bouton();
 			this.boutonConfirmer = new Stratego.UserControls.Bouton();
 			this.panelBorderSon = new Stratego.UserControls.PanelBorder();
+			this.checkBoxSon = new System.Windows.Forms.CheckBox();
+			this.labelSonActive = new System.Windows.Forms.Label();
 			this.labelSon = new System.Windows.Forms.Label();
 			this.panelBorderGraphique = new Stratego.UserControls.PanelBorder();
 			this.checkBoxHistorique = new System.Windows.Forms.CheckBox();
@@ -90,12 +92,36 @@ namespace Stratego.Fenetres
 			// 
 			this.panelBorderSon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(165)))));
 			this.panelBorderSon.BorderColor = System.Drawing.Color.Chocolate;
+			this.panelBorderSon.Controls.Add(this.checkBoxSon);
+			this.panelBorderSon.Controls.Add(this.labelSonActive);
 			this.panelBorderSon.Controls.Add(this.labelSon);
 			this.panelBorderSon.Epaisseur = 5;
 			this.panelBorderSon.Location = new System.Drawing.Point(349, 237);
 			this.panelBorderSon.Name = "panelBorderSon";
 			this.panelBorderSon.Size = new System.Drawing.Size(299, 129);
 			this.panelBorderSon.TabIndex = 9;
+			// 
+			// checkBoxSon
+			// 
+			this.checkBoxSon.AutoSize = true;
+			this.checkBoxSon.Location = new System.Drawing.Point(218, 43);
+			this.checkBoxSon.Name = "checkBoxSon";
+			this.checkBoxSon.Size = new System.Drawing.Size(80, 17);
+			this.checkBoxSon.TabIndex = 8;
+			this.checkBoxSon.Text = "checkBox1";
+			this.checkBoxSon.UseVisualStyleBackColor = true;
+			this.checkBoxSon.CheckedChanged += new System.EventHandler(this.checkBoxSon_CheckedChanged);
+			// 
+			// labelSonActive
+			// 
+			this.labelSonActive.AutoSize = true;
+			this.labelSonActive.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelSonActive.ForeColor = System.Drawing.Color.Chocolate;
+			this.labelSonActive.Location = new System.Drawing.Point(15, 42);
+			this.labelSonActive.Name = "labelSonActive";
+			this.labelSonActive.Size = new System.Drawing.Size(112, 16);
+			this.labelSonActive.TabIndex = 7;
+			this.labelSonActive.Text = "Activer les sons ?";
 			// 
 			// labelSon
 			// 
@@ -289,7 +315,6 @@ namespace Stratego.Fenetres
 			this.MinimizeBox = false;
 			this.Name = "Options";
 			this.Text = "Options";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Options_FormClosing);
 			this.panelBorderSon.ResumeLayout(false);
 			this.panelBorderSon.PerformLayout();
 			this.panelBorderGraphique.ResumeLayout(false);
@@ -321,5 +346,7 @@ namespace Stratego.Fenetres
 		private System.Windows.Forms.Label labelEmplaementPiece;
 		private System.Windows.Forms.CheckBox checkBoxHistorique;
 		private System.Windows.Forms.Label labelHistorique;
+		private System.Windows.Forms.CheckBox checkBoxSon;
+		private System.Windows.Forms.Label labelSonActive;
 	}
 }

@@ -5,17 +5,19 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using Carrosse;
 using Stratego.UserControls;
 
 //todo cases vertes et rouges
 //todo zone tuto premièe prise en main
+//todo fin de partie si aucune pièce ne peut bouger
 namespace Stratego.Fenetres
 {
     public partial class Form1 : Form
     {
         private PartieActuelle partieActuelle;
-
         private Point positionOrigine; // position de départ de la pièce déplacée
+        private bool sonActive;
 
         public Form1()
         {
@@ -24,6 +26,8 @@ namespace Stratego.Fenetres
 
             if (partieActuelle.Option.GetOption("AfficherHistorique") == false.ToString())
 	            richTextBox1.Visible = false;
+
+            sonActive = Convert.ToBoolean(partieActuelle.Option.GetOption("EtatSon"));
         }
 
         private void evenement_Click(object sender, EventArgs e)
@@ -47,7 +51,10 @@ namespace Stratego.Fenetres
 	        using (Options form = new Options())
 	        {
 		        if (form.ShowDialog() == DialogResult.OK)
+		        {
 			        richTextBox1.Visible = form.EtatHistortique;
+			        sonActive = form.EtatSon;
+                }
 	        }
         }
         
@@ -64,7 +71,7 @@ namespace Stratego.Fenetres
 
                 if (nom.Contains("Reprendre"))
                 {
-	                fichierSauvegarde = new FileStream(@"save.sav", FileMode.Open);
+	                fichierSauvegarde = new FileStream(partieActuelle.Option.GetOption("EmplacementSauvegarde"), FileMode.Open);
                     PartieActuelle ancienJeu = (PartieActuelle)formatter.Deserialize(fichierSauvegarde);
 
                     partieActuelle = ancienJeu;
@@ -87,7 +94,7 @@ namespace Stratego.Fenetres
                         return;
 	                }
 
-                    fichierSauvegarde = new FileStream(@"save.sav", FileMode.Create);
+                    fichierSauvegarde = new FileStream(partieActuelle.Option.GetOption("EmplacementSauvegarde"), FileMode.Create);
                     formatter.Serialize(fichierSauvegarde, partieActuelle);
                     
                     resultat = @"Partie sauvegardée";
@@ -111,6 +118,8 @@ namespace Stratego.Fenetres
             
             partieActuelle.Jeu.LachePiece(e.Location, positionOrigine, richTextBox1);
 
+            Son("drop");
+
             pictureBox1.Invalidate();
         }
 
@@ -127,6 +136,8 @@ namespace Stratego.Fenetres
         {
             partieActuelle.Jeu.PrisePiece(ref positionOrigine, e.Location, partieActuelle.MenuContextuel.PlacementPieces);
             partieActuelle.MenuContextuel.PositionOrigine = positionOrigine;
+
+            Son("pick");
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -200,6 +211,15 @@ namespace Stratego.Fenetres
                 buttonRemplir.Text = buttonRemplir.Text.Replace("bleus", "rouges");
 
             pictureBox1.Invalidate();
+        }
+
+        private void Son(string nom)
+        {
+	        if (sonActive)
+	        {
+		        Son son = new Son(nom);
+		        son.Joue();
+            }
         }
     }
 }

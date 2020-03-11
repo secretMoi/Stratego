@@ -84,6 +84,7 @@
     <Compile Include="Reseau\Client.cs" />
     <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serveur.cs" />
+    <Compile Include="Son.cs" />
     <Compile Include="Theme.cs" />
     <Compile Include="UserControls\Bouton.cs">
       <SubType>Component</SubType>
@@ -138,89 +139,95 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="images\bleu_bombe.jpg">
+    <EmbeddedResource Include="Ressources\Sons\drop.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_capitaine.jpg">
+    <EmbeddedResource Include="Ressources\Sons\pick.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_colonel.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_bombe.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_demineur.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_capitaine.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_drapeau.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_colonel.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_eclaireur.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_demineur.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_espion.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_drapeau.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_general.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_eclaireur.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_lieutenant.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_espion.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_major.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_general.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_marechal.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_lieutenant.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\bleu_sergent.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_major.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\fonds.png">
+    <EmbeddedResource Include="Ressources\Images\bleu_marechal.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_bombe.jpg">
+    <EmbeddedResource Include="Ressources\Images\bleu_sergent.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_capitaine.jpg">
+    <EmbeddedResource Include="Ressources\Images\fonds.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_colonel.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_bombe.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_demineur.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_capitaine.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_drapeau.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_colonel.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_eclaireur.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_demineur.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_espion.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_drapeau.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_general.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_eclaireur.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_lieutenant.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_espion.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_major.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_general.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_marechal.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_lieutenant.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\rouge_sergent.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_major.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\pieceAdverse.jpg">
+    <EmbeddedResource Include="Ressources\Images\rouge_marechal.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="images\fondParchemin.png">
+    <EmbeddedResource Include="Ressources\Images\rouge_sergent.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <Content Include="images\listePieces.jpg" />
-    <EmbeddedResource Include="images\pieceAlliee.jpg">
+    <EmbeddedResource Include="Ressources\Images\pieceAdverse.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ressources\Images\fondParchemin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Ressources\Images\listePieces.jpg" />
+    <EmbeddedResource Include="Ressources\Images\pieceAlliee.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <Content Include="ListePieces.xml">
