@@ -3,26 +3,33 @@ using System.Windows.Forms;
 
 namespace Stratego.UserControls
 {
-	public partial class PanelBorder : Panel
+	public sealed partial class PanelBorder : Panel
 	{
-		private Color colorBorder = Color.Chocolate;
+		private Color colorBorder = Theme.CouleurTexte;
 		private Pen pinceau;
 		private int epaisseur;
 
-		public PanelBorder() : base()
+		public PanelBorder()
 		{
 			this.SetStyle(ControlStyles.UserPaint, true);
 			epaisseur = 5;
 			pinceau = new Pen(new SolidBrush(colorBorder), epaisseur);
 
-			BackColor = Color.FromArgb(247, 211, 165);
+			BackColor = Theme.CouleurFondLight;
 
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
+
+			/*e.Graphics.DrawRectangle(
+				pinceau,
+				0,
+				0,
+				Width,
+				Height);*/
 			base.OnPaint(e);
-			e.Graphics.DrawRectangle(pinceau, e.ClipRectangle);
+			e.Graphics.DrawRectangle(pinceau, ClientRectangle);
 		}
 
 		private void SetPinceau()
@@ -42,7 +49,7 @@ namespace Stratego.UserControls
 
 		public Color BorderColor
 		{
-			get { return colorBorder; }
+			get => colorBorder;
 			set
 			{
 				colorBorder = value;

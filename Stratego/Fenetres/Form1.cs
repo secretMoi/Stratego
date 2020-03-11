@@ -9,15 +9,11 @@ using Stratego.UserControls;
 
 //todo cases vertes et rouges
 //todo zone tuto premièe prise en main
-//todo fenetre menu (son, Anti-alias, emplacement sauvegarde, activé/désactivé historique combat...)
-//todo créer ses propres MessageBox
 namespace Stratego.Fenetres
 {
     public partial class Form1 : Form
     {
         private PartieActuelle partieActuelle;
-        private Color couleurFond = Color.FromArgb(218, 184, 133);
-        private Color couleurFondLight = Color.FromArgb(247, 211, 165);
 
         private Point positionOrigine; // position de départ de la pièce déplacée
 
@@ -25,6 +21,9 @@ namespace Stratego.Fenetres
         {
             InitializeComponent();
             partieActuelle = new PartieActuelle(pictureBox1);
+
+            if (partieActuelle.Option.GetOption("AfficherHistorique") == false.ToString())
+	            richTextBox1.Visible = false;
         }
 
         private void evenement_Click(object sender, EventArgs e)
@@ -42,12 +41,22 @@ namespace Stratego.Fenetres
 
             fenetre?.Show(); // Affiche la fenêtre
         }
+
+        private void FenetreOptions(object sender, EventArgs e)
+        {
+	        using (Options form = new Options())
+	        {
+		        if (form.ShowDialog() == DialogResult.OK)
+			        richTextBox1.Visible = form.EtatHistortique;
+	        }
+        }
         
         private void Partie(object sender, EventArgs e)
         {
             string nom = ((ToolStripMenuItem) sender).Name; // récupère le nom du controle appelant
             string resultat;
             FileStream fichierSauvegarde;
+
             try
             {
                 // Use a BinaryFormatter or SoapFormatter.

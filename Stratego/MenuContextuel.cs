@@ -33,7 +33,7 @@ namespace Stratego
             positionOrigine = (Point) info.GetValue("PositionOrigine", typeof(Point));
             placementPieces = (bool) info.GetValue("PlacementPieces", typeof(bool));*/
 
-            pictureBox.ContextMenu.Dispose();
+            pictureBox.ContextMenu?.Dispose();
         }
 
         public MenuContextuel(PictureBox pictureBox)

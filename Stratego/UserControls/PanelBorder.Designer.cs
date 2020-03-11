@@ -1,6 +1,6 @@
 ﻿namespace Stratego.UserControls
 {
-	partial class PanelBorder
+	sealed partial class PanelBorder
 	{
 		/// <summary> 
 		/// Variable nécessaire au concepteur.

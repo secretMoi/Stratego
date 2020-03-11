@@ -32,9 +32,13 @@ namespace Stratego.Fenetres
         private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Options));
+			this.boutonAnnuler = new Stratego.UserControls.Bouton();
+			this.boutonConfirmer = new Stratego.UserControls.Bouton();
 			this.panelBorderSon = new Stratego.UserControls.PanelBorder();
 			this.labelSon = new System.Windows.Forms.Label();
 			this.panelBorderGraphique = new Stratego.UserControls.PanelBorder();
+			this.checkBoxHistorique = new System.Windows.Forms.CheckBox();
+			this.labelHistorique = new System.Windows.Forms.Label();
 			this.labelGraphique = new System.Windows.Forms.Label();
 			this.panelBorderDivers = new Stratego.UserControls.PanelBorder();
 			this.labelDivers = new System.Windows.Forms.Label();
@@ -46,15 +50,41 @@ namespace Stratego.Fenetres
 			this.textBoxEmplacementSauvegarde = new System.Windows.Forms.TextBox();
 			this.labelEmplacementSauvegarde = new System.Windows.Forms.Label();
 			this.labelSauvegarde = new System.Windows.Forms.Label();
-			this.boutonConfirmer = new Stratego.UserControls.Bouton();
-			this.boutonAnnuler = new Stratego.UserControls.Bouton();
-			this.labelHistorique = new System.Windows.Forms.Label();
-			this.checkBoxHistorique = new System.Windows.Forms.CheckBox();
 			this.panelBorderSon.SuspendLayout();
 			this.panelBorderGraphique.SuspendLayout();
 			this.panelBorderDivers.SuspendLayout();
 			this.panelBorderSauvegarde.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// boutonAnnuler
+			// 
+			this.boutonAnnuler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
+			this.boutonAnnuler.FlatAppearance.BorderSize = 2;
+			this.boutonAnnuler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.boutonAnnuler.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.boutonAnnuler.ForeColor = System.Drawing.Color.Chocolate;
+			this.boutonAnnuler.Location = new System.Drawing.Point(448, 428);
+			this.boutonAnnuler.Name = "boutonAnnuler";
+			this.boutonAnnuler.Size = new System.Drawing.Size(106, 60);
+			this.boutonAnnuler.TabIndex = 11;
+			this.boutonAnnuler.Text = "Annuler";
+			this.boutonAnnuler.UseVisualStyleBackColor = false;
+			this.boutonAnnuler.Click += new System.EventHandler(this.boutonAnnuler_Click);
+			// 
+			// boutonConfirmer
+			// 
+			this.boutonConfirmer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
+			this.boutonConfirmer.FlatAppearance.BorderSize = 2;
+			this.boutonConfirmer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.boutonConfirmer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.boutonConfirmer.ForeColor = System.Drawing.Color.Chocolate;
+			this.boutonConfirmer.Location = new System.Drawing.Point(96, 428);
+			this.boutonConfirmer.Name = "boutonConfirmer";
+			this.boutonConfirmer.Size = new System.Drawing.Size(106, 60);
+			this.boutonConfirmer.TabIndex = 10;
+			this.boutonConfirmer.Text = "Confirmer";
+			this.boutonConfirmer.UseVisualStyleBackColor = false;
+			this.boutonConfirmer.Click += new System.EventHandler(this.boutonConfirmer_Click);
 			// 
 			// panelBorderSon
 			// 
@@ -90,6 +120,28 @@ namespace Stratego.Fenetres
 			this.panelBorderGraphique.Name = "panelBorderGraphique";
 			this.panelBorderGraphique.Size = new System.Drawing.Size(299, 129);
 			this.panelBorderGraphique.TabIndex = 8;
+			// 
+			// checkBoxHistorique
+			// 
+			this.checkBoxHistorique.AutoSize = true;
+			this.checkBoxHistorique.Location = new System.Drawing.Point(216, 43);
+			this.checkBoxHistorique.Name = "checkBoxHistorique";
+			this.checkBoxHistorique.Size = new System.Drawing.Size(80, 17);
+			this.checkBoxHistorique.TabIndex = 6;
+			this.checkBoxHistorique.Text = "checkBox1";
+			this.checkBoxHistorique.UseVisualStyleBackColor = true;
+			this.checkBoxHistorique.CheckedChanged += new System.EventHandler(this.checkBoxHistorique_CheckedChanged);
+			// 
+			// labelHistorique
+			// 
+			this.labelHistorique.AutoSize = true;
+			this.labelHistorique.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelHistorique.ForeColor = System.Drawing.Color.Chocolate;
+			this.labelHistorique.Location = new System.Drawing.Point(13, 42);
+			this.labelHistorique.Name = "labelHistorique";
+			this.labelHistorique.Size = new System.Drawing.Size(123, 16);
+			this.labelHistorique.TabIndex = 5;
+			this.labelHistorique.Text = "Afficher historique ?";
 			// 
 			// labelGraphique
 			// 
@@ -220,57 +272,6 @@ namespace Stratego.Fenetres
 			this.labelSauvegarde.TabIndex = 0;
 			this.labelSauvegarde.Text = "Sauvegarde";
 			// 
-			// boutonConfirmer
-			// 
-			this.boutonConfirmer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
-			this.boutonConfirmer.FlatAppearance.BorderSize = 2;
-			this.boutonConfirmer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.boutonConfirmer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.boutonConfirmer.ForeColor = System.Drawing.Color.Chocolate;
-			this.boutonConfirmer.Location = new System.Drawing.Point(96, 428);
-			this.boutonConfirmer.Name = "boutonConfirmer";
-			this.boutonConfirmer.Size = new System.Drawing.Size(106, 60);
-			this.boutonConfirmer.TabIndex = 10;
-			this.boutonConfirmer.Text = "Confirmer";
-			this.boutonConfirmer.UseVisualStyleBackColor = false;
-			this.boutonConfirmer.Click += new System.EventHandler(this.boutonConfirmer_Click);
-			// 
-			// boutonAnnuler
-			// 
-			this.boutonAnnuler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
-			this.boutonAnnuler.FlatAppearance.BorderSize = 2;
-			this.boutonAnnuler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.boutonAnnuler.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.boutonAnnuler.ForeColor = System.Drawing.Color.Chocolate;
-			this.boutonAnnuler.Location = new System.Drawing.Point(448, 428);
-			this.boutonAnnuler.Name = "boutonAnnuler";
-			this.boutonAnnuler.Size = new System.Drawing.Size(106, 60);
-			this.boutonAnnuler.TabIndex = 11;
-			this.boutonAnnuler.Text = "Annuler";
-			this.boutonAnnuler.UseVisualStyleBackColor = false;
-			this.boutonAnnuler.Click += new System.EventHandler(this.boutonAnnuler_Click);
-			// 
-			// labelHistorique
-			// 
-			this.labelHistorique.AutoSize = true;
-			this.labelHistorique.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelHistorique.ForeColor = System.Drawing.Color.Chocolate;
-			this.labelHistorique.Location = new System.Drawing.Point(13, 42);
-			this.labelHistorique.Name = "labelHistorique";
-			this.labelHistorique.Size = new System.Drawing.Size(123, 16);
-			this.labelHistorique.TabIndex = 5;
-			this.labelHistorique.Text = "Afficher historique ?";
-			// 
-			// checkBoxHistorique
-			// 
-			this.checkBoxHistorique.AutoSize = true;
-			this.checkBoxHistorique.Location = new System.Drawing.Point(216, 43);
-			this.checkBoxHistorique.Name = "checkBoxHistorique";
-			this.checkBoxHistorique.Size = new System.Drawing.Size(80, 17);
-			this.checkBoxHistorique.TabIndex = 6;
-			this.checkBoxHistorique.Text = "checkBox1";
-			this.checkBoxHistorique.UseVisualStyleBackColor = true;
-			// 
 			// Options
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -288,6 +289,7 @@ namespace Stratego.Fenetres
 			this.MinimizeBox = false;
 			this.Name = "Options";
 			this.Text = "Options";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Options_FormClosing);
 			this.panelBorderSon.ResumeLayout(false);
 			this.panelBorderSon.PerformLayout();
 			this.panelBorderGraphique.ResumeLayout(false);

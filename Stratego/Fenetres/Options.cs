@@ -8,6 +8,7 @@ namespace Stratego.Fenetres
     public partial class Options : Form
     {
 	    private Stratego.Options options;
+	    private bool etatHistorique;
         public Options()
         {
             InitializeComponent();
@@ -17,6 +18,8 @@ namespace Stratego.Fenetres
             textBoxEmplacementSauvegarde.Text = options.GetOption("EmplacementSauvegarde");
             textBoxEmplacementPiece.Text = options.GetOption("EmplacementPiece");
             checkBoxHistorique.Checked = Convert.ToBoolean(options.GetOption("AfficherHistorique"));
+
+            TexteCheckBox();
         }
 
         private void boutonOpenSauvegarde_Click(object sender, EventArgs e)
@@ -51,5 +54,27 @@ namespace Stratego.Fenetres
             options.Enregistre();
             Close();
         }
+
+        private void TexteCheckBox()
+        {
+	        if (bool.Parse(options.GetOption("AfficherHistorique")))
+		        checkBoxHistorique.Text = @"Affiché";
+            else
+		        checkBoxHistorique.Text = @"Caché";
+        }
+
+        private void checkBoxHistorique_CheckedChanged(object sender, EventArgs e)
+        {
+	        options.SetOption("AfficherHistorique", checkBoxHistorique.Checked.ToString());
+            TexteCheckBox();
+        }
+
+        private void Options_FormClosing(object sender, FormClosingEventArgs e)
+        {
+	        DialogResult = DialogResult.OK;
+	        etatHistorique = checkBoxHistorique.Checked;
+        }
+
+        public bool EtatHistortique => etatHistorique;
     }
 }

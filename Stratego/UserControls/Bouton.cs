@@ -19,8 +19,8 @@ namespace Stratego.UserControls
 				GraphicsUnit.Point,
 				((byte)(0))
 			);
-			ForeColor = Color.Chocolate;
-			BackColor = Color.FromArgb(218, 184, 133);
+			ForeColor = Theme.CouleurTexte;
+			BackColor = Theme.CouleurFond;
 			UseVisualStyleBackColor = false;
 		}
 	}

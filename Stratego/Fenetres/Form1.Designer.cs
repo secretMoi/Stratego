@@ -43,7 +43,7 @@
 			this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
 			this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuAide = new System.Windows.Forms.ToolStripMenuItem();
-			this.aProposToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuAide_APropos = new System.Windows.Forms.ToolStripMenuItem();
 			this.vueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttonRemplir = new Stratego.UserControls.Bouton();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -137,45 +137,45 @@
 			// menuProgramme_Sauvegarder
 			// 
 			this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
-			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(180, 22);
 			this.menuProgramme_Sauvegarder.Text = "Sauvegarder partie";
 			this.menuProgramme_Sauvegarder.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Reprendre
 			// 
 			this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
-			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(180, 22);
 			this.menuProgramme_Reprendre.Text = "Reprendre partie";
 			this.menuProgramme_Reprendre.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Options
 			// 
 			this.menuProgramme_Options.Name = "menuProgramme_Options";
-			this.menuProgramme_Options.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Options.Size = new System.Drawing.Size(180, 22);
 			this.menuProgramme_Options.Text = "Options";
-			this.menuProgramme_Options.Click += new System.EventHandler(this.evenement_Click);
+			this.menuProgramme_Options.Click += new System.EventHandler(this.FenetreOptions);
 			// 
 			// quitterToolStripMenuItem
 			// 
 			this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
-			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.quitterToolStripMenuItem.Text = "Quitter";
 			this.quitterToolStripMenuItem.Click += new System.EventHandler(this.Quitter_Click);
 			// 
 			// menuAide
 			// 
 			this.menuAide.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aProposToolStripMenuItem});
+            this.menuAide_APropos});
 			this.menuAide.Name = "menuAide";
 			this.menuAide.Size = new System.Drawing.Size(43, 20);
 			this.menuAide.Text = "Aide";
 			// 
-			// aProposToolStripMenuItem
+			// menuAide_APropos
 			// 
-			this.aProposToolStripMenuItem.Name = "aProposToolStripMenuItem";
-			this.aProposToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-			this.aProposToolStripMenuItem.Text = "A propos";
-			this.aProposToolStripMenuItem.Click += new System.EventHandler(this.evenement_Click);
+			this.menuAide_APropos.Name = "menuAide_APropos";
+			this.menuAide_APropos.Size = new System.Drawing.Size(122, 22);
+			this.menuAide_APropos.Text = "A propos";
+			this.menuAide_APropos.Click += new System.EventHandler(this.evenement_Click);
 			// 
 			// vueToolStripMenuItem
 			// 
@@ -234,7 +234,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem aProposToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuAide_APropos;
         private System.Windows.Forms.ToolStripMenuItem quitterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Sauvegarder;
         private System.Windows.Forms.ToolStripMenuItem menuAide;

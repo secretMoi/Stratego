@@ -84,6 +84,7 @@
     <Compile Include="Reseau\Client.cs" />
     <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serveur.cs" />
+    <Compile Include="Theme.cs" />
     <Compile Include="UserControls\Bouton.cs">
       <SubType>Component</SubType>
     </Compile>
