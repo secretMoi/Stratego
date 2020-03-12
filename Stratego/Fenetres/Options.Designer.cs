@@ -32,6 +32,7 @@ namespace Stratego.Fenetres
         private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Options));
+			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.boutonAnnuler = new Stratego.UserControls.Bouton();
 			this.boutonConfirmer = new Stratego.UserControls.Bouton();
 			this.panelBorderSon = new Stratego.UserControls.PanelBorder();
@@ -42,8 +43,10 @@ namespace Stratego.Fenetres
 			this.checkBoxHistorique = new System.Windows.Forms.CheckBox();
 			this.labelHistorique = new System.Windows.Forms.Label();
 			this.labelGraphique = new System.Windows.Forms.Label();
-			this.panelBorderDivers = new Stratego.UserControls.PanelBorder();
-			this.labelDivers = new System.Windows.Forms.Label();
+			this.panelBorderPlaylist = new Stratego.UserControls.PanelBorder();
+			this.labelPlaylistChemin = new System.Windows.Forms.Label();
+			this.listViewSonsFond = new System.Windows.Forms.ListView();
+			this.labelPlaylist = new System.Windows.Forms.Label();
 			this.panelBorderSauvegarde = new Stratego.UserControls.PanelBorder();
 			this.boutonEmplacementPiece = new Stratego.UserControls.Bouton();
 			this.textBoxEmplacementPiece = new System.Windows.Forms.TextBox();
@@ -54,7 +57,7 @@ namespace Stratego.Fenetres
 			this.labelSauvegarde = new System.Windows.Forms.Label();
 			this.panelBorderSon.SuspendLayout();
 			this.panelBorderGraphique.SuspendLayout();
-			this.panelBorderDivers.SuspendLayout();
+			this.panelBorderPlaylist.SuspendLayout();
 			this.panelBorderSauvegarde.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -104,7 +107,7 @@ namespace Stratego.Fenetres
 			// checkBoxSon
 			// 
 			this.checkBoxSon.AutoSize = true;
-			this.checkBoxSon.Location = new System.Drawing.Point(218, 43);
+			this.checkBoxSon.Location = new System.Drawing.Point(216, 41);
 			this.checkBoxSon.Name = "checkBoxSon";
 			this.checkBoxSon.Size = new System.Drawing.Size(80, 17);
 			this.checkBoxSon.TabIndex = 8;
@@ -180,27 +183,52 @@ namespace Stratego.Fenetres
 			this.labelGraphique.TabIndex = 1;
 			this.labelGraphique.Text = "Options graphiques";
 			// 
-			// panelBorderDivers
+			// panelBorderPlaylist
 			// 
-			this.panelBorderDivers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(165)))));
-			this.panelBorderDivers.BorderColor = System.Drawing.Color.Chocolate;
-			this.panelBorderDivers.Controls.Add(this.labelDivers);
-			this.panelBorderDivers.Epaisseur = 5;
-			this.panelBorderDivers.Location = new System.Drawing.Point(349, 12);
-			this.panelBorderDivers.Name = "panelBorderDivers";
-			this.panelBorderDivers.Size = new System.Drawing.Size(299, 177);
-			this.panelBorderDivers.TabIndex = 7;
+			this.panelBorderPlaylist.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(247)))), ((int)(((byte)(211)))), ((int)(((byte)(165)))));
+			this.panelBorderPlaylist.BorderColor = System.Drawing.Color.Chocolate;
+			this.panelBorderPlaylist.Controls.Add(this.labelPlaylistChemin);
+			this.panelBorderPlaylist.Controls.Add(this.listViewSonsFond);
+			this.panelBorderPlaylist.Controls.Add(this.labelPlaylist);
+			this.panelBorderPlaylist.Epaisseur = 5;
+			this.panelBorderPlaylist.Location = new System.Drawing.Point(349, 12);
+			this.panelBorderPlaylist.Name = "panelBorderPlaylist";
+			this.panelBorderPlaylist.Size = new System.Drawing.Size(299, 177);
+			this.panelBorderPlaylist.TabIndex = 7;
 			// 
-			// labelDivers
+			// labelPlaylistChemin
 			// 
-			this.labelDivers.AutoSize = true;
-			this.labelDivers.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelDivers.ForeColor = System.Drawing.Color.Chocolate;
-			this.labelDivers.Location = new System.Drawing.Point(14, 10);
-			this.labelDivers.Name = "labelDivers";
-			this.labelDivers.Size = new System.Drawing.Size(53, 20);
-			this.labelDivers.TabIndex = 1;
-			this.labelDivers.Text = "Divers";
+			this.labelPlaylistChemin.AutoSize = true;
+			this.labelPlaylistChemin.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelPlaylistChemin.ForeColor = System.Drawing.Color.Chocolate;
+			this.labelPlaylistChemin.Location = new System.Drawing.Point(15, 42);
+			this.labelPlaylistChemin.Name = "labelPlaylistChemin";
+			this.labelPlaylistChemin.Size = new System.Drawing.Size(107, 16);
+			this.labelPlaylistChemin.TabIndex = 3;
+			this.labelPlaylistChemin.Text = "Musique de fond";
+			// 
+			// listViewSonsFond
+			// 
+			this.listViewSonsFond.HideSelection = false;
+			this.listViewSonsFond.Location = new System.Drawing.Point(3, 71);
+			this.listViewSonsFond.MultiSelect = false;
+			this.listViewSonsFond.Name = "listViewSonsFond";
+			this.listViewSonsFond.Size = new System.Drawing.Size(293, 103);
+			this.listViewSonsFond.TabIndex = 2;
+			this.listViewSonsFond.UseCompatibleStateImageBehavior = false;
+			this.listViewSonsFond.View = System.Windows.Forms.View.Tile;
+			this.listViewSonsFond.SelectedIndexChanged += new System.EventHandler(this.listViewSonsFond_SelectedIndexChanged);
+			// 
+			// labelPlaylist
+			// 
+			this.labelPlaylist.AutoSize = true;
+			this.labelPlaylist.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelPlaylist.ForeColor = System.Drawing.Color.Chocolate;
+			this.labelPlaylist.Location = new System.Drawing.Point(14, 10);
+			this.labelPlaylist.Name = "labelPlaylist";
+			this.labelPlaylist.Size = new System.Drawing.Size(115, 20);
+			this.labelPlaylist.TabIndex = 1;
+			this.labelPlaylist.Text = "Thème musical";
 			// 
 			// panelBorderSauvegarde
 			// 
@@ -308,7 +336,7 @@ namespace Stratego.Fenetres
 			this.Controls.Add(this.boutonConfirmer);
 			this.Controls.Add(this.panelBorderSon);
 			this.Controls.Add(this.panelBorderGraphique);
-			this.Controls.Add(this.panelBorderDivers);
+			this.Controls.Add(this.panelBorderPlaylist);
 			this.Controls.Add(this.panelBorderSauvegarde);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -319,8 +347,8 @@ namespace Stratego.Fenetres
 			this.panelBorderSon.PerformLayout();
 			this.panelBorderGraphique.ResumeLayout(false);
 			this.panelBorderGraphique.PerformLayout();
-			this.panelBorderDivers.ResumeLayout(false);
-			this.panelBorderDivers.PerformLayout();
+			this.panelBorderPlaylist.ResumeLayout(false);
+			this.panelBorderPlaylist.PerformLayout();
 			this.panelBorderSauvegarde.ResumeLayout(false);
 			this.panelBorderSauvegarde.PerformLayout();
 			this.ResumeLayout(false);
@@ -329,13 +357,13 @@ namespace Stratego.Fenetres
 
         #endregion
 		private UserControls.PanelBorder panelBorderSauvegarde;
-		private UserControls.PanelBorder panelBorderDivers;
+		private UserControls.PanelBorder panelBorderPlaylist;
 		private UserControls.PanelBorder panelBorderGraphique;
 		private UserControls.PanelBorder panelBorderSon;
 		private System.Windows.Forms.Label labelSauvegarde;
 		private System.Windows.Forms.Label labelSon;
 		private System.Windows.Forms.Label labelGraphique;
-		private System.Windows.Forms.Label labelDivers;
+		private System.Windows.Forms.Label labelPlaylist;
 		private System.Windows.Forms.TextBox textBoxEmplacementSauvegarde;
 		private System.Windows.Forms.Label labelEmplacementSauvegarde;
 		private UserControls.Bouton boutonOpenSauvegarde;
@@ -348,5 +376,8 @@ namespace Stratego.Fenetres
 		private System.Windows.Forms.Label labelHistorique;
 		private System.Windows.Forms.CheckBox checkBoxSon;
 		private System.Windows.Forms.Label labelSonActive;
+		private System.Windows.Forms.ColorDialog colorDialog;
+		private System.Windows.Forms.Label labelPlaylistChemin;
+		private System.Windows.Forms.ListView listViewSonsFond;
 	}
 }

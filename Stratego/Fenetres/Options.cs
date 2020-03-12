@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using Stratego.Core;
+using Stratego.UserControls;
 
 namespace Stratego.Fenetres
 {
@@ -9,7 +11,6 @@ namespace Stratego.Fenetres
     public partial class Options : Form
     {
 	    private readonly Stratego.Options options;
-
 	    private readonly Dictionary<string, string> optionsTemporaires;
 
         public Options()
@@ -24,6 +25,10 @@ namespace Stratego.Fenetres
             AjouteOptionTemporaire("EmplacementPiece");
             AjouteOptionTemporaire("AfficherHistorique");
             AjouteOptionTemporaire("EtatSon");
+            AjouteOptionTemporaire("CouleurFond");
+            AjouteOptionTemporaire("CouleurFondLight");
+            AjouteOptionTemporaire("CouleurTexte");
+            AjouteOptionTemporaire("SonFond");
 
 
             textBoxEmplacementSauvegarde.Text = optionsTemporaires["EmplacementSauvegarde"];
@@ -33,6 +38,13 @@ namespace Stratego.Fenetres
 
             TexteCheckBox();
             TexteCheckBoxSon();
+            RemplitListSonsFond();
+        }
+
+        private void RemplitListSonsFond()
+        {
+	        foreach (string son in MusiqueFond.ListeSons())
+		        listViewSonsFond.Items.Add(son);
         }
 
         private void AjouteOptionTemporaire(string nom)
@@ -71,6 +83,7 @@ namespace Stratego.Fenetres
 
 	        EtatHistortique = checkBoxHistorique.Checked;
 	        EtatSon = checkBoxSon.Checked;
+	        EtatMusiqueFond = optionsTemporaires["SonFond"];
 
 	        foreach (KeyValuePair<string, string> option in optionsTemporaires)
 		        options.SetOption(option.Key, option.Value);
@@ -107,7 +120,14 @@ namespace Stratego.Fenetres
 	        TexteCheckBoxSon();
         }
 
+        private void listViewSonsFond_SelectedIndexChanged(object sender, EventArgs e)
+        {
+	        if (listViewSonsFond.SelectedItems.Count > 0)
+		        optionsTemporaires["SonFond"] = listViewSonsFond.SelectedItems[0].Text;
+        }
+
         public bool EtatHistortique { get; private set; }
         public bool EtatSon { get; private set; }
+        public string EtatMusiqueFond { get; private set; }
     }
 }

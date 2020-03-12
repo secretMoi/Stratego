@@ -42,10 +42,12 @@ namespace Stratego
 
 			string nom = null, valeur = null;
 
-			XmlReaderSettings settings = new XmlReaderSettings();
-			settings.ConformanceLevel = ConformanceLevel.Fragment;
-			settings.IgnoreWhitespace = true;
-			settings.IgnoreComments = true;
+			XmlReaderSettings settings = new XmlReaderSettings
+			{
+				ConformanceLevel = ConformanceLevel.Fragment,
+				IgnoreWhitespace = true,
+				IgnoreComments = true
+			};
 			XmlReader xReader = XmlReader.Create(FichierConfiguration, settings);
 
 			while (xReader.Read())

@@ -137,28 +137,28 @@
 			// menuProgramme_Sauvegarder
 			// 
 			this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
-			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(180, 22);
+			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(172, 22);
 			this.menuProgramme_Sauvegarder.Text = "Sauvegarder partie";
 			this.menuProgramme_Sauvegarder.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Reprendre
 			// 
 			this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
-			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(180, 22);
+			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(172, 22);
 			this.menuProgramme_Reprendre.Text = "Reprendre partie";
 			this.menuProgramme_Reprendre.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Options
 			// 
 			this.menuProgramme_Options.Name = "menuProgramme_Options";
-			this.menuProgramme_Options.Size = new System.Drawing.Size(180, 22);
+			this.menuProgramme_Options.Size = new System.Drawing.Size(172, 22);
 			this.menuProgramme_Options.Text = "Options";
 			this.menuProgramme_Options.Click += new System.EventHandler(this.FenetreOptions);
 			// 
 			// quitterToolStripMenuItem
 			// 
 			this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
-			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.quitterToolStripMenuItem.Text = "Quitter";
 			this.quitterToolStripMenuItem.Click += new System.EventHandler(this.Quitter_Click);
 			// 

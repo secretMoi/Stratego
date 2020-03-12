@@ -5,7 +5,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using Carrosse;
 using Stratego.UserControls;
 
 //todo cases vertes et rouges
@@ -18,6 +17,7 @@ namespace Stratego.Fenetres
         private PartieActuelle partieActuelle;
         private Point positionOrigine; // position de départ de la pièce déplacée
         private bool sonActive;
+        private MusiqueFond musiqueFond;
 
         public Form1()
         {
@@ -28,6 +28,8 @@ namespace Stratego.Fenetres
 	            richTextBox1.Visible = false;
 
             sonActive = Convert.ToBoolean(partieActuelle.Option.GetOption("EtatSon"));
+
+            MusiqueFond();
         }
 
         private void evenement_Click(object sender, EventArgs e)
@@ -52,9 +54,16 @@ namespace Stratego.Fenetres
 	        {
 		        if (form.ShowDialog() == DialogResult.OK)
 		        {
-			        richTextBox1.Visible = form.EtatHistortique;
-			        sonActive = form.EtatSon;
-                }
+			        richTextBox1.Visible = form.EtatHistortique; // set l'état de la richtextbox
+
+			        if (sonActive && !form.EtatSon) // si le son est coupé
+				        musiqueFond?.Stop(); // on coupe la musique
+			        if (!sonActive && form.EtatSon)
+				        MusiqueFond(true);
+                    if(musiqueFond?.SonEnCours != partieActuelle.Option.GetOption("SonFond"))
+                        MusiqueFond();
+                    sonActive = form.EtatSon; // set l'état du son
+		        }
 	        }
         }
         
@@ -220,6 +229,17 @@ namespace Stratego.Fenetres
 		        Son son = new Son(nom);
 		        son.Joue();
             }
+        }
+
+        private void MusiqueFond(bool force = false)
+        {
+	        if (sonActive || force)
+	        {
+		        musiqueFond?.Stop();
+
+                musiqueFond = new MusiqueFond(partieActuelle.Option.GetOption("SonFond"));
+		        musiqueFond.Joue();
+	        }
         }
     }
 }
