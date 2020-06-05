@@ -42,9 +42,6 @@
 			this.menuProgramme_Reprendre = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
 			this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuAide = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuAide_APropos = new System.Windows.Forms.ToolStripMenuItem();
-			this.vueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttonRemplir = new Stratego.UserControls.Bouton();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
@@ -113,9 +110,7 @@
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuProgramme,
-            this.menuAide,
-            this.vueToolStripMenuItem});
+            this.menuProgramme});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -137,51 +132,30 @@
 			// menuProgramme_Sauvegarder
 			// 
 			this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
-			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(180, 22);
 			this.menuProgramme_Sauvegarder.Text = "Sauvegarder partie";
 			this.menuProgramme_Sauvegarder.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Reprendre
 			// 
 			this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
-			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(180, 22);
 			this.menuProgramme_Reprendre.Text = "Reprendre partie";
 			this.menuProgramme_Reprendre.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Options
 			// 
 			this.menuProgramme_Options.Name = "menuProgramme_Options";
-			this.menuProgramme_Options.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Options.Size = new System.Drawing.Size(180, 22);
 			this.menuProgramme_Options.Text = "Options";
 			this.menuProgramme_Options.Click += new System.EventHandler(this.FenetreOptions);
 			// 
 			// quitterToolStripMenuItem
 			// 
 			this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
-			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.quitterToolStripMenuItem.Text = "Quitter";
 			this.quitterToolStripMenuItem.Click += new System.EventHandler(this.Quitter_Click);
-			// 
-			// menuAide
-			// 
-			this.menuAide.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuAide_APropos});
-			this.menuAide.Name = "menuAide";
-			this.menuAide.Size = new System.Drawing.Size(43, 20);
-			this.menuAide.Text = "Aide";
-			// 
-			// menuAide_APropos
-			// 
-			this.menuAide_APropos.Name = "menuAide_APropos";
-			this.menuAide_APropos.Size = new System.Drawing.Size(122, 22);
-			this.menuAide_APropos.Text = "A propos";
-			this.menuAide_APropos.Click += new System.EventHandler(this.evenement_Click);
-			// 
-			// vueToolStripMenuItem
-			// 
-			this.vueToolStripMenuItem.Name = "vueToolStripMenuItem";
-			this.vueToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-			this.vueToolStripMenuItem.Text = "Vue";
 			// 
 			// buttonRemplir
 			// 
@@ -234,14 +208,11 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem menuAide_APropos;
         private System.Windows.Forms.ToolStripMenuItem quitterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Sauvegarder;
-        private System.Windows.Forms.ToolStripMenuItem menuAide;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Options;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
-        private System.Windows.Forms.ToolStripMenuItem vueToolStripMenuItem;
 		private UserControls.Bouton buttonRemplir;
 	}
 }

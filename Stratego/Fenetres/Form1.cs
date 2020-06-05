@@ -36,7 +36,7 @@ namespace Stratego.Fenetres
         {
             string nom = ((ToolStripMenuItem) sender).Name; // récupère le nom du controle appelant
             string[] chaine = nom.Split('_'); // scinde le nom pour avoir les 2 parties
-            
+
             string @namespace = GetType().Namespace;
             string @class = chaine[1];
 
@@ -66,7 +66,7 @@ namespace Stratego.Fenetres
 		        }
 	        }
         }
-        
+
         private void Partie(object sender, EventArgs e)
         {
             string nom = ((ToolStripMenuItem) sender).Name; // récupère le nom du controle appelant
@@ -90,9 +90,9 @@ namespace Stratego.Fenetres
 	                    buttonRemplir.Enabled = false;
 	                    buttonRemplir.Visible = false;
                     }
-                    
+
                     resultat = @"Partie restaurée";
-                    
+
                     pictureBox1.Invalidate();
                 }
                 else if(nom.Contains("Sauvegarder"))
@@ -105,7 +105,7 @@ namespace Stratego.Fenetres
 
                     fichierSauvegarde = new FileStream(partieActuelle.Option.GetOption("EmplacementSauvegarde"), FileMode.Create);
                     formatter.Serialize(fichierSauvegarde, partieActuelle);
-                    
+
                     resultat = @"Partie sauvegardée";
                 }
                 else
@@ -124,7 +124,7 @@ namespace Stratego.Fenetres
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) // relâchement clic souris
         {
             if (partieActuelle.MenuContextuel.PlacementPieces) return; // si la pièce n'est pas sélectionnée ce n'est pas la peine de continuer
-            
+
             partieActuelle.Jeu.LachePiece(e.Location, positionOrigine, richTextBox1);
 
             Son("drop");
@@ -135,9 +135,9 @@ namespace Stratego.Fenetres
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if(partieActuelle.MenuContextuel.PlacementPieces) return;
-            
+
             partieActuelle.Jeu.BougePiece(e.Location);
-            
+
             pictureBox1.Invalidate();
         }
 
@@ -160,7 +160,7 @@ namespace Stratego.Fenetres
         {
             Close();
         }
-        
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // todo réactiver

@@ -44,7 +44,7 @@ namespace Stratego
 
 			XmlReaderSettings settings = new XmlReaderSettings
 			{
-				ConformanceLevel = ConformanceLevel.Fragment,
+				ConformanceLevel = ConformanceLevel.Fragment, // format conforme au w3c
 				IgnoreWhitespace = true,
 				IgnoreComments = true
 			};

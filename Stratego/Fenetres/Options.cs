@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 using Stratego.Core;
-using Stratego.UserControls;
 
 namespace Stratego.Fenetres
 {
@@ -25,9 +23,6 @@ namespace Stratego.Fenetres
             AjouteOptionTemporaire("EmplacementPiece");
             AjouteOptionTemporaire("AfficherHistorique");
             AjouteOptionTemporaire("EtatSon");
-            AjouteOptionTemporaire("CouleurFond");
-            AjouteOptionTemporaire("CouleurFondLight");
-            AjouteOptionTemporaire("CouleurTexte");
             AjouteOptionTemporaire("SonFond");
 
 
@@ -58,7 +53,7 @@ namespace Stratego.Fenetres
             ouvrir.AddFilter("Fichier de sauvegarde", "sav");
 
 	        if (ouvrir.ShowDialog() == DialogResult.OK)
-		        textBoxEmplacementSauvegarde.Text = ouvrir.FileName;
+		        textBoxEmplacementSauvegarde.Text = CutPath(ouvrir.FileName);
         }
 
         private void boutonEmplacementPiece_Click(object sender, EventArgs e)
@@ -67,7 +62,13 @@ namespace Stratego.Fenetres
 	        ouvrir.AddFilter("Fichier de pièces", "xml");
 
 	        if (ouvrir.ShowDialog() == DialogResult.OK)
-		        textBoxEmplacementPiece.Text = ouvrir.FileName;
+		        textBoxEmplacementPiece.Text = CutPath(ouvrir.FileName);
+        }
+
+        private string CutPath(string path)
+        {
+            string[] paths = path.Split('\\');
+            return paths[paths.Length - 1];
         }
 
         private void boutonAnnuler_Click(object sender, EventArgs e)
