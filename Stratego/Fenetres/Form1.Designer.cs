@@ -40,9 +40,12 @@
 			this.menuProgramme = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Sauvegarder = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Reprendre = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuProgramme_Hobby = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
 			this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttonRemplir = new Stratego.UserControls.Bouton();
+			this.checkBoxServer = new System.Windows.Forms.CheckBox();
+			this.checkBoxClient = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -123,6 +126,7 @@
 			this.menuProgramme.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuProgramme_Sauvegarder,
             this.menuProgramme_Reprendre,
+            this.menuProgramme_Hobby,
             this.menuProgramme_Options,
             this.quitterToolStripMenuItem});
 			this.menuProgramme.Name = "menuProgramme";
@@ -132,28 +136,35 @@
 			// menuProgramme_Sauvegarder
 			// 
 			this.menuProgramme_Sauvegarder.Name = "menuProgramme_Sauvegarder";
-			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(180, 22);
+			this.menuProgramme_Sauvegarder.Size = new System.Drawing.Size(172, 22);
 			this.menuProgramme_Sauvegarder.Text = "Sauvegarder partie";
 			this.menuProgramme_Sauvegarder.Click += new System.EventHandler(this.Partie);
 			// 
 			// menuProgramme_Reprendre
 			// 
 			this.menuProgramme_Reprendre.Name = "menuProgramme_Reprendre";
-			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(180, 22);
+			this.menuProgramme_Reprendre.Size = new System.Drawing.Size(172, 22);
 			this.menuProgramme_Reprendre.Text = "Reprendre partie";
 			this.menuProgramme_Reprendre.Click += new System.EventHandler(this.Partie);
+			// 
+			// menuProgramme_Hobby
+			// 
+			this.menuProgramme_Hobby.Name = "menuProgramme_Hobby";
+			this.menuProgramme_Hobby.Size = new System.Drawing.Size(172, 22);
+			this.menuProgramme_Hobby.Text = "Hobby";
+			this.menuProgramme_Hobby.Click += new System.EventHandler(this.evenement_Click);
 			// 
 			// menuProgramme_Options
 			// 
 			this.menuProgramme_Options.Name = "menuProgramme_Options";
-			this.menuProgramme_Options.Size = new System.Drawing.Size(180, 22);
+			this.menuProgramme_Options.Size = new System.Drawing.Size(172, 22);
 			this.menuProgramme_Options.Text = "Options";
 			this.menuProgramme_Options.Click += new System.EventHandler(this.FenetreOptions);
 			// 
 			// quitterToolStripMenuItem
 			// 
 			this.quitterToolStripMenuItem.Name = "quitterToolStripMenuItem";
-			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.quitterToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.quitterToolStripMenuItem.Text = "Quitter";
 			this.quitterToolStripMenuItem.Click += new System.EventHandler(this.Quitter_Click);
 			// 
@@ -172,12 +183,36 @@
 			this.buttonRemplir.UseVisualStyleBackColor = false;
 			this.buttonRemplir.Click += new System.EventHandler(this.buttonRemplir_Click_1);
 			// 
+			// checkBoxServer
+			// 
+			this.checkBoxServer.AutoSize = true;
+			this.checkBoxServer.Location = new System.Drawing.Point(798, 678);
+			this.checkBoxServer.Name = "checkBoxServer";
+			this.checkBoxServer.Size = new System.Drawing.Size(63, 17);
+			this.checkBoxServer.TabIndex = 11;
+			this.checkBoxServer.Text = "Serveur";
+			this.checkBoxServer.UseVisualStyleBackColor = true;
+			this.checkBoxServer.CheckedChanged += new System.EventHandler(this.checkBoxServer_CheckedChanged);
+			// 
+			// checkBoxClient
+			// 
+			this.checkBoxClient.AutoSize = true;
+			this.checkBoxClient.Location = new System.Drawing.Point(949, 668);
+			this.checkBoxClient.Name = "checkBoxClient";
+			this.checkBoxClient.Size = new System.Drawing.Size(52, 17);
+			this.checkBoxClient.TabIndex = 12;
+			this.checkBoxClient.Text = "Client";
+			this.checkBoxClient.UseVisualStyleBackColor = true;
+			this.checkBoxClient.CheckedChanged += new System.EventHandler(this.checkBoxClient_CheckedChanged);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.ClientSize = new System.Drawing.Size(1145, 813);
+			this.Controls.Add(this.checkBoxClient);
+			this.Controls.Add(this.checkBoxServer);
 			this.Controls.Add(this.buttonRemplir);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -191,6 +226,7 @@
 			this.Name = "Form1";
 			this.Text = "Stratego";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+			this.Load += new System.EventHandler(this.Form1_Load);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -214,5 +250,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Options;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
 		private UserControls.Bouton buttonRemplir;
+		private System.Windows.Forms.ToolStripMenuItem menuProgramme_Hobby;
+		private System.Windows.Forms.CheckBox checkBoxServer;
+		private System.Windows.Forms.CheckBox checkBoxClient;
 	}
 }

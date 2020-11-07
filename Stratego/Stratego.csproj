@@ -56,6 +56,12 @@
     <Compile Include="Fenetres\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fenetres\Hobby.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Hobby.Designer.cs">
+      <DependentUpon>Hobby.cs</DependentUpon>
+    </Compile>
     <Compile Include="Fenetres\Options.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,9 +91,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rectangle.cs" />
-    <Compile Include="Reseau\Client.cs" />
-    <Compile Include="Reseau\Reseau.cs" />
-    <Compile Include="Reseau\Serveur.cs" />
+    <Compile Include="Reseau\Clients\ClientController.cs" />
+    <Compile Include="Reseau\ServeurController.cs" />
     <Compile Include="Son.cs" />
     <Compile Include="Theme.cs" />
     <Compile Include="UserControls\Bouton.cs">
@@ -110,6 +115,9 @@
     </Compile>
     <EmbeddedResource Include="Fenetres\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Hobby.resx">
+      <DependentUpon>Hobby.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
