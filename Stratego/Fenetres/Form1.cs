@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Stratego.Reseau;
 using Stratego.Reseau.Clients;
+using Stratego.Reseau.Serveurs;
 using Stratego.UserControls;
 
 //todo fin de partie si aucune pièce ne peut bouger

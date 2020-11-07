@@ -9,7 +9,7 @@ namespace Stratego.Reseau.Clients
 {
 	public class ClientController
 	{
-		private const int Port = 32432;
+		private const int Port = 32430;
 
 		public async Task<PingReply> PingAsync(string ip)
 		{
@@ -38,14 +38,9 @@ namespace Stratego.Reseau.Clients
 		{
 			var client = new UdpClient();
 			var requestData = Encoding.ASCII.GetBytes("Stratego_" + Environment.MachineName);
-			var serverEp = new IPEndPoint(IPAddress.Any, 0);
 
 			client.EnableBroadcast = true;
 			await client.SendAsync(requestData, requestData.Length, new IPEndPoint(IPAddress.Broadcast, Port));
-
-			/*var serverResponseData = await client.ReceiveAsync();
-			var serverResponse = Encoding.ASCII.GetString(serverResponseData.Buffer);
-			Console.WriteLine(@"Recived {0} from {1}", serverResponse, serverEp.Address);*/
 
 			client.Close();
 		}

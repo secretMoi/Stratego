@@ -15,7 +15,10 @@ namespace Stratego.Fenetres
 
 		private async void Hobby_Load(object sender, EventArgs e)
 		{
-			List<Task<string>> tasks = new List<Task<string>>();
+
+
+
+			/*List<Task<string>> tasks = new List<Task<string>>();
 			ClientController client = new ClientController();
 
 			for (int i = 1; i < 255; i++)
@@ -32,7 +35,7 @@ namespace Stratego.Fenetres
 					listBoxServersList.Items.Add(hostname);
 			}
 
-			MessageBox.Show(@"Scan terminé");
+			MessageBox.Show(@"Scan terminé");*/
 		}
 	}
 }

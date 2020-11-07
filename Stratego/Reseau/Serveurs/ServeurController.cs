@@ -4,11 +4,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stratego.Reseau
+namespace Stratego.Reseau.Serveurs
 {
 	public class ServeurController
 	{
-		private const int Port = 32432;
+		private const int Port = 32430;
 		private UdpClient _broadcastServer;
 
 		private bool _state = true;
