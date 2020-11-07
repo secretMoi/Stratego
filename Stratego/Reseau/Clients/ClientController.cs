@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Clients
 {
@@ -37,7 +38,12 @@ namespace Stratego.Reseau.Clients
 		public async Task BroadCastAsync()
 		{
 			var client = new UdpClient();
-			var requestData = Encoding.ASCII.GetBytes("Stratego_" + Environment.MachineName);
+
+			var requestData = Serialise.ObjectToByteArray(new InitModel
+			{
+				Address = new IPEndPoint(Reseau.GetLocalIpAddress(), Port),
+				MachineName = Environment.MachineName
+			});
 
 			client.EnableBroadcast = true;
 			await client.SendAsync(requestData, requestData.Length, new IPEndPoint(IPAddress.Broadcast, Port));

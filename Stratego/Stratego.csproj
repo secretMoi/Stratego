@@ -94,6 +94,7 @@
     <Compile Include="Reseau\Clients\ClientController.cs" />
     <Compile Include="Reseau\Models\IModelReseau.cs" />
     <Compile Include="Reseau\Models\InitModel.cs" />
+    <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serialise.cs" />
     <Compile Include="Reseau\Serveurs\ServeurController.cs" />
     <Compile Include="Son.cs" />

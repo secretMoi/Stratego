@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Serveurs
 {
@@ -48,8 +49,8 @@ namespace Stratego.Reseau.Serveurs
 				try
 				{
 					clientData = await _broadcastServer.ReceiveAsync();
-					var clientRequest = Encoding.ASCII.GetString(clientData.Buffer);
-					Console.WriteLine(@"Recived {0} from {1}, sending response", clientRequest, clientEp.Address);
+					var clientRequest = Serialise.ByteArrayToObject<InitModel>(clientData.Buffer);
+					Console.WriteLine(@"Recived {0} from {1}, sending response", clientRequest.MachineName, clientEp.Address);
 				}
 				catch (Exception e)
 				{
