@@ -1,41 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Stratego.Reseau.Clients;
+using Stratego.Reseau.Models;
+using Stratego.Reseau.Serveurs;
 
 namespace Stratego.Fenetres
 {
 	public partial class Hobby : Form
 	{
+		private readonly ServeurController _serveur = new ServeurController();
+		private IList<string> _tokensDiscovered = new List<string>();
+
 		public Hobby()
 		{
 			InitializeComponent();
+
+			listBoxServersList.DisplayMember = "MachineName";
 		}
 
 		private async void Hobby_Load(object sender, EventArgs e)
 		{
+			await _serveur.ReceiveBroadCastAsync(AddItem);
+		}
 
-
-
-			/*List<Task<string>> tasks = new List<Task<string>>();
-			ClientController client = new ClientController();
-
-			for (int i = 1; i < 255; i++)
+		public void AddItem(InitModel result)
+		{
+			if (!_tokensDiscovered.Contains(result.Token))
 			{
-				string ip = "192.168.1." + i;
-				tasks.Add( client.PingTask(ip));
+				_tokensDiscovered.Add(result.Token);
+				listBoxServersList.Items.Add(result);
 			}
+		}
 
-			var res = await Task.WhenAll(tasks);
+		private void Hobby_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			_serveur.State = false;
+		}
 
-			foreach (var hostname in res)
-			{
-				if (hostname != null)
-					listBoxServersList.Items.Add(hostname);
-			}
+		private void listBoxServersList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			InitModel joueur2 = listBoxServersList.SelectedItem as InitModel;
 
-			MessageBox.Show(@"Scan terminé");*/
+			// todo finir
+
 		}
 	}
 }

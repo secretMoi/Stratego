@@ -39,6 +39,7 @@
 			this.listBoxServersList.Name = "listBoxServersList";
 			this.listBoxServersList.Size = new System.Drawing.Size(776, 225);
 			this.listBoxServersList.TabIndex = 0;
+			this.listBoxServersList.SelectedIndexChanged += new System.EventHandler(this.listBoxServersList_SelectedIndexChanged);
 			// 
 			// Hobby
 			// 
@@ -52,6 +53,7 @@
 			this.MinimizeBox = false;
 			this.Name = "Hobby";
 			this.Text = "Hobby";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Hobby_FormClosing);
 			this.Load += new System.EventHandler(this.Hobby_Load);
 			this.ResumeLayout(false);
 

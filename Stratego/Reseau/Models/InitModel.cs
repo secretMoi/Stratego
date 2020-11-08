@@ -9,5 +9,7 @@ namespace Stratego.Reseau.Models
 		public IPEndPoint Address { get; set; }
 
 		public string MachineName { get; set; }
+
+		public string Token { get; set; }
 	}
 }

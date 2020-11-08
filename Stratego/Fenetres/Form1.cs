@@ -271,12 +271,13 @@ namespace Stratego.Fenetres
 			await _serveur.ReceiveBroadCastAsync();
 		}
 
-		private async void checkBoxClient_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxClient_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!checkBoxClient.Checked) return;
 
 			ClientController client = new ClientController();
-			await client.BroadCastAsync();
+			//await client.BroadCastAsync();
+			client.LaunchBroadcast();
 		}
 	}
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Clients
@@ -11,44 +10,32 @@ namespace Stratego.Reseau.Clients
 	public class ClientController
 	{
 		private const int Port = 32430;
+		private string _token = Reseau.CreateToken();
 
-		public async Task<PingReply> PingAsync(string ip)
-		{
-			return await new Ping().SendPingAsync(ip, 100);
-		}
-
-		public Task<string> PingTask(string ip)
-		{
-			//todo changer en une req custom pour que les serveurs répondent
-			return Task.Run(() => PingAsync(ip)).ContinueWith(task =>
-				{
-					//IPHostEntry repEntry = null;
-
-					string res = null;
-
-					if (task.Result.Status == IPStatus.Success)
-						res = task.Result.Address.ToString();
-					//repEntry = Dns.GetHostEntry(task.Result.Address);
-
-					return res;
-				}
-			);
-		}
-
-		public async Task BroadCastAsync()
+		public async void BroadCastAsync(object source, ElapsedEventArgs e)
 		{
 			var client = new UdpClient();
 
 			var requestData = Serialise.ObjectToByteArray(new InitModel
 			{
 				Address = new IPEndPoint(Reseau.GetLocalIpAddress(), Port),
-				MachineName = Environment.MachineName
+				MachineName = Environment.MachineName,
+				Token = _token
 			});
 
 			client.EnableBroadcast = true;
+
 			await client.SendAsync(requestData, requestData.Length, new IPEndPoint(IPAddress.Broadcast, Port));
 
 			client.Close();
+		}
+
+		public void LaunchBroadcast()
+		{
+			Timer aTimer = new Timer();
+			aTimer.Elapsed += BroadCastAsync;
+			aTimer.Interval = 500;
+			aTimer.Enabled = true;
 		}
 	}
 }
