@@ -274,8 +274,8 @@ namespace Stratego.Fenetres
 		{
 			if (!checkBoxClient.Checked) return;
 
-			ClientController client = new ClientController();
-			client.LaunchBroadcast();
+			ClientBroadcastController clientBroadcast = new ClientBroadcastController();
+			clientBroadcast.LaunchBroadcast();
 		}
 	}
 }

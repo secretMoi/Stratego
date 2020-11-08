@@ -6,14 +6,14 @@ using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Clients
 {
-	public class ClientController
+	public class ClientBroadcastController
 	{
 		private const int Port = 32430;
 
 		private string _token;
 		private UdpClient _broadcast;
 		private byte[] _initModel;
-		private Timer _timerBroadcast;
+		private Timer _timer;
 
 		public async void BroadCastAsync(object source, ElapsedEventArgs e)
 		{
@@ -33,15 +33,16 @@ namespace Stratego.Reseau.Clients
 
 			_broadcast.EnableBroadcast = true;
 
-			_timerBroadcast = new Timer();
-			_timerBroadcast.Elapsed += BroadCastAsync;
-			_timerBroadcast.Interval = 500;
-			_timerBroadcast.Enabled = true;
+			_timer = new Timer();
+			_timer.Elapsed += BroadCastAsync;
+			_timer.Interval = 500;
+			_timer.Enabled = true;
 		}
 
 		public void EndBroadcast()
 		{
-			_timerBroadcast.Enabled = false;
+			_timer.Enabled = false;
+			_timer.Dispose();
 			_broadcast.Close();
 		}
 	}
