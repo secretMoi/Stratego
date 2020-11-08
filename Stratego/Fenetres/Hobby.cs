@@ -9,7 +9,7 @@ namespace Stratego.Fenetres
 	public partial class Hobby : Form
 	{
 		private readonly ServeurController _serveur = new ServeurController();
-		private IList<string> _tokensDiscovered = new List<string>();
+		private readonly IList<string> _tokensDiscovered = new List<string>();
 
 		public Hobby()
 		{
@@ -25,11 +25,10 @@ namespace Stratego.Fenetres
 
 		public void AddItem(InitModel result)
 		{
-			if (!_tokensDiscovered.Contains(result.Token))
-			{
-				_tokensDiscovered.Add(result.Token);
-				listBoxServersList.Items.Add(result);
-			}
+			if (_tokensDiscovered.Contains(result.Token)) return;
+
+			_tokensDiscovered.Add(result.Token);
+			listBoxServersList.Items.Add(result);
 		}
 
 		private void Hobby_FormClosing(object sender, FormClosingEventArgs e)
@@ -41,7 +40,24 @@ namespace Stratego.Fenetres
 		{
 			InitModel joueur2 = listBoxServersList.SelectedItem as InitModel;
 
-			// todo finir
+			buttonConnect.Text = @"Se connecter à " + joueur2?.MachineName;
+
+		}
+
+		private void buttonConnect_Click(object sender, EventArgs e)
+		{
+			InitModel joueur2 = listBoxServersList.SelectedItem as InitModel;
+
+			if (joueur2 == null)
+			{
+				MessageBox.Show(@"Veuillez sélectionner un serveur.");
+				return;
+			}
+
+			// ferme les connexions udp
+			_serveur.State = false;
+
+			// on est le client vu qu'on va demander au serveur (joueur2) de se connecter
 
 		}
 	}

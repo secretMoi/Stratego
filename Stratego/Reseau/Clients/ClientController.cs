@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using System.Timers;
 using Stratego.Reseau.Models;
 
@@ -10,32 +9,40 @@ namespace Stratego.Reseau.Clients
 	public class ClientController
 	{
 		private const int Port = 32430;
-		private string _token = Reseau.CreateToken();
+
+		private string _token;
+		private UdpClient _broadcast;
+		private byte[] _initModel;
+		private Timer _timerBroadcast;
 
 		public async void BroadCastAsync(object source, ElapsedEventArgs e)
 		{
-			var client = new UdpClient();
+			await _broadcast.SendAsync(_initModel, _initModel.Length, new IPEndPoint(IPAddress.Broadcast, Port));
+		}
 
-			var requestData = Serialise.ObjectToByteArray(new InitModel
+		public void LaunchBroadcast()
+		{
+			_broadcast = new UdpClient();
+			_token = Reseau.CreateToken();
+			_initModel = Serialise.ObjectToByteArray(new InitModel
 			{
 				Address = new IPEndPoint(Reseau.GetLocalIpAddress(), Port),
 				MachineName = Environment.MachineName,
 				Token = _token
 			});
 
-			client.EnableBroadcast = true;
+			_broadcast.EnableBroadcast = true;
 
-			await client.SendAsync(requestData, requestData.Length, new IPEndPoint(IPAddress.Broadcast, Port));
-
-			client.Close();
+			_timerBroadcast = new Timer();
+			_timerBroadcast.Elapsed += BroadCastAsync;
+			_timerBroadcast.Interval = 500;
+			_timerBroadcast.Enabled = true;
 		}
 
-		public void LaunchBroadcast()
+		public void EndBroadcast()
 		{
-			Timer aTimer = new Timer();
-			aTimer.Elapsed += BroadCastAsync;
-			aTimer.Interval = 500;
-			aTimer.Enabled = true;
+			_timerBroadcast.Enabled = false;
+			_broadcast.Close();
 		}
 	}
 }

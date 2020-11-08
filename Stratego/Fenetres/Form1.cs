@@ -5,7 +5,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using Stratego.Reseau;
 using Stratego.Reseau.Clients;
 using Stratego.Reseau.Serveurs;
 using Stratego.UserControls;
@@ -276,7 +275,6 @@ namespace Stratego.Fenetres
 			if (!checkBoxClient.Checked) return;
 
 			ClientController client = new ClientController();
-			//await client.BroadCastAsync();
 			client.LaunchBroadcast();
 		}
 	}
