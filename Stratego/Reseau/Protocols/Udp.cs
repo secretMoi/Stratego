@@ -8,14 +8,20 @@ namespace Stratego.Reseau.Protocols
 {
 	public class Udp
 	{
-		private readonly UdpClient _udp;
+		private UdpClient _udp;
 
 		public string Token { get; }
 		public UdpClient Connection => _udp;
 
 		public Udp(int port)
 		{
-			//_udp = new UdpClient();
+			OpenPort(port);
+
+			Token = Reseau.CreateToken();
+		}
+
+		private void OpenPort(int startPort)
+		{
 			int tentatives = -1;
 			bool connected = false;
 			while (tentatives < 5 && connected == false)
@@ -23,17 +29,15 @@ namespace Stratego.Reseau.Protocols
 				try
 				{
 					tentatives++;
-					_udp = new UdpClient(port + tentatives);
+					_udp = new UdpClient(startPort + tentatives);
 					connected = true;
-					port += tentatives;
+					startPort += tentatives;
 				}
 				catch (Exception e)
 				{
 					Console.WriteLine(@"Impossible d'ouvrir un socket UDP " + e.Message);
 				}
 			}
-
-			Token = Reseau.CreateToken();
 		}
 
 		public async Task SendAsync(IModelReseau model, IPEndPoint destination)

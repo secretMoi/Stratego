@@ -5,8 +5,6 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
-using Stratego.Reseau.Clients;
-using Stratego.Reseau.Serveurs;
 using Stratego.UserControls;
 
 //todo fin de partie si aucune pièce ne peut bouger
@@ -19,7 +17,7 @@ namespace Stratego.Fenetres
 		private bool sonActive;
 		private MusiqueFond musiqueFond;
 
-		private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
+		//private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
 
 		public Form1()
 		{
@@ -262,20 +260,20 @@ namespace Stratego.Fenetres
 
 		private async void checkBoxServer_CheckedChanged(object sender, EventArgs e)
 		{
-			serveurBroadcast.State = checkBoxServer.Checked;
+			/*serveurBroadcast.State = checkBoxServer.Checked;
 
 			if (!checkBoxServer.Checked)
 				return;
 
-			await serveurBroadcast.ReceiveBroadCastAsync();
+			await serveurBroadcast.ReceiveBroadCastAsync();*/
 		}
 
 		private void checkBoxClient_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!checkBoxClient.Checked) return;
+			/*if (!checkBoxClient.Checked) return;
 
 			ClientBroadcastController clientBroadcast = new ClientBroadcastController();
-			clientBroadcast.LaunchBroadcast();
+			clientBroadcast.LaunchBroadcast();*/
 		}
 	}
 }

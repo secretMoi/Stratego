@@ -13,7 +13,6 @@ namespace Stratego.Fenetres
 		private Broadcast serveurBroadcast;
 		private Broadcast _clientBroadcastServer;
 
-		//private readonly ClientBroadcastController _clientBroadcast = new ClientBroadcastController();
 		//private readonly ServeurTcpController _serveurTcp = new ServeurTcpController();
 		private readonly IList<string> _tokensDiscovered = new List<string>();
 
@@ -26,9 +25,6 @@ namespace Stratego.Fenetres
 
 		private void Hobby_Load(object sender, EventArgs e)
 		{
-			/*_clientBroadcast.LaunchBroadcast();
-			await serveurBroadcast.ReceiveBroadCastAsync(AddItem);
-
 			/*bool res = await _serveurTcp.ListenAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 35000));
 			if (!res)
 			{
