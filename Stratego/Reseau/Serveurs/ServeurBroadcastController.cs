@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Stratego.Reseau.Models;
@@ -7,7 +8,7 @@ namespace Stratego.Reseau.Serveurs
 {
 	public class ServeurBroadcastController
 	{
-		private const int Port = 32430;
+		private int port;
 		private UdpClient _broadcastServer;
 
 		private bool _state = true;
@@ -35,6 +36,11 @@ namespace Stratego.Reseau.Serveurs
 			}
 		}
 
+		public ServeurBroadcastController(int port = 32430)
+		{
+			this.port = port;
+		}
+
 		public async Task ReceiveBroadCastAsync(Action<InitModel> callback = null)
 		{
 			int tentatives = -1;
@@ -44,12 +50,13 @@ namespace Stratego.Reseau.Serveurs
 				try
 				{
 					tentatives++;
-					_broadcastServer = new UdpClient(Port + tentatives);
+					_broadcastServer = new UdpClient(port + tentatives);
 					connected = true;
+					port += tentatives;
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine(e.Message);
+					Console.WriteLine(@"Impossible d'ouvrir un serveur UDP " + e.Message);
 				}
 			}
 
@@ -64,11 +71,12 @@ namespace Stratego.Reseau.Serveurs
 					Console.WriteLine(
 						$@"Received {clientRequest.MachineName} from {clientRequest.Address.Address}:{clientRequest.Address.Port}");
 
+					//await RespondAsync(clientRequest.Address);
 					callback?.Invoke(clientRequest);
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine(e.Message);
+					Console.WriteLine(@"Impossible de recevoir des données UDP " + e.Message);
 				}
 			}
 		}

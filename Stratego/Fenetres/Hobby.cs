@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Windows.Forms;
+using Stratego.Reseau;
 using Stratego.Reseau.Clients;
 using Stratego.Reseau.Models;
+using Stratego.Reseau.Protocols;
 using Stratego.Reseau.Serveurs;
 
 namespace Stratego.Fenetres
 {
 	public partial class Hobby : Form
 	{
-		private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
+		private ServeurBroadcastController serveurBroadcast;
+		Udp udp = new Udp();
 		private readonly ClientBroadcastController _clientBroadcast = new ClientBroadcastController();
 		//private readonly ServeurTcpController _serveurTcp = new ServeurTcpController();
 		private readonly IList<string> _tokensDiscovered = new List<string>();
@@ -22,9 +25,9 @@ namespace Stratego.Fenetres
 			listBoxServersList.DisplayMember = "MachineName";
 		}
 
-		private async void Hobby_Load(object sender, EventArgs e)
+		private void Hobby_Load(object sender, EventArgs e)
 		{
-			_clientBroadcast.LaunchBroadcast();
+			/*_clientBroadcast.LaunchBroadcast();
 			await serveurBroadcast.ReceiveBroadCastAsync(AddItem);
 
 			/*bool res = await _serveurTcp.ListenAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 35000));
@@ -48,7 +51,8 @@ namespace Stratego.Fenetres
 
 		private void Hobby_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			serveurBroadcast.State = false;
+			if(serveurBroadcast != null)
+				serveurBroadcast.State = false;
 		}
 
 		private void listBoxServersList_SelectedIndexChanged(object sender, EventArgs e)
@@ -70,7 +74,7 @@ namespace Stratego.Fenetres
 			}
 
 			// ferme les connexions udp
-			serveurBroadcast.State = false;
+			//serveurBroadcast.State = false;
 
 			// ferme le serveur
 			//_serveurTcp.Close();
@@ -79,6 +83,42 @@ namespace Stratego.Fenetres
 			/*ClientTcpController client = new ClientTcpController();
 			await client.ConnectAsync(joueur2);
 			await client.SendAsync(joueur2);*/
+		}
+
+		private async void buttonServer_Click(object sender, EventArgs e)
+		{
+			serveurBroadcast = new ServeurBroadcastController(32430);
+			await serveurBroadcast.ReceiveBroadCastAsync(RespondToClient);
+
+			/*bool res = await _serveurTcp.ListenAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 35000));
+			if (!res)
+			{
+				MessageBox.Show(@"Impossible de démarrer le serveur TCP");
+			}
+			else
+			{
+				var t = await _serveurTcp.ReceiveAsync<InitModel>();
+			}*/
+		}
+
+		private async void RespondToClient(InitModel initModel)
+		{
+			await udp.SendAsync(initModel, initModel.Address);
+		}
+
+		private async void buttonClient_Click(object sender, EventArgs e)
+		{
+			serveurBroadcast = new ServeurBroadcastController(32530);
+
+			_clientBroadcast.LaunchBroadcast();
+
+			await serveurBroadcast.ReceiveBroadCastAsync(AddItem);
+
+			// stop le broadcasting lorsque le serveur répond
+			serveurBroadcast.State = false;
+			_clientBroadcast.EndBroadcast();
+
+			//udp.SendAsync()
 		}
 	}
 }

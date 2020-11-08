@@ -26,7 +26,7 @@ namespace Stratego.Reseau.Clients
 			_token = Reseau.CreateToken();
 			_initModel = Serialise.ObjectToByteArray(new InitModel
 			{
-				Address = new IPEndPoint(Reseau.GetLocalIpAddress(), Port),
+				Address = new IPEndPoint(Reseau.GetLocalIpAddress(), 32530),
 				MachineName = Environment.MachineName,
 				Token = _token
 			});

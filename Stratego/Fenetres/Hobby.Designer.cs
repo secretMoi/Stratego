@@ -31,6 +31,8 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Hobby));
 			this.listBoxServersList = new System.Windows.Forms.ListBox();
 			this.buttonConnect = new System.Windows.Forms.Button();
+			this.buttonServer = new System.Windows.Forms.Button();
+			this.buttonClient = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// listBoxServersList
@@ -44,13 +46,33 @@
 			// 
 			// buttonConnect
 			// 
-			this.buttonConnect.Location = new System.Drawing.Point(677, 243);
+			this.buttonConnect.Location = new System.Drawing.Point(630, 243);
 			this.buttonConnect.Name = "buttonConnect";
-			this.buttonConnect.Size = new System.Drawing.Size(111, 49);
+			this.buttonConnect.Size = new System.Drawing.Size(158, 49);
 			this.buttonConnect.TabIndex = 1;
 			this.buttonConnect.Text = "Se connecter";
 			this.buttonConnect.UseVisualStyleBackColor = true;
 			this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+			// 
+			// buttonServer
+			// 
+			this.buttonServer.Location = new System.Drawing.Point(12, 243);
+			this.buttonServer.Name = "buttonServer";
+			this.buttonServer.Size = new System.Drawing.Size(158, 49);
+			this.buttonServer.TabIndex = 2;
+			this.buttonServer.Text = "Héberger";
+			this.buttonServer.UseVisualStyleBackColor = true;
+			this.buttonServer.Click += new System.EventHandler(this.buttonServer_Click);
+			// 
+			// buttonClient
+			// 
+			this.buttonClient.Location = new System.Drawing.Point(176, 243);
+			this.buttonClient.Name = "buttonClient";
+			this.buttonClient.Size = new System.Drawing.Size(158, 49);
+			this.buttonClient.TabIndex = 3;
+			this.buttonClient.Text = "Chercher";
+			this.buttonClient.UseVisualStyleBackColor = true;
+			this.buttonClient.Click += new System.EventHandler(this.buttonClient_Click);
 			// 
 			// Hobby
 			// 
@@ -58,6 +80,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.buttonClient);
+			this.Controls.Add(this.buttonServer);
 			this.Controls.Add(this.buttonConnect);
 			this.Controls.Add(this.listBoxServersList);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -75,5 +99,7 @@
 
 		private System.Windows.Forms.ListBox listBoxServersList;
 		private System.Windows.Forms.Button buttonConnect;
+		private System.Windows.Forms.Button buttonServer;
+		private System.Windows.Forms.Button buttonClient;
 	}
 }
