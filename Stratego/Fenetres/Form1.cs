@@ -19,7 +19,7 @@ namespace Stratego.Fenetres
 		private bool sonActive;
 		private MusiqueFond musiqueFond;
 
-		private readonly ServeurController _serveur = new ServeurController();
+		private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
 
 		public Form1()
 		{
@@ -262,12 +262,12 @@ namespace Stratego.Fenetres
 
 		private async void checkBoxServer_CheckedChanged(object sender, EventArgs e)
 		{
-			_serveur.State = checkBoxServer.Checked;
+			serveurBroadcast.State = checkBoxServer.Checked;
 
 			if (!checkBoxServer.Checked)
 				return;
 
-			await _serveur.ReceiveBroadCastAsync();
+			await serveurBroadcast.ReceiveBroadCastAsync();
 		}
 
 		private void checkBoxClient_CheckedChanged(object sender, EventArgs e)

@@ -20,7 +20,6 @@ namespace Stratego.Reseau
 			{
 				await Task.Run(() =>
 				{
-					//NetworkStream flux = _client.GetStream(); // recoit le flux
 					BinaryReader binaryReader = new BinaryReader(flux); // converti le flux en binaire
 					data = Serialise.ByteArrayToObject<T>(binaryReader.ReadBytes(int.MaxValue)); // converti les octets en un model demandé
 
@@ -39,14 +38,12 @@ namespace Stratego.Reseau
 		 * <param name="data">Model qui implémente <see cref="IModelReseau"/> à envoyer</param>
 		 * <returns>true si tout s'est bien passé, false sinon</returns>
 		 */
-		protected virtual async Task<bool> SendAsync(IModelReseau data, Socket socket)
+		protected virtual async Task<bool> SendAsync(IModelReseau data, NetworkStream flux)
 		{
 			try
 			{
 				await Task.Run(() =>
 				{
-					NetworkStream flux = new NetworkStream(socket); // recoit le flux
-
 					BinaryWriter binaryWriter = new BinaryWriter(flux); // converti le flux en binaire
 
 					binaryWriter.Write(Serialise.ObjectToByteArray(data)); // envoie le model sous forme de bytes[]

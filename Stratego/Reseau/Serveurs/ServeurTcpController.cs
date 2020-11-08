@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -47,24 +46,6 @@ namespace Stratego.Reseau.Serveurs
 		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
 			return await ReceiveAsync<T>(_client.GetStream());
-			/*T data = null;
-
-			try
-			{
-				await Task.Run(() =>
-				{
-					NetworkStream flux = _client.GetStream(); // recoit le flux
-					BinaryReader binaryReader = new BinaryReader(flux); // converti le flux en binaire
-					data = Serialise.ByteArrayToObject<T>(binaryReader.ReadBytes(int.MaxValue)); // converti les octets en un model demandé
-
-				});
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e.Message);
-			}
-
-			return data;*/
 		}
 
 		/**
@@ -83,25 +64,7 @@ namespace Stratego.Reseau.Serveurs
 		 */
 		public async Task<bool> SendAsync(IModelReseau data)
 		{
-			try
-			{
-				await Task.Run(() =>
-				{
-					NetworkStream flux = new NetworkStream(_serveur.Server); // recoit le flux
-
-					BinaryWriter binaryWriter = new BinaryWriter(flux); // converti le flux en binaire
-
-					binaryWriter.Write(Serialise.ObjectToByteArray(data)); // envoie le model sous forme de bytes[]
-				});
-
-				return true;
-			}
-
-			catch (Exception e)
-			{
-				Console.WriteLine(e.Message);
-				return false;
-			}
+			return await SendAsync(data, _client.GetStream());
 		}
 
 

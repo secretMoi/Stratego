@@ -30,29 +30,36 @@ namespace Stratego.Reseau.Clients
 		}
 
 		/**
-		 * <summary>Lance l'écoute</summary>
+		 * <summary>Lance l'écoute sur le serveur</summary>
 		 * <returns>Les données wrappées dans le model T demandé, null si une erreur</returns>
 		 */
-		/*public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
+		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
-			T data = null;
+			return await ReceiveAsync<T>(_client.GetStream());
+		}
 
-			try
-			{
-				await Task.Run(() =>
-				{
-					NetworkStream flux = _client.GetStream(); // recoit le flux
-					BinaryReader binaryReader = new BinaryReader(flux); // converti le flux en binaire
-					data = Serialise.ByteArrayToObject<T>(binaryReader.ReadBytes(int.MaxValue)); // converti les octets en un model demandé
+		/**
+		 * <summary>Lance l'écoute sur le serveur</summary>
+		 * <param name="callback">Méthode à rappeler lorsque des données arrivent</param>
+		 */
+		public async Task ReceiveCallbackAsync<T>(Action<T> callback) where T : class, IModelReseau
+		{
+			callback?.Invoke(await ReceiveAsync<T>());
+		}
 
-				});
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e.Message);
-			}
+		/**
+		 * <summary>Envoie un model au client</summary>
+		 * <param name="data">Model qui implémente <see cref="IModelReseau"/> à envoyer</param>
+		 * <returns>true si tout s'est bien passé, false sinon</returns>
+		 */
+		public async Task<bool> SendAsync(IModelReseau data)
+		{
+			return await SendAsync(data, _client.GetStream());
+		}
 
-			return data;
-		}*/
+		public void Close()
+		{
+			_client.Close();
+		}
 	}
 }

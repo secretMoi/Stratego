@@ -5,7 +5,7 @@ using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Serveurs
 {
-	public class ServeurController
+	public class ServeurBroadcastController
 	{
 		private const int Port = 32430;
 		private UdpClient _broadcastServer;
@@ -29,7 +29,7 @@ namespace Stratego.Reseau.Serveurs
 				}
 				else
 				{
-					_broadcastServer.Close();
+					_broadcastServer?.Close();
 					Console.WriteLine(@"Server is OFF");
 				}
 			}
@@ -37,7 +37,21 @@ namespace Stratego.Reseau.Serveurs
 
 		public async Task ReceiveBroadCastAsync(Action<InitModel> callback = null)
 		{
-			_broadcastServer = new UdpClient(Port);
+			int tentatives = -1;
+			bool connected = false;
+			while (tentatives < 5 && connected == false)
+			{
+				try
+				{
+					tentatives++;
+					_broadcastServer = new UdpClient(Port + tentatives);
+					connected = true;
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
+			}
 
 			while (State)
 			{

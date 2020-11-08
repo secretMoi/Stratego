@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Windows.Forms;
+using Stratego.Reseau.Clients;
 using Stratego.Reseau.Models;
 using Stratego.Reseau.Serveurs;
 
@@ -8,7 +10,9 @@ namespace Stratego.Fenetres
 {
 	public partial class Hobby : Form
 	{
-		private readonly ServeurController _serveur = new ServeurController();
+		private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
+		private readonly ClientBroadcastController _clientBroadcast = new ClientBroadcastController();
+		//private readonly ServeurTcpController _serveurTcp = new ServeurTcpController();
 		private readonly IList<string> _tokensDiscovered = new List<string>();
 
 		public Hobby()
@@ -20,7 +24,18 @@ namespace Stratego.Fenetres
 
 		private async void Hobby_Load(object sender, EventArgs e)
 		{
-			await _serveur.ReceiveBroadCastAsync(AddItem);
+			_clientBroadcast.LaunchBroadcast();
+			await serveurBroadcast.ReceiveBroadCastAsync(AddItem);
+
+			/*bool res = await _serveurTcp.ListenAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 35000));
+			if (!res)
+			{
+				MessageBox.Show(@"Impossible de démarrer le serveur TCP");
+			}
+			else
+			{
+				var t = await _serveurTcp.ReceiveAsync<InitModel>();
+			}*/
 		}
 
 		public void AddItem(InitModel result)
@@ -33,7 +48,7 @@ namespace Stratego.Fenetres
 
 		private void Hobby_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			_serveur.State = false;
+			serveurBroadcast.State = false;
 		}
 
 		private void listBoxServersList_SelectedIndexChanged(object sender, EventArgs e)
@@ -55,10 +70,15 @@ namespace Stratego.Fenetres
 			}
 
 			// ferme les connexions udp
-			_serveur.State = false;
+			serveurBroadcast.State = false;
+
+			// ferme le serveur
+			//_serveurTcp.Close();
 
 			// on est le client vu qu'on va demander au serveur (joueur2) de se connecter
-
+			/*ClientTcpController client = new ClientTcpController();
+			await client.ConnectAsync(joueur2);
+			await client.SendAsync(joueur2);*/
 		}
 	}
 }
