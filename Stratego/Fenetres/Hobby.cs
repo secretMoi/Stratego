@@ -5,14 +5,14 @@ using System.Windows.Forms;
 using Stratego.Reseau;
 using Stratego.Reseau.Models;
 using Stratego.Reseau.Protocols;
-using Stratego.Reseau.Serveurs;
 
 namespace Stratego.Fenetres
 {
 	public partial class Hobby : Form
 	{
-		private ServeurBroadcastController serveurBroadcast;
-		Udp udpServer = new Udp(32430);
+		private Broadcast serveurBroadcast;
+		private Broadcast _clientBroadcastServer;
+
 		//private readonly ClientBroadcastController _clientBroadcast = new ClientBroadcastController();
 		//private readonly ServeurTcpController _serveurTcp = new ServeurTcpController();
 		private readonly IList<string> _tokensDiscovered = new List<string>();
@@ -48,13 +48,16 @@ namespace Stratego.Fenetres
 			listBoxServersList.Items.Add(result);
 
 			// stop le broadcasting lorsque le serveur répond
-			serveurBroadcast.State = false;
+			_clientBroadcastServer.ServerState = false;
 		}
 
 		private void Hobby_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if(serveurBroadcast != null)
-				serveurBroadcast.State = false;
+				serveurBroadcast.ServerState = false;
+
+			if(_clientBroadcastServer != null)
+				_clientBroadcastServer.ServerState = false;
 		}
 
 		private void listBoxServersList_SelectedIndexChanged(object sender, EventArgs e)
@@ -89,11 +92,8 @@ namespace Stratego.Fenetres
 
 		private async void buttonServer_Click(object sender, EventArgs e)
 		{
-			Broadcast broadcast = new Broadcast(udpServer);
-			await broadcast.ReceiveBroadCastAsync(RespondToClient);
-
-			/*serveurBroadcast = new ServeurBroadcastController(32430);
-			await serveurBroadcast.ReceiveBroadCastAsync(RespondToClient);*/
+			serveurBroadcast = new Broadcast(new Udp(32430));
+			await serveurBroadcast.ReceiveBroadCastAsync(RespondToClient);
 
 			/*bool res = await _serveurTcp.ListenAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 35000));
 			if (!res)
@@ -108,12 +108,12 @@ namespace Stratego.Fenetres
 
 		private async void RespondToClient(InitModel initModel)
 		{
-			await udpServer.SendAsync(initModel, initModel.Address);
+			await serveurBroadcast.Udp.SendAsync(initModel, initModel.Address);
 		}
 
 		private async void buttonClient_Click(object sender, EventArgs e)
 		{
-			serveurBroadcast = new ServeurBroadcastController(32530); // serveur écoute client
+			_clientBroadcastServer = new Broadcast(new Udp(32530));
 
 			Udp udp = new Udp(32430);
 			Broadcast broadcast = new Broadcast(udp);
@@ -125,7 +125,7 @@ namespace Stratego.Fenetres
 			};
 			broadcast.LaunchBroadcast(model, 32430); // lance le broadcast sur les serveurs
 
-			await serveurBroadcast.ReceiveBroadCastAsync(AddItem); // écoute les réponses
+			await _clientBroadcastServer.ReceiveBroadCastAsync(AddItem); // écoute les réponses
 
 			broadcast.EndBroadcast(); // ferme les req broadcast
 		}

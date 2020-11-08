@@ -18,6 +18,8 @@ namespace Stratego.Reseau
 		private bool _state = true;
 		private readonly object cadenas = new object();
 
+		public Udp Udp => _udp;
+
 		public bool ServerState
 		{
 			get => _state;
