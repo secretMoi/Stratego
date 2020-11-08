@@ -99,6 +99,7 @@
     <Compile Include="Reseau\Serialise.cs" />
     <Compile Include="Reseau\Serveurs\ServeurController.cs" />
     <Compile Include="Reseau\Serveurs\ServeurTcpController.cs" />
+    <Compile Include="Reseau\TcpConnection.cs" />
     <Compile Include="Son.cs" />
     <Compile Include="Theme.cs" />
     <Compile Include="UserControls\Bouton.cs">

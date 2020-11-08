@@ -7,11 +7,10 @@ using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Serveurs
 {
-	public class ServeurTcpController
+	public class ServeurTcpController : TcpConnection
 	{
 		private TcpListener _serveur;
 		private TcpClient _client;
-		private NetworkStream _flux;
 
 		/**
 		 * <summary>Démarre le serveur</summary>
@@ -28,7 +27,6 @@ namespace Stratego.Reseau.Serveurs
 				{
 					_serveur.Start();
 					_client = _serveur.AcceptTcpClient(); // accepte une connexion client
-					_flux = _client.GetStream();
 				});
 
 				return true;
@@ -48,14 +46,15 @@ namespace Stratego.Reseau.Serveurs
 		 */
 		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
-			T data = null;
+			return await ReceiveAsync<T>(_client.GetStream());
+			/*T data = null;
 
 			try
 			{
 				await Task.Run(() =>
 				{
-					//_flux = _client.GetStream(); // recoit le flux
-					BinaryReader binaryReader = new BinaryReader(_flux); // converti le flux en binaire
+					NetworkStream flux = _client.GetStream(); // recoit le flux
+					BinaryReader binaryReader = new BinaryReader(flux); // converti le flux en binaire
 					data = Serialise.ByteArrayToObject<T>(binaryReader.ReadBytes(int.MaxValue)); // converti les octets en un model demandé
 
 				});
@@ -65,7 +64,7 @@ namespace Stratego.Reseau.Serveurs
 				Console.WriteLine(e.Message);
 			}
 
-			return data;
+			return data;*/
 		}
 
 		/**
@@ -88,9 +87,9 @@ namespace Stratego.Reseau.Serveurs
 			{
 				await Task.Run(() =>
 				{
-					//_flux = _client.GetStream(); // recoit le flux
+					NetworkStream flux = new NetworkStream(_serveur.Server); // recoit le flux
 
-					BinaryWriter binaryWriter = new BinaryWriter(_flux); // converti le flux en binaire
+					BinaryWriter binaryWriter = new BinaryWriter(flux); // converti le flux en binaire
 
 					binaryWriter.Write(Serialise.ObjectToByteArray(data)); // envoie le model sous forme de bytes[]
 				});
