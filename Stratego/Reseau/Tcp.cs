@@ -2,11 +2,12 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Stratego.Core;
 using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau
 {
-	public class TcpConnection
+	public class Tcp
 	{
 		/**
 		 * <summary>Lance l'écoute sur le serveur</summary>
@@ -27,7 +28,7 @@ namespace Stratego.Reseau
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
+				Catcher.LogError(@"Impossible de recevoir un message TCP" + e.Message);
 			}
 
 			return data;
@@ -54,7 +55,7 @@ namespace Stratego.Reseau
 
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
+				Catcher.LogError(@"Impossible d'envoyer un message TCP" + e.Message);
 				return false;
 			}
 		}

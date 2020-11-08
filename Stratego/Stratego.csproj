@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Catcher.cs" />
     <Compile Include="Core\FileGUI.cs" />
     <Compile Include="Fenetres\Form1.cs">
       <SubType>Form</SubType>
@@ -98,8 +99,8 @@
     <Compile Include="Reseau\Protocols\Udp.cs" />
     <Compile Include="Reseau\Reseau.cs" />
     <Compile Include="Reseau\Serialise.cs" />
-    <Compile Include="Reseau\Serveurs\ServeurTcpController.cs" />
-    <Compile Include="Reseau\TcpConnection.cs" />
+    <Compile Include="Reseau\Serveurs\ServerTcpController.cs" />
+    <Compile Include="Reseau\Tcp.cs" />
     <Compile Include="Son.cs" />
     <Compile Include="Theme.cs" />
     <Compile Include="UserControls\Bouton.cs">

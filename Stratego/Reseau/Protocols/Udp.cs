@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Stratego.Core;
 using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Protocols
@@ -39,7 +40,7 @@ namespace Stratego.Reseau.Protocols
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine(@"Impossible d'ouvrir un socket UDP " + e.Message);
+					Catcher.LogError(@"Impossible d'ouvrir un socket UDP " + e.Message);
 				}
 			}
 		}

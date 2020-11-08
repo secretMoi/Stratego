@@ -1,31 +1,37 @@
 ﻿using System;
-using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Stratego.Core;
 using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Clients
 {
-	public class ClientTcpController : TcpConnection
+	public class ClientTcpController : Tcp
 	{
 		private InitModel _initModel;
 		private TcpClient _client;
+
+		public ClientTcpController()
+		{
+			_client = new TcpClient();
+		}
 
 		/**
 		 * <summary>Se connecte à un serveur</summary>
 		 * <param name="serveur">Informations du serveur auquel se connecter</param>
 		 */
-		public async Task ConnectAsync(InitModel serveur)
+		public async Task ConnectAsync(IPEndPoint serveur)
 		{
-			_initModel = serveur;
-
 			try
 			{
-				await _client.ConnectAsync(_initModel.Address.Address, _initModel.Address.Port);
+				//todo erreur
+				await _client.ConnectAsync(serveur.Address, serveur.Port);
+				Catcher.LogInfo($@"Connecté au serveur TCP {serveur.Address}:{serveur.Port}");
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
+				Catcher.LogError(e.Message);
 			}
 		}
 

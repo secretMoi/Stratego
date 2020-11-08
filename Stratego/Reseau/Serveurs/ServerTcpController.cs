@@ -2,11 +2,12 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Stratego.Core;
 using Stratego.Reseau.Models;
 
 namespace Stratego.Reseau.Serveurs
 {
-	public class ServeurTcpController : TcpConnection
+	public class ServerTcpController : Tcp
 	{
 		private TcpListener _serveur;
 		private TcpClient _client;
@@ -32,7 +33,7 @@ namespace Stratego.Reseau.Serveurs
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
+				Catcher.LogError(@"Impossible de démarrer le serveur TCP" + e.Message);
 
 				return false;
 			}

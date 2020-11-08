@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Timers;
+using Stratego.Core;
 using Stratego.Reseau.Models;
 using Stratego.Reseau.Protocols;
 
@@ -32,12 +34,12 @@ namespace Stratego.Reseau
 
 				if (value)
 				{
-					Console.WriteLine(@"Server is ON");
+					Catcher.LogInfo(@"Server is ON");
 				}
 				else
 				{
 					_udp?.Connection.Close();
-					Console.WriteLine(@"Server is OFF");
+					Catcher.LogInfo(@"Server is OFF");
 				}
 			}
 		}
@@ -61,15 +63,15 @@ namespace Stratego.Reseau
 					clientData = await _udp.Connection.ReceiveAsync();
 					var clientRequest = Serialise.ByteArrayToObject<InitModel>(clientData.Buffer);
 
-					Console.WriteLine(
-						$@"Received {clientRequest.MachineName} from {clientRequest.Address.Address}:{clientRequest.Address.Port}");
+					Catcher.LogInfo(
+						$@"Received {clientRequest.MachineName} from {clientRequest.Address.Address}:{clientRequest.Address.Port}"
+					);
 
-					//await RespondAsync(clientRequest.Address);
 					callback?.Invoke(clientRequest);
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine(@"Impossible de recevoir des données UDP " + e.Message);
+					Catcher.LogError(@"Impossible de recevoir des données UDP " + e.Message);
 				}
 			}
 		}
