@@ -20,6 +20,10 @@ namespace Stratego.Reseau.Protocols
 			Token = Reseau.CreateToken();
 		}
 
+		/**
+		 * <summary>Ouvre un port à partir d'un port de base</summary>
+		 * <param name="startPort">Numéro du port de base</param>
+		 */
 		private void OpenPort(int startPort)
 		{
 			int tentatives = -1;
@@ -40,6 +44,11 @@ namespace Stratego.Reseau.Protocols
 			}
 		}
 
+		/**
+		 * <summary>Envoie un message en UDP</summary>
+		 * <param name="model">Données à envoyer, implémentant <see cref="IModelReseau"/></param>
+		 * <param name="destination"><see cref="IPEndPoint"/> Données sur la destination des données (IP et port)</param>
+		 */
 		public async Task SendAsync(IModelReseau model, IPEndPoint destination)
 		{
 			byte[] data = Serialise.ObjectToByteArray(model);

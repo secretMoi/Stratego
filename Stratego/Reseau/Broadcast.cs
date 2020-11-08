@@ -47,6 +47,10 @@ namespace Stratego.Reseau
 			_udp = udp;
 		}
 
+		/**
+		 * <summary>Démarrve un serveur recevant des messages broadcastés</summary>
+		 * <param name="callback">Fonction à appeler lorsque le serveur recoit un message</param>
+		 */
 		public async Task ReceiveBroadCastAsync(Action<InitModel> callback = null)
 		{
 			while (ServerState)
@@ -70,6 +74,11 @@ namespace Stratego.Reseau
 			}
 		}
 
+		/**
+		 * <summary>Lance un message de broadcast sur le réseau local</summary>
+		 * <param name="model">Données à envoyer dans le message, implémente <see cref="IModelReseau"/></param>
+		 * <param name="destinationPort">Port de destination des données</param>
+		 */
 		public void LaunchBroadcast(IModelReseau model, int destinationPort)
 		{
 			_data = model;
@@ -83,12 +92,18 @@ namespace Stratego.Reseau
 			_timer.Enabled = true;
 		}
 
+		/**
+		 * <summary>Envoie un message broadcasté</summary>
+		 */
 		public async void BroadcastAsync(object source, ElapsedEventArgs e)
 		{
 			await _udp.SendAsync(_data, new IPEndPoint(IPAddress.Broadcast, _destinationPort));
 
 		}
 
+		/**
+		 * <summary>Termine et ferme les connexions utilisées lors du broadcast</summary>
+		 */
 		public void EndBroadcast()
 		{
 			_timer.Enabled = false;
