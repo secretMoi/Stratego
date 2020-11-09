@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading;
 using System.Windows.Forms;
 using Stratego.Reseau;
 using Stratego.Reseau.Clients;
@@ -28,15 +27,7 @@ namespace Stratego.Fenetres
 
 		private void Hobby_Load(object sender, EventArgs e)
 		{
-			/*bool res = await serverTcp.ListenAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 35000));
-			if (!res)
-			{
-				MessageBox.Show(@"Impossible de démarrer le serveur TCP");
-			}
-			else
-			{
-				var t = await serverTcp.ReceiveAsync<InitModel>();
-			}*/
+			
 		}
 
 		public void AddItem(InitModel result)
@@ -77,16 +68,7 @@ namespace Stratego.Fenetres
 				return;
 			}
 
-			// ferme les connexions udp
-			//serveurBroadcast.State = false;
 
-			// ferme le serveur
-			//serverTcp.Close();
-
-			// on est le client vu qu'on va demander au serveur (joueur2) de se connecter
-			/*ClientTcpController client = new ClientTcpController();
-			await client.ConnectAsync(joueur2);
-			await client.SendAsync(joueur2);*/
 		}
 
 		private async void buttonServer_Click(object sender, EventArgs e)
@@ -131,7 +113,6 @@ namespace Stratego.Fenetres
 			broadcast.EndBroadcast(); // ferme les req broadcast
 
 			// démarre le client tcp
-			
 			ClientTcpController client = new ClientTcpController();
 			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
 			await client.SendAsync(model);
