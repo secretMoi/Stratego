@@ -25,20 +25,12 @@ namespace Stratego.Fenetres
 			listBoxServersList.DisplayMember = "MachineName";
 		}
 
-		private void Hobby_Load(object sender, EventArgs e)
-		{
-			
-		}
-
 		public void AddItem(InitModel result)
 		{
 			if (_tokensDiscovered.Contains(result.Token)) return;
 
 			_tokensDiscovered.Add(result.Token);
 			listBoxServersList.Items.Add(result);
-
-			// stop le broadcasting lorsque le serveur répond
-			_clientBroadcastServer.ServerState = false;
 		}
 
 		private void Hobby_FormClosing(object sender, FormClosingEventArgs e)
@@ -58,7 +50,7 @@ namespace Stratego.Fenetres
 
 		}
 
-		private void buttonConnect_Click(object sender, EventArgs e)
+		private async void buttonConnect_Click(object sender, EventArgs e)
 		{
 			InitModel joueur2 = listBoxServersList.SelectedItem as InitModel;
 
@@ -68,7 +60,12 @@ namespace Stratego.Fenetres
 				return;
 			}
 
+			_clientBroadcastServer.EndBroadcast(); // ferme les req broadcast
 
+			// démarre le client tcp
+			ClientTcpController client = new ClientTcpController();
+			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
+			await client.SendAsync(GetInitModel(_clientBroadcastServer.Udp.Token));
 		}
 
 		private async void buttonServer_Click(object sender, EventArgs e)
@@ -99,23 +96,23 @@ namespace Stratego.Fenetres
 			_clientBroadcastServer = new Broadcast(new Udp(32530));
 
 			Udp udp = new Udp(32430);
-			Broadcast broadcast = new Broadcast(udp);
-			InitModel model = new InitModel // données du client
-			{
-				Address = new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32530),
-				MachineName = Environment.MachineName,
-				Token = udp.Token
-			};
-			broadcast.LaunchBroadcast(model, 32430); // lance le broadcast sur les serveurs
+			var model = GetInitModel(udp.Token);
+
+			_clientBroadcastServer.LaunchBroadcast(model, 32430); // lance le broadcast sur les serveurs
 
 			await _clientBroadcastServer.ReceiveBroadCastAsync(AddItem); // écoute les réponses
 
-			broadcast.EndBroadcast(); // ferme les req broadcast
+			
+		}
 
-			// démarre le client tcp
-			ClientTcpController client = new ClientTcpController();
-			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
-			await client.SendAsync(model);
+		private InitModel GetInitModel(string token)
+		{
+			return new InitModel // données du client
+			{
+				Address = new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32530),
+				MachineName = Environment.MachineName,
+				Token = token
+			};
 		}
 	}
 }

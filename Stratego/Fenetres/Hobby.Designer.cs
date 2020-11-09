@@ -90,7 +90,6 @@
 			this.Name = "Hobby";
 			this.Text = "Hobby";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Hobby_FormClosing);
-			this.Load += new System.EventHandler(this.Hobby_Load);
 			this.ResumeLayout(false);
 
 		}
