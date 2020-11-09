@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Windows.Forms;
+using Stratego.Models;
 using Stratego.Reseau;
 using Stratego.Reseau.Clients;
 using Stratego.Reseau.Models;
@@ -66,6 +67,8 @@ namespace Stratego.Fenetres
 			ClientTcpController client = new ClientTcpController();
 			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
 			await client.SendAsync(GetInitModel(_clientBroadcastServer.Udp.Token));
+
+			PassConnectionToForm(client, GetInitModel(_clientBroadcastServer.Udp.Token));
 		}
 
 		private async void buttonServer_Click(object sender, EventArgs e)
@@ -81,6 +84,8 @@ namespace Stratego.Fenetres
 			else
 			{
 				var t = await serverTcp.ReceiveAsync<InitModel>();
+
+				PassConnectionToForm(serverTcp, t);
 			}
 		}
 
@@ -101,8 +106,6 @@ namespace Stratego.Fenetres
 			_clientBroadcastServer.LaunchBroadcast(model, 32430); // lance le broadcast sur les serveurs
 
 			await _clientBroadcastServer.ReceiveBroadCastAsync(AddItem); // écoute les réponses
-
-			
 		}
 
 		private InitModel GetInitModel(string token)
@@ -113,6 +116,14 @@ namespace Stratego.Fenetres
 				MachineName = Environment.MachineName,
 				Token = token
 			};
+		}
+
+		private void PassConnectionToForm<T>(T connection, InitModel model) where T : Tcp
+		{
+			HobbyToFormModel<T>.TcpConnection = connection;
+			HobbyToFormModel<T>.InitModel = model;
+
+			Form1.Form.SetConnection(serverTcp);
 		}
 	}
 }

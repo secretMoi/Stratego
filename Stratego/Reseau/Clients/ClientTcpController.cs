@@ -4,12 +4,12 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Stratego.Core;
 using Stratego.Reseau.Models;
+using Stratego.Reseau.Protocols;
 
 namespace Stratego.Reseau.Clients
 {
 	public class ClientTcpController : Tcp
 	{
-		private InitModel _initModel;
 		private readonly TcpClient _client;
 		private NetworkStream _flux;
 

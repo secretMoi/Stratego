@@ -34,8 +34,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.menuProgramme = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Sauvegarder = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,8 +42,6 @@
 			this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
 			this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttonRemplir = new Stratego.UserControls.Bouton();
-			this.checkBoxServer = new System.Windows.Forms.CheckBox();
-			this.checkBoxClient = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -88,27 +84,6 @@
 			this.richTextBox1.Size = new System.Drawing.Size(432, 546);
 			this.richTextBox1.TabIndex = 5;
 			this.richTextBox1.Text = "";
-			// 
-			// button1
-			// 
-			this.button1.Enabled = false;
-			this.button1.Location = new System.Drawing.Point(1028, 716);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(113, 20);
-			this.button1.TabIndex = 6;
-			this.button1.Text = "Client";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Visible = false;
-			// 
-			// button2
-			// 
-			this.button2.Location = new System.Drawing.Point(1028, 750);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(113, 20);
-			this.button2.TabIndex = 7;
-			this.button2.Text = "Serveur";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Visible = false;
 			// 
 			// menuStrip1
 			// 
@@ -183,39 +158,13 @@
 			this.buttonRemplir.UseVisualStyleBackColor = false;
 			this.buttonRemplir.Click += new System.EventHandler(this.buttonRemplir_Click_1);
 			// 
-			// checkBoxServer
-			// 
-			this.checkBoxServer.AutoSize = true;
-			this.checkBoxServer.Location = new System.Drawing.Point(798, 678);
-			this.checkBoxServer.Name = "checkBoxServer";
-			this.checkBoxServer.Size = new System.Drawing.Size(63, 17);
-			this.checkBoxServer.TabIndex = 11;
-			this.checkBoxServer.Text = "Serveur";
-			this.checkBoxServer.UseVisualStyleBackColor = true;
-			this.checkBoxServer.CheckedChanged += new System.EventHandler(this.checkBoxServer_CheckedChanged);
-			// 
-			// checkBoxClient
-			// 
-			this.checkBoxClient.AutoSize = true;
-			this.checkBoxClient.Location = new System.Drawing.Point(949, 668);
-			this.checkBoxClient.Name = "checkBoxClient";
-			this.checkBoxClient.Size = new System.Drawing.Size(52, 17);
-			this.checkBoxClient.TabIndex = 12;
-			this.checkBoxClient.Text = "Client";
-			this.checkBoxClient.UseVisualStyleBackColor = true;
-			this.checkBoxClient.CheckedChanged += new System.EventHandler(this.checkBoxClient_CheckedChanged);
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.ClientSize = new System.Drawing.Size(1145, 813);
-			this.Controls.Add(this.checkBoxClient);
-			this.Controls.Add(this.checkBoxServer);
 			this.Controls.Add(this.buttonRemplir);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -241,8 +190,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem quitterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Sauvegarder;
@@ -251,7 +198,5 @@
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
 		private UserControls.Bouton buttonRemplir;
 		private System.Windows.Forms.ToolStripMenuItem menuProgramme_Hobby;
-		private System.Windows.Forms.CheckBox checkBoxServer;
-		private System.Windows.Forms.CheckBox checkBoxClient;
 	}
 }

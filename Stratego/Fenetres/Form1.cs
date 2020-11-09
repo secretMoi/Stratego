@@ -5,6 +5,8 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using Stratego.Models;
+using Stratego.Reseau.Protocols;
 using Stratego.UserControls;
 
 //todo fin de partie si aucune pièce ne peut bouger
@@ -16,6 +18,7 @@ namespace Stratego.Fenetres
 		private Point positionOrigine; // position de départ de la pièce déplacée
 		private bool sonActive;
 		private MusiqueFond musiqueFond;
+		public static Form1 Form;
 
 		//private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
 
@@ -30,6 +33,8 @@ namespace Stratego.Fenetres
 			sonActive = Convert.ToBoolean(partieActuelle.Option.GetOption("EtatSon"));
 
 			MusiqueFond();
+
+			Form = this;
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -258,22 +263,12 @@ namespace Stratego.Fenetres
 			}
 		}
 
-		private async void checkBoxServer_CheckedChanged(object sender, EventArgs e)
+		public void SetConnection<T>(T connection) where T : Tcp
 		{
-			/*serveurBroadcast.State = checkBoxServer.Checked;
+			var test = HobbyToFormModel<T>.TcpConnection;
+			var test2 = connection;
 
-			if (!checkBoxServer.Checked)
-				return;
-
-			await serveurBroadcast.ReceiveBroadCastAsync();*/
-		}
-
-		private void checkBoxClient_CheckedChanged(object sender, EventArgs e)
-		{
-			/*if (!checkBoxClient.Checked) return;
-
-			ClientBroadcastController clientBroadcast = new ClientBroadcastController();
-			clientBroadcast.LaunchBroadcast();*/
+			DialogBox.Show("Vous êtes maintenant connecté avec l'autre joueur !");
 		}
 	}
 }

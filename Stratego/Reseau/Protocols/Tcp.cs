@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Stratego.Core;
 using Stratego.Reseau.Models;
 
-namespace Stratego.Reseau
+namespace Stratego.Reseau.Protocols
 {
 	public class Tcp
 	{
