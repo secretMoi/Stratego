@@ -11,6 +11,7 @@ namespace Stratego.Reseau.Serveurs
 	{
 		private TcpListener _serveur;
 		private TcpClient _client;
+		private NetworkStream _flux;
 
 		/**
 		 * <summary>Démarre le serveur</summary>
@@ -27,7 +28,10 @@ namespace Stratego.Reseau.Serveurs
 				{
 					_serveur.Start();
 					_client = _serveur.AcceptTcpClient(); // accepte une connexion client
+					_flux = _client.GetStream();
 				});
+
+				Catcher.LogInfo("Serveur TCP démarré");
 
 				return true;
 			}
@@ -46,7 +50,7 @@ namespace Stratego.Reseau.Serveurs
 		 */
 		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
-			return await ReceiveAsync<T>(_client.GetStream());
+			return await ReceiveAsync<T>(_flux, _client.ReceiveBufferSize);
 		}
 
 		/**
@@ -65,7 +69,7 @@ namespace Stratego.Reseau.Serveurs
 		 */
 		public async Task<bool> SendAsync(IModelReseau data)
 		{
-			return await SendAsync(data, _client.GetStream());
+			return await SendAsync(data, _flux);
 		}
 
 

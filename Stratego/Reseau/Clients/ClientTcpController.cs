@@ -10,7 +10,8 @@ namespace Stratego.Reseau.Clients
 	public class ClientTcpController : Tcp
 	{
 		private InitModel _initModel;
-		private TcpClient _client;
+		private readonly TcpClient _client;
+		private NetworkStream _flux;
 
 		public ClientTcpController()
 		{
@@ -21,17 +22,21 @@ namespace Stratego.Reseau.Clients
 		 * <summary>Se connecte à un serveur</summary>
 		 * <param name="serveur">Informations du serveur auquel se connecter</param>
 		 */
-		public async Task ConnectAsync(IPEndPoint serveur)
+		public async Task<bool> ConnectAsync(IPEndPoint serveur)
 		{
 			try
 			{
-				//todo erreur
 				await _client.ConnectAsync(serveur.Address, serveur.Port);
+				_flux = _client.GetStream();
 				Catcher.LogInfo($@"Connecté au serveur TCP {serveur.Address}:{serveur.Port}");
+
+				return true;
 			}
 			catch (Exception e)
 			{
-				Catcher.LogError(e.Message);
+				Catcher.LogError($@"Impossible de se connecter au serveur TCP {e.Message}");
+
+				return false;
 			}
 		}
 
@@ -41,7 +46,7 @@ namespace Stratego.Reseau.Clients
 		 */
 		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
-			return await ReceiveAsync<T>(_client.GetStream());
+			return await ReceiveAsync<T>(_flux, _client.ReceiveBufferSize);
 		}
 
 		/**
@@ -60,7 +65,7 @@ namespace Stratego.Reseau.Clients
 		 */
 		public async Task<bool> SendAsync(IModelReseau data)
 		{
-			return await SendAsync(data, _client.GetStream());
+			return await SendAsync(data, _flux);
 		}
 
 		public void Close()

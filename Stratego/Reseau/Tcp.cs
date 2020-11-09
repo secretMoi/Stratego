@@ -13,7 +13,7 @@ namespace Stratego.Reseau
 		 * <summary>Lance l'écoute sur le serveur</summary>
 		 * <returns>Les données wrappées dans le model T demandé, null si une erreur</returns>
 		 */
-		protected async Task<T> ReceiveAsync<T>(NetworkStream flux) where T : class, IModelReseau
+		protected async Task<T> ReceiveAsync<T>(NetworkStream flux, int bufferSize) where T : class, IModelReseau
 		{
 			T data = null;
 
@@ -21,14 +21,22 @@ namespace Stratego.Reseau
 			{
 				await Task.Run(() =>
 				{
-					BinaryReader binaryReader = new BinaryReader(flux); // converti le flux en binaire
-					data = Serialise.ByteArrayToObject<T>(binaryReader.ReadBytes(int.MaxValue)); // converti les octets en un model demandé
+					Catcher.LogInfo("En attente d'un message...");
+
+					byte[] byteData = new byte[bufferSize];
+
+					// This method blocks until at least one byte is read.
+					flux.Read(byteData, 0, bufferSize);
+
+					Catcher.LogInfo($"Message de longueur {byteData.Length} reçu");
+
+					data = Serialise.ByteArrayToObject<T>(byteData); // converti les octets en un model demandé
 
 				});
 			}
 			catch (Exception e)
 			{
-				Catcher.LogError(@"Impossible de recevoir un message TCP" + e.Message);
+				Catcher.LogError(@"Impossible de recevoir un message TCP : " + e.Message);
 			}
 
 			return data;
@@ -37,6 +45,7 @@ namespace Stratego.Reseau
 		/**
 		 * <summary>Envoie un model au client</summary>
 		 * <param name="data">Model qui implémente <see cref="IModelReseau"/> à envoyer</param>
+		 * <param name="flux">Flux <see cref="NetworkStream"/> à envoyer</param>
 		 * <returns>true si tout s'est bien passé, false sinon</returns>
 		 */
 		protected virtual async Task<bool> SendAsync(IModelReseau data, NetworkStream flux)
@@ -47,7 +56,11 @@ namespace Stratego.Reseau
 				{
 					BinaryWriter binaryWriter = new BinaryWriter(flux); // converti le flux en binaire
 
-					binaryWriter.Write(Serialise.ObjectToByteArray(data)); // envoie le model sous forme de bytes[]
+					byte[] byteData = Serialise.ObjectToByteArray(data);
+
+					binaryWriter.Write(byteData); // envoie le model sous forme de bytes[]
+
+					Catcher.LogInfo($"Message de longueur {byteData.Length} envoyé");
 				});
 
 				return true;

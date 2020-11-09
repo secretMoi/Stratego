@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 using Stratego.Reseau;
 using Stratego.Reseau.Clients;
@@ -130,8 +131,10 @@ namespace Stratego.Fenetres
 			broadcast.EndBroadcast(); // ferme les req broadcast
 
 			// démarre le client tcp
+			
 			ClientTcpController client = new ClientTcpController();
 			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
+			await client.SendAsync(model);
 		}
 	}
 }
