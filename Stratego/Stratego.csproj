@@ -73,6 +73,8 @@
     <Compile Include="Map.cs" />
     <Compile Include="MenuContextuel.cs" />
     <Compile Include="Models\HobbyToFormModel.cs" />
+    <Compile Include="Models\TcpConnection.cs" />
+    <Compile Include="Models\TurnModel.cs" />
     <Compile Include="MusiqueFond.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="PartieActuelle.cs" />

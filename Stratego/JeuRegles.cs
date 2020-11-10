@@ -17,12 +17,17 @@ namespace Stratego
 		private int idDragged; // id de l'élément sélectionné par la souris
 		private bool drag; // si on est en train de déplacer un élément
 		private bool partieEnCours;
-		private readonly List<Rectangle> positionPieces; // liste des positions des pièces
-		private readonly Dictionary<String, int> listePieces; // liste dse pièces du fichier XML
+		private List<Rectangle> positionPieces; // liste des positions des pièces
+		private Dictionary<String, int> listePieces; // liste dse pièces du fichier XML
 		private bool tourActuel = Personnage.Bleu; // indique quelle équipe joue actuellement
 		private readonly Bitmap imagePieceAdverse;
 		private readonly Bitmap imagePieceAlliee;
 		private bool cheatMode = false;
+
+		public Action ChangeTurnCallback { get; set; }
+		public bool TourActuel => tourActuel;
+
+		public List<Rectangle> PositionPieces { get; set; }
 		
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
@@ -82,13 +87,6 @@ namespace Stratego
 		
 		// Vérifie qu'une classe existe
 		private bool ClasseExiste(string typeName) {
-			/*foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
-				foreach (Type type in assembly.GetTypes()) {
-					if (type.Name == typeName)
-						return true;
-				}
-			}*/
-
 			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Any(type => type.Name == typeName);
 		}
 
@@ -105,6 +103,8 @@ namespace Stratego
 		private void ChangeTour()
 		{
 			tourActuel = !tourActuel;
+
+			ChangeTurnCallback?.Invoke();
 		}
 
 		private static void GenereHistoriqueDialogue(RichTextBox richTextBox, Personnage attaquant, Personnage defenseur, int resultat)
@@ -359,7 +359,11 @@ namespace Stratego
 			}
 		}
 
-		public Dictionary<string, int> ListePieces => listePieces;
+		public Dictionary<string, int> ListePieces
+		{
+			get => listePieces;
+			set => listePieces = value;
+		}
 
 		public Map Map
 		{

@@ -5,8 +5,13 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using Stratego.Core;
 using Stratego.Models;
+using Stratego.Personnages;
+using Stratego.Reseau.Clients;
+using Stratego.Reseau.Models;
 using Stratego.Reseau.Protocols;
+using Stratego.Reseau.Serveurs;
 using Stratego.UserControls;
 
 //todo fin de partie si aucune pièce ne peut bouger
@@ -19,8 +24,7 @@ namespace Stratego.Fenetres
 		private bool sonActive;
 		private MusiqueFond musiqueFond;
 		public static Form1 Form;
-
-		//private readonly ServeurBroadcastController serveurBroadcast = new ServeurBroadcastController();
+		private TcpConnection _tcpConnexion;
 
 		public Form1()
 		{
@@ -161,9 +165,17 @@ namespace Stratego.Fenetres
 
 		private void pictureBox1_Paint(object sender, PaintEventArgs e)
 		{
-			e.Graphics.DrawImage(partieActuelle.Jeu.Map.Fond, partieActuelle.AireJeu.Rect); // repeint la grille
+			try
+			{
+				e.Graphics.DrawImage(partieActuelle.Jeu.Map.Fond, partieActuelle.AireJeu.Rect); // repeint la grille
 
-			partieActuelle.Jeu.DessinePieces(e.Graphics);
+				partieActuelle.Jeu.DessinePieces(e.Graphics);
+			}
+			catch (Exception exception)
+			{
+				Catcher.LogError(exception.Message);
+			}
+			
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -266,9 +278,62 @@ namespace Stratego.Fenetres
 		public void SetConnection<T>(T connection) where T : Tcp
 		{
 			var test = HobbyToFormModel<T>.TcpConnection;
+			if (HobbyToFormModel<T>.TcpConnection is ServerTcpController)
+				_tcpConnexion = new TcpConnection
+				{
+					Server = HobbyToFormModel<T>.TcpConnection as ServerTcpController,
+					Type = TcpConnection.TcpType.Server
+				};
+			else if(HobbyToFormModel<T>.TcpConnection is ClientTcpController)
+			{
+				_tcpConnexion = new TcpConnection
+				{
+					Client = HobbyToFormModel<T>.TcpConnection as ClientTcpController,
+					Type = TcpConnection.TcpType.Client
+				};
+			}
+			else
+			{
+				DialogBox.Show("Erreur lors de la communication entre les joueurs.");
+				return;
+			}
 			var test2 = connection;
 
 			DialogBox.Show("Vous êtes maintenant connecté avec l'autre joueur !");
+
+			partieActuelle.Jeu.ChangeTurnCallback = ChangeTurn;
+		}
+
+		/**
+		 * <summary>Méthode à appeler à chaque changement de tour</summary>
+		 */
+		public async void ChangeTurn()
+		{
+			TurnModel model = new TurnModel
+			{
+				Map = partieActuelle.Jeu.Map,
+				ListePieces = partieActuelle.Jeu.ListePieces,
+				PositionPieces = partieActuelle.Jeu.PositionPieces
+			};
+
+			if (_tcpConnexion.Server != null) // si on est le serveur
+			{
+				await _tcpConnexion.Server.SendAsync(partieActuelle);
+				await _tcpConnexion.Server.ReceiveCallbackAsync<TurnModel>(ReceiveTurn);
+			}
+			else
+			{
+				await _tcpConnexion.Client.SendAsync(partieActuelle);
+				await _tcpConnexion.Client.ReceiveCallbackAsync<TurnModel>(ReceiveTurn);
+			}
+		}
+
+		private void ReceiveTurn(TurnModel model)
+		{
+			partieActuelle.Jeu.Map = model.Map;
+			partieActuelle.Jeu.ListePieces = model.ListePieces;
+			partieActuelle.Jeu.PositionPieces = model.PositionPieces;
+			//partieActuelle = model;
 		}
 	}
 }

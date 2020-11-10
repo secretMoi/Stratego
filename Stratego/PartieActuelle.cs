@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using Stratego.Reseau.Models;
 
 namespace Stratego
 {
     [Serializable]
-    public class PartieActuelle : ISerializable
+    public class PartieActuelle : ISerializable, IModelReseau
     {
         private Rectangle aireJeu;
         private JeuRegles jeu;

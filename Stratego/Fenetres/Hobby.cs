@@ -123,7 +123,7 @@ namespace Stratego.Fenetres
 			HobbyToFormModel<T>.TcpConnection = connection;
 			HobbyToFormModel<T>.InitModel = model;
 
-			Form1.Form.SetConnection(serverTcp);
+			Form1.Form.SetConnection(connection);
 		}
 	}
 }
