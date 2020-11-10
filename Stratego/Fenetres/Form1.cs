@@ -275,7 +275,7 @@ namespace Stratego.Fenetres
 			}
 		}
 
-		public void SetConnection<T>(T connection) where T : Tcp
+		public async void SetConnection<T>(T connection) where T : Tcp
 		{
 			var test = HobbyToFormModel<T>.TcpConnection;
 			if (HobbyToFormModel<T>.TcpConnection is ServerTcpController)
@@ -301,6 +301,11 @@ namespace Stratego.Fenetres
 
 			DialogBox.Show("Vous êtes maintenant connecté avec l'autre joueur !");
 
+			if (_tcpConnexion.Server != null) // si on est le serveur
+			{
+				await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+			}
+
 			partieActuelle.Jeu.ChangeTurnCallback = ChangeTurn;
 		}
 
@@ -319,21 +324,28 @@ namespace Stratego.Fenetres
 			if (_tcpConnexion.Server != null) // si on est le serveur
 			{
 				await _tcpConnexion.Server.SendAsync(partieActuelle);
-				await _tcpConnexion.Server.ReceiveCallbackAsync<TurnModel>(ReceiveTurn);
+				await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
 			}
 			else
 			{
 				await _tcpConnexion.Client.SendAsync(partieActuelle);
-				await _tcpConnexion.Client.ReceiveCallbackAsync<TurnModel>(ReceiveTurn);
+				await _tcpConnexion.Client.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
 			}
+
+			pictureBox1.Invalidate();
 		}
 
-		private void ReceiveTurn(TurnModel model)
+		private void ReceiveTurn(PartieActuelle model)
 		{
-			partieActuelle.Jeu.Map = model.Map;
+			/*partieActuelle.Jeu.Map = model.Map;
 			partieActuelle.Jeu.ListePieces = model.ListePieces;
-			partieActuelle.Jeu.PositionPieces = model.PositionPieces;
-			//partieActuelle = model;
+			partieActuelle.Jeu.PositionPieces = model.PositionPieces;*/
+			if (model == null)
+			{
+				DialogBox.Show("Erreur lors de la communication");
+				return;
+			}
+			partieActuelle = model;
 		}
 	}
 }

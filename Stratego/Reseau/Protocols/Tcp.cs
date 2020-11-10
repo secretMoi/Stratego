@@ -13,7 +13,7 @@ namespace Stratego.Reseau.Protocols
 		 * <summary>Lance l'écoute sur le serveur</summary>
 		 * <returns>Les données wrappées dans le model T demandé, null si une erreur</returns>
 		 */
-		protected async Task<T> ReceiveAsync<T>(NetworkStream flux, int bufferSize) where T : class, IModelReseau
+		protected async Task<T> ReceiveAsync<T>(NetworkStream flux) where T : class, IModelReseau
 		{
 			T data = null;
 
@@ -23,12 +23,15 @@ namespace Stratego.Reseau.Protocols
 				{
 					Catcher.LogInfo("En attente d'un message...");
 
-					byte[] byteData = new byte[bufferSize];
+					// lit le premier message, contenant la longueur du second
+					byte[] lengthData = new byte[4];
+					flux.Read(lengthData, 0, 4); // This method blocks until at least one byte is read.
+					int length = BitConverter.ToInt32(lengthData, 0);
+					Catcher.LogInfo($"Message de longueur {length} attendu");
 
-					// This method blocks until at least one byte is read.
-					flux.Read(byteData, 0, bufferSize);
-
-					Catcher.LogInfo($"Message de longueur {byteData.Length} reçu");
+					byte[] byteData = new byte[length];
+					flux.Read(lengthData, 0, length); // This method blocks until at least one byte is read.
+					Catcher.LogInfo($"Message de longueur {byteData.Length} attendu");
 
 					data = Serialise.ByteArrayToObject<T>(byteData); // converti les octets en un model demandé
 
@@ -58,6 +61,8 @@ namespace Stratego.Reseau.Protocols
 
 					byte[] byteData = Serialise.ObjectToByteArray(data);
 
+					Send(binaryWriter, BitConverter.GetBytes(byteData.Length));
+
 					binaryWriter.Write(byteData); // envoie le model sous forme de bytes[]
 
 					Catcher.LogInfo($"Message de longueur {byteData.Length} envoyé");
@@ -70,6 +75,18 @@ namespace Stratego.Reseau.Protocols
 			{
 				Catcher.LogError(@"Impossible d'envoyer un message TCP" + e.Message);
 				return false;
+			}
+		}
+
+		protected void Send(BinaryWriter sender, byte[] data)
+		{
+			try
+			{
+				sender.Write(data);
+			}
+			catch (Exception e)
+			{
+				Catcher.LogError($"Impossible d'envoyer le message le message TCP de longueur {data.Length} : " + e.Message);
 			}
 		}
 	}

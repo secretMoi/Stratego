@@ -124,6 +124,7 @@ namespace Stratego.Fenetres
 			HobbyToFormModel<T>.InitModel = model;
 
 			Form1.Form.SetConnection(connection);
+			Close();
 		}
 	}
 }

@@ -47,6 +47,7 @@ namespace Stratego.Reseau.Clients
 		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
 			return await ReceiveAsync<T>(_flux, _client.ReceiveBufferSize);
+			//return await ReceiveAsync<T>(_flux, 1024*1024*32);
 		}
 
 		/**
