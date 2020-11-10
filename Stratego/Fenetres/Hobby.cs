@@ -66,7 +66,7 @@ namespace Stratego.Fenetres
 			// démarre le client tcp
 			ClientTcpController client = new ClientTcpController();
 			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
-			await client.SendAsync(GetInitModel(_clientBroadcastServer.Udp.Token));
+			//await client.SendAsync(GetInitModel(_clientBroadcastServer.Udp.Token));
 
 			PassConnectionToForm(client, GetInitModel(_clientBroadcastServer.Udp.Token));
 		}
@@ -83,9 +83,9 @@ namespace Stratego.Fenetres
 			}
 			else
 			{
-				var t = await serverTcp.ReceiveAsync<InitModel>();
+				//var t = await serverTcp.ReceiveAsync<InitModel>();
 
-				PassConnectionToForm(serverTcp, t);
+				PassConnectionToForm(serverTcp, null);
 			}
 		}
 

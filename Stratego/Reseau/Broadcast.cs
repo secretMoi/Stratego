@@ -33,12 +33,12 @@ namespace Stratego.Reseau
 
 				if (value)
 				{
-					Catcher.LogInfo(@"Server is ON");
+					Catcher.LogInfo(@"Server UDP turned ON");
 				}
 				else
 				{
 					_udp?.Connection.Close();
-					Catcher.LogInfo(@"Server is OFF");
+					Catcher.LogInfo(@"Server UDP turned OFF");
 				}
 			}
 		}
@@ -63,7 +63,7 @@ namespace Stratego.Reseau
 					var clientRequest = Serialise.ByteArrayToObject<InitModel>(clientData.Buffer);
 
 					Catcher.LogInfo(
-						$@"Received {clientRequest.MachineName} from {clientRequest.Address.Address}:{clientRequest.Address.Port}"
+						$@"Received in UDP {clientRequest.MachineName} from {clientRequest.Address.Address}:{clientRequest.Address.Port}"
 					);
 
 					callback?.Invoke(clientRequest);
@@ -99,7 +99,6 @@ namespace Stratego.Reseau
 		public async void BroadcastAsync(object source, ElapsedEventArgs e)
 		{
 			await _udp.SendAsync(_data, new IPEndPoint(IPAddress.Broadcast, _destinationPort));
-
 		}
 
 		/**

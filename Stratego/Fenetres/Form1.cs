@@ -4,12 +4,11 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Stratego.Core;
 using Stratego.Models;
-using Stratego.Personnages;
 using Stratego.Reseau.Clients;
-using Stratego.Reseau.Models;
 using Stratego.Reseau.Protocols;
 using Stratego.Reseau.Serveurs;
 using Stratego.UserControls;
@@ -25,6 +24,7 @@ namespace Stratego.Fenetres
 		private MusiqueFond musiqueFond;
 		public static Form1 Form;
 		private TcpConnection _tcpConnexion;
+		private bool paint = true;
 
 		public Form1()
 		{
@@ -165,6 +165,8 @@ namespace Stratego.Fenetres
 
 		private void pictureBox1_Paint(object sender, PaintEventArgs e)
 		{
+			if(!paint) return;
+
 			try
 			{
 				e.Graphics.DrawImage(partieActuelle.Jeu.Map.Fond, partieActuelle.AireJeu.Rect); // repeint la grille
@@ -301,12 +303,26 @@ namespace Stratego.Fenetres
 
 			DialogBox.Show("Vous êtes maintenant connecté avec l'autre joueur !");
 
+			partieActuelle.Jeu.ChangeTurnCallback = ChangeTurn;
+
 			if (_tcpConnexion.Server != null) // si on est le serveur
 			{
-				await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+				await WaitDataServer();
 			}
+		}
 
-			partieActuelle.Jeu.ChangeTurnCallback = ChangeTurn;
+		private async Task WaitDataServer()
+		{
+			paint = false;
+			await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+			paint = true;
+		}
+
+		private async Task WaitDataClient()
+		{
+			paint = false;
+			await _tcpConnexion.Client.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+			paint = true;
 		}
 
 		/**
@@ -324,12 +340,14 @@ namespace Stratego.Fenetres
 			if (_tcpConnexion.Server != null) // si on est le serveur
 			{
 				await _tcpConnexion.Server.SendAsync(partieActuelle);
-				await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+				//await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+				await WaitDataServer();
 			}
 			else
 			{
 				await _tcpConnexion.Client.SendAsync(partieActuelle);
-				await _tcpConnexion.Client.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+				//await _tcpConnexion.Client.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
+				await WaitDataClient();
 			}
 
 			pictureBox1.Invalidate();
@@ -345,6 +363,7 @@ namespace Stratego.Fenetres
 				DialogBox.Show("Erreur lors de la communication");
 				return;
 			}
+
 			partieActuelle = model;
 		}
 	}
