@@ -332,21 +332,18 @@ namespace Stratego.Fenetres
 		{
 			TurnModel model = new TurnModel
 			{
-				Map = partieActuelle.Jeu.Map,
-				ListePieces = partieActuelle.Jeu.ListePieces,
+				Grille = partieActuelle.Jeu.Map.Grille,
 				PositionPieces = partieActuelle.Jeu.PositionPieces
 			};
 
 			if (_tcpConnexion.Server != null) // si on est le serveur
 			{
 				await _tcpConnexion.Server.SendAsync(partieActuelle);
-				//await _tcpConnexion.Server.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
 				await WaitDataServer();
 			}
 			else
 			{
 				await _tcpConnexion.Client.SendAsync(partieActuelle);
-				//await _tcpConnexion.Client.ReceiveCallbackAsync<PartieActuelle>(ReceiveTurn);
 				await WaitDataClient();
 			}
 
@@ -364,7 +361,11 @@ namespace Stratego.Fenetres
 				return;
 			}
 
+			paint = false;
+			/*partieActuelle.Jeu.Map.Grille = model.Grille;
+			partieActuelle.Jeu.PositionPieces = model.PositionPieces;*/
 			partieActuelle = model;
+			paint = true;
 		}
 	}
 }

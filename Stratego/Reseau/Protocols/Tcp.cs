@@ -13,7 +13,7 @@ namespace Stratego.Reseau.Protocols
 		 * <summary>Lance l'écoute sur le serveur</summary>
 		 * <returns>Les données wrappées dans le model T demandé, null si une erreur</returns>
 		 */
-		protected async Task<T> ReceiveAsync<T>(TcpClient tcpClient) where T : class, IModelReseau
+		protected async Task<T> ReceiveAsync<T>(NetworkStream flux) where T : class, IModelReseau
 		{
 			T data = null;
 
@@ -30,27 +30,31 @@ namespace Stratego.Reseau.Protocols
 					Catcher.LogInfo($"Message de longueur {length} attendu");
 
 					byte[] byteData = new byte[length];*/
-					using (NetworkStream flux = tcpClient.GetStream())
+					//using (NetworkStream flux = tcpClient.GetStream())
+					//{
+					byte[] buffer = new byte[1024];
+					using (MemoryStream ms = new MemoryStream())
 					{
-						byte[] buffer = new byte[1024];
-						using (MemoryStream ms = new MemoryStream())
+						int numBytesRead = flux.Read(buffer, 0, buffer.Length);
+						while (flux.DataAvailable || numBytesRead > 0)
 						{
-							int numBytesRead;
-							while ((numBytesRead = flux.Read(buffer, 0, buffer.Length)) > 0)
-							{
-								Catcher.LogInfo($"Réception de {numBytesRead} bytes");
-								ms.Write(buffer, 0, numBytesRead);
-							}
-
-							Catcher.LogInfo(numBytesRead.ToString());
-							data = Serialise.ByteArrayToObject<T>(ms.ToArray()); // converti les octets en un model demandé
-
-							//flux.Read(lengthData, 0, length); // This method blocks until at least one byte is read.
-							Catcher.LogInfo($"Message de longueur {ms.ToArray().Length} reçu");
-
-							//data = Serialise.ByteArrayToObject<T>(byteData); // converti les octets en un model demandé
+							if(numBytesRead == 0)
+								numBytesRead = flux.Read(buffer, 0, buffer.Length);
+							Catcher.LogInfo($"Réception de {numBytesRead} bytes");
+							ms.Write(buffer, 0, numBytesRead);
+							numBytesRead = 0;
 						}
+
+						data = Serialise.MemoryStreamToObject<T>(ms); // converti les octets en un model demandé
+						//data = Serialise.ByteArrayToObject<T>(ms.ToArray()); // converti les octets en un model demandé
+
+						//flux.Read(lengthData, 0, length); // This method blocks until at least one byte is read.
+						Catcher.LogInfo($"Message de longueur {ms.ToArray().Length} reçu");
+
+						//data = Serialise.ByteArrayToObject<T>(byteData); // converti les octets en un model demandé
 					}
+					//}
+
 				});
 			}
 			catch (Exception e)

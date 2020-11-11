@@ -51,7 +51,7 @@ namespace Stratego.Reseau.Serveurs
 		 */
 		public async Task<T> ReceiveAsync<T>() where T : class, IModelReseau
 		{
-			return await ReceiveAsync<T>(_client);
+			return await ReceiveAsync<T>(_flux);
 		}
 
 		/**

@@ -18,7 +18,7 @@ namespace Stratego
 		// nombre de cases
 		public const int CasesX = 10;
 		public const int CasesY = 10;
-		private readonly Personnage[,] grille;
+		private Personnage[,] grille;
 		private readonly List<Point> casesInterdites;
 		
 		// taille de chaque case
@@ -31,6 +31,12 @@ namespace Stratego
 
 		public const bool Pixel = false;
 		public const bool Coord = true;
+
+		public Personnage[,] Grille
+		{
+			get => grille;
+			set => grille = value;
+		}
 
 		public Map(List<Point> casesInterdites)
 		{

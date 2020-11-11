@@ -39,5 +39,17 @@ namespace Stratego.Reseau
 				return obj as T;
 			}
 		}
+
+		public static T MemoryStreamToObject<T>(MemoryStream stream) where T : class, IModelReseau
+		{
+			var binForm = new BinaryFormatter();
+
+			/*stream.Write(arrBytes, 0, arrBytes.Length);*/
+			stream.Seek(0, SeekOrigin.Begin);
+			var obj = binForm.Deserialize(stream);
+
+			return obj as T;
+			
+		}
 	}
 }
