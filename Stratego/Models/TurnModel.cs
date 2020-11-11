@@ -9,20 +9,20 @@ namespace Stratego.Models
 	[Serializable]
 	public class TurnModel : IModelReseau
 	{
-		public List<Rectangle> PositionPieces { get; set; }
-		public Personnage[,] Grille { get; set; }
+		public PartieActuelle PartieActuelle { get; set; }
+		public string BoutonRemplir { get; set; }
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue("Grille", Grille, typeof(Personnage[,]));
-			info.AddValue("PositionPieces", PositionPieces, typeof(List<Rectangle>));
+			info.AddValue("PartieActuelle", PartieActuelle, typeof(PartieActuelle));
+			info.AddValue("BoutonRemplir", BoutonRemplir, typeof(string));
 		}
 
 		// deserialise
 		public TurnModel(SerializationInfo info, StreamingContext context)
 		{
-			Grille = (Personnage[,])info.GetValue("Grille", typeof(Personnage[,]));
-			PositionPieces = (List<Rectangle>)info.GetValue("PositionPieces", typeof(List<Rectangle>));
+			PartieActuelle = (PartieActuelle)info.GetValue("PartieActuelle", typeof(PartieActuelle));
+			BoutonRemplir = (string)info.GetValue("BoutonRemplir", typeof(string));
 		}
 
 		public TurnModel()

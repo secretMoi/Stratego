@@ -21,9 +21,9 @@ namespace Stratego
         // serialise
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Jeu", jeu, typeof(JeuRegles));
+            /*info.AddValue("Jeu", jeu, typeof(JeuRegles));
             info.AddValue("PositionOrigine", positionOrigine, typeof(Point));
-            info.AddValue("PlacementPieces", placementPieces, typeof(bool));
+            info.AddValue("PlacementPieces", placementPieces, typeof(bool));*/
         }
         
         // deserialise

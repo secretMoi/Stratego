@@ -40,7 +40,9 @@ namespace Stratego.Reseau.Protocols
 						{
 							if(numBytesRead == 0)
 								numBytesRead = flux.Read(buffer, 0, buffer.Length);
+
 							Catcher.LogInfo($"Réception de {numBytesRead} bytes");
+
 							ms.Write(buffer, 0, numBytesRead);
 							numBytesRead = 0;
 						}

@@ -100,7 +100,7 @@ namespace Stratego
 			richTextBox.SelectionColor = richTextBox.ForeColor;
 		}
 
-		private void ChangeTour()
+		public void ChangeTour()
 		{
 			tourActuel = !tourActuel;
 
@@ -170,8 +170,8 @@ namespace Stratego
 			positionPieces.Add(new Rectangle(Map.CoordToPx(personnage.Position), personnage.Piece.Dimension)); // position de l'image
 			map.SetPositionPiece(personnage.Position, personnage); // indique à la map ce qu'elle contient
 
-			if (Personnage.GetNombrePieces() % 40 == 0)
-				ChangeTour();
+			/*if (Personnage.GetNombrePieces() % 40 == 0)
+				ChangeTour();*/
 
 			return personnage;
 		}
