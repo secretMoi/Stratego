@@ -34,11 +34,14 @@ namespace Stratego
 
         public int X
         {
-            set { rectangle.X = value; }
+	        get => rectangle.X;
+	        set { rectangle.X = value; }
         }
+
         public int Y
         {
-            set { rectangle.Y = value; }
+	        get => rectangle.Y;
+	        set { rectangle.Y = value; }
         }
 
         public Point Point

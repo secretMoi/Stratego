@@ -142,6 +142,7 @@ namespace Stratego.Personnages
             info.AddValue("Position", position, typeof(Point));
             info.AddValue("Id", id, typeof(int));
             info.AddValue("Puissance", puissance, typeof(int));
+            info.AddValue("NombrePiece", nombrePiece, typeof(int));
             info.AddValue("Type", type, typeof(string));
             info.AddValue("Equipe", equipe, typeof(bool));
         }
@@ -154,6 +155,7 @@ namespace Stratego.Personnages
             position = (Point) info.GetValue("Position", typeof(Point));
             id = (int) info.GetValue("Id", typeof(int));
             puissance = (int) info.GetValue("Puissance", typeof(int));
+            nombrePiece = (int) info.GetValue("NombrePiece", typeof(int));
             type = (string) info.GetValue("Type", typeof(string));
             equipe = (bool) info.GetValue("Equipe", typeof(bool));
         }

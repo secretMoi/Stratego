@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
+using Stratego.Core;
 using Stratego.Personnages;
 using Stratego.UserControls;
 
@@ -26,8 +27,6 @@ namespace Stratego
 
 		public Action ChangeTurnCallback { get; set; }
 		public bool TourActuel => tourActuel;
-
-		public List<Rectangle> PositionPieces { get; set; }
 		
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
