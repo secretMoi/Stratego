@@ -38,7 +38,7 @@ namespace Stratego.Reseau.Serveurs
 			}
 			catch (Exception e)
 			{
-				Catcher.LogError(@"Impossible de démarrer le serveur TCP" + e.Message);
+				Catcher.LogError(@"Impossible de démarrer le serveur TCP " + e.Message);
 
 				return false;
 			}
@@ -76,8 +76,10 @@ namespace Stratego.Reseau.Serveurs
 
 		public void Close()
 		{
-			_client.Close();
-			_serveur.Stop();
+			_client?.GetStream().Close();
+			_client?.Close();
+			_flux?.Close();
+			_serveur?.Stop();
 		}
 	}
 }

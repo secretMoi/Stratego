@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Windows.Forms;
+using Stratego.Core;
 using Stratego.Models;
 using Stratego.Reseau;
 using Stratego.Reseau.Clients;
@@ -66,13 +67,14 @@ namespace Stratego.Fenetres
 			// démarre le client tcp
 			ClientTcpController client = new ClientTcpController();
 			await client.ConnectAsync(new IPEndPoint(Reseau.Reseau.GetLocalIpAddress(), 32430));
-			//await client.SendAsync(GetInitModel(_clientBroadcastServer.Udp.Token));
 
 			PassConnectionToForm(client, GetInitModel(_clientBroadcastServer.Udp.Token));
 		}
 
 		private async void buttonServer_Click(object sender, EventArgs e)
 		{
+			StateButton(false);
+
 			serveurBroadcast = new Broadcast(new Udp(32430));
 			await serveurBroadcast.ReceiveBroadCastAsync(RespondToClient);
 
@@ -80,11 +82,10 @@ namespace Stratego.Fenetres
 			if (!res)
 			{
 				MessageBox.Show(@"Impossible de démarrer le serveur TCP");
+				StateButton(true);
 			}
 			else
 			{
-				//var t = await serverTcp.ReceiveAsync<InitModel>();
-
 				PassConnectionToForm(serverTcp, null);
 			}
 		}
@@ -98,14 +99,25 @@ namespace Stratego.Fenetres
 
 		private async void buttonClient_Click(object sender, EventArgs e)
 		{
-			_clientBroadcastServer = new Broadcast(new Udp(32530));
+			StateButton(false);
 
-			Udp udp = new Udp(32430);
-			var model = GetInitModel(udp.Token);
+			try
+			{
+				_clientBroadcastServer = new Broadcast(new Udp(32530));
 
-			_clientBroadcastServer.LaunchBroadcast(model, 32430); // lance le broadcast sur les serveurs
+				Udp udp = new Udp(32430);
+				var model = GetInitModel(udp.Token);
 
-			await _clientBroadcastServer.ReceiveBroadCastAsync(AddItem); // écoute les réponses
+				_clientBroadcastServer.LaunchBroadcast(model, 32430); // lance le broadcast sur les serveurs
+
+				await _clientBroadcastServer.ReceiveBroadCastAsync(AddItem); // écoute les réponses
+			}
+			catch (Exception exception)
+			{
+				Catcher.LogError(exception.Message);
+				StateButton(true);
+			}
+			
 		}
 
 		private InitModel GetInitModel(string token)
@@ -125,6 +137,12 @@ namespace Stratego.Fenetres
 
 			Form1.Form.SetConnection(connection);
 			Close();
+		}
+
+		private void StateButton(bool state)
+		{
+			buttonServer.Enabled = state;
+			buttonClient.Enabled = state;
 		}
 	}
 }
