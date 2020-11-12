@@ -11,11 +11,15 @@ namespace Stratego.Models
 	{
 		public PartieActuelle PartieActuelle { get; set; }
 		public string BoutonRemplir { get; set; }
+		public bool EtatBoutonRemplir { get; set; }
+		public string Historique { get; set; }
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("PartieActuelle", PartieActuelle, typeof(PartieActuelle));
 			info.AddValue("BoutonRemplir", BoutonRemplir, typeof(string));
+			info.AddValue("EtatBoutonRemplir", EtatBoutonRemplir, typeof(bool));
+			info.AddValue("Historique", Historique, typeof(string));
 		}
 
 		// deserialise
@@ -23,6 +27,8 @@ namespace Stratego.Models
 		{
 			PartieActuelle = (PartieActuelle)info.GetValue("PartieActuelle", typeof(PartieActuelle));
 			BoutonRemplir = (string)info.GetValue("BoutonRemplir", typeof(string));
+			EtatBoutonRemplir = (bool)info.GetValue("EtatBoutonRemplir", typeof(bool));
+			Historique = (string)info.GetValue("Historique", typeof(string));
 		}
 
 		public TurnModel()

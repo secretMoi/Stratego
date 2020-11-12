@@ -26,7 +26,11 @@ namespace Stratego
 		private bool cheatMode = false;
 
 		public Action ChangeTurnCallback { get; set; }
-		public bool TourActuel => tourActuel;
+		public bool TourActuel
+		{
+			get => tourActuel;
+			set => tourActuel = value;
+		}
 		
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
@@ -94,14 +98,15 @@ namespace Stratego
 			richTextBox.SelectionStart = richTextBox.TextLength;
 			richTextBox.SelectionLength = 0;
 
-			richTextBox.SelectionColor = color;
+			//richTextBox.SelectionColor = color;
 			richTextBox.AppendText(texte);
-			richTextBox.SelectionColor = richTextBox.ForeColor;
+			//richTextBox.SelectionColor = richTextBox.ForeColor;
 		}
 
 		public void ChangeTour()
 		{
-			tourActuel = !tourActuel;
+			if(ChangeTurnCallback == null)
+				tourActuel = !tourActuel;
 
 			ChangeTurnCallback?.Invoke();
 		}

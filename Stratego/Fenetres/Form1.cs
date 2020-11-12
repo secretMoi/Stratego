@@ -26,6 +26,7 @@ namespace Stratego.Fenetres
 		public static Form1 Form;
 		private TcpConnection _tcpConnexion;
 		private bool paint = true;
+		private bool tourActif = true;
 
 		public Form1()
 		{
@@ -55,7 +56,6 @@ namespace Stratego.Fenetres
 			string @namespace = GetType().Namespace;
 			string @class = chaine[1];
 
-			// équivalent var typeClasse = Type.GetType(String.Format("{0}.{1}", @namespace, @class));
 			var typeClasse = Type.GetType($"{@namespace}.{@class}"); // trouve la classe
 			if (typeClasse == null) return; // quitte si la classe est introuvable
 			Form fenetre = Activator.CreateInstance(typeClasse) as Form; // instancie un objet
@@ -158,6 +158,12 @@ namespace Stratego.Fenetres
 
 		private void pictureBox1_MouseDown(object sender, MouseEventArgs e) // enfoncement clic souris
 		{
+			if(!tourActif)
+			{
+				DialogBox.Show("Non didju, c'est pas ton tour petit con !");
+				return;
+			}
+
 			partieActuelle.Jeu.PrisePiece(ref positionOrigine, e.Location, partieActuelle.MenuContextuel.PlacementPieces);
 			partieActuelle.MenuContextuel.PositionOrigine = positionOrigine;
 
@@ -208,6 +214,12 @@ namespace Stratego.Fenetres
 
 		private void buttonRemplir_Click_1(object sender, EventArgs e)
 		{
+			if (!tourActif)
+			{
+				DialogBox.Show("Non didju, c'est pas ton tour petit con !");
+				return;
+			}
+
 			Point caseCourante = new Point(0, Map.CasesY - 1); // position de la pièce à placer
 			List<Point> listeCases = new List<Point>(40); // liste les coordonnées des cases disponibles
 			Random positionAleatoire = new Random();
@@ -309,24 +321,46 @@ namespace Stratego.Fenetres
 
 			if (_tcpConnexion.Server != null) // si on est le serveur
 			{
+				partieActuelle.Jeu.TourActuel = Personnage.Rouge;
 				await WaitDataServer();
 				partieActuelle.MenuContextuel = new MenuContextuel(pictureBox1);
 				partieActuelle.MenuContextuel.GenereMenu(partieActuelle.Jeu);
+			}
+			else
+			{
+				partieActuelle.Jeu.TourActuel = Personnage.Bleu;
+				boutonTour.Text = @"A vous de jouer";
 			}
 		}
 
 		private async Task WaitDataServer()
 		{
-			paint = false;
+			tourActif = false;
+
+			boutonTour.Text = @"Tour de l'adversaire...";
+
 			await _tcpConnexion.Server.ReceiveCallbackAsync<TurnModel>(ReceiveTurn);
-			paint = true;
+			partieActuelle.Jeu.ChangeTurnCallback = ChangeTurn;
+			partieActuelle.Jeu.TourActuel = Personnage.Rouge;
+
+			boutonTour.Text = @"A vous de jouer";
+
+			tourActif = true;
 		}
 
 		private async Task WaitDataClient()
 		{
-			paint = false;
+			tourActif = false;
+
+			boutonTour.Text = @"Tour de l'adversaire...";
+
 			await _tcpConnexion.Client.ReceiveCallbackAsync<TurnModel>(ReceiveTurn);
-			paint = true;
+			partieActuelle.Jeu.ChangeTurnCallback = ChangeTurn;
+			partieActuelle.Jeu.TourActuel = Personnage.Bleu;
+
+			boutonTour.Text = @"A vous de jouer";
+
+			tourActif = true;
 		}
 
 		/**
@@ -337,7 +371,9 @@ namespace Stratego.Fenetres
 			TurnModel model = new TurnModel
 			{
 				PartieActuelle = partieActuelle,
-				BoutonRemplir = buttonRemplir.Text
+				BoutonRemplir = buttonRemplir.Text,
+				EtatBoutonRemplir = buttonRemplir.Visible,
+				Historique = richTextBox1.Text
 			};
 
 			if (_tcpConnexion.Server != null) // si on est le serveur
@@ -363,6 +399,8 @@ namespace Stratego.Fenetres
 			paint = false;
 			partieActuelle = model.PartieActuelle;
 			buttonRemplir.Text = model.BoutonRemplir;
+			buttonRemplir.Visible = model.EtatBoutonRemplir;
+			richTextBox1.Text = model.Historique;
 			paint = true;
 
 			pictureBox1.Invalidate();

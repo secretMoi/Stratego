@@ -41,6 +41,7 @@
 			this.menuProgramme_Hobby = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuProgramme_Options = new System.Windows.Forms.ToolStripMenuItem();
 			this.quitterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.boutonTour = new Stratego.UserControls.Bouton();
 			this.buttonRemplir = new Stratego.UserControls.Bouton();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.menuStrip1.SuspendLayout();
@@ -143,6 +144,19 @@
 			this.quitterToolStripMenuItem.Text = "Quitter";
 			this.quitterToolStripMenuItem.Click += new System.EventHandler(this.Quitter_Click);
 			// 
+			// boutonTour
+			// 
+			this.boutonTour.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
+			this.boutonTour.FlatAppearance.BorderSize = 2;
+			this.boutonTour.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.boutonTour.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.boutonTour.ForeColor = System.Drawing.Color.Chocolate;
+			this.boutonTour.Location = new System.Drawing.Point(920, 575);
+			this.boutonTour.Name = "boutonTour";
+			this.boutonTour.Size = new System.Drawing.Size(221, 48);
+			this.boutonTour.TabIndex = 11;
+			this.boutonTour.UseVisualStyleBackColor = false;
+			// 
 			// buttonRemplir
 			// 
 			this.buttonRemplir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
@@ -164,6 +178,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(184)))), ((int)(((byte)(133)))));
 			this.ClientSize = new System.Drawing.Size(1145, 813);
+			this.Controls.Add(this.boutonTour);
 			this.Controls.Add(this.buttonRemplir);
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.label2);
@@ -198,5 +213,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuProgramme_Reprendre;
 		private UserControls.Bouton buttonRemplir;
 		private System.Windows.Forms.ToolStripMenuItem menuProgramme_Hobby;
+		private UserControls.Bouton boutonTour;
 	}
 }

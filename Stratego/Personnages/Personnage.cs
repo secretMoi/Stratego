@@ -110,10 +110,12 @@ namespace Stratego.Personnages
 
         public Color Couleur()
         {
-            if(Equipe == Bleu)
+            /*if(Equipe == Bleu)
                 return Color.Navy;
 
-            return Color.Crimson;
+            return Color.Crimson;*/
+
+            return Theme.CouleurTexte;
         }
 
         private void Dispose(bool disposing)
